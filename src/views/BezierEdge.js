@@ -4,7 +4,6 @@ import {BezierEdge, BezierEdgeModel} from '@logicflow/core'
 class animationModel extends BezierEdgeModel {
     constructor(data, graphModel) {
         super(data, graphModel);
-
         // 启动动画
         this.isAnimation = true;
     }
