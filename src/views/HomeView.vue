@@ -28,14 +28,13 @@ import "@logicflow/core/lib/style/index.css";
 
 import {DndPanel} from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css";
-import "./style.css";
 
 // 组件引入
 import vStartNode from '@/components/v-startNode.vue'
 import vKnowNode from '@/components/v-knowNode.vue'
 import vEndNode from '@/components/v-endNode.vue'
 
-import {noAnimationEdge, animationEdge} from './BezierEdge'
+import {noAnimationEdge, animationEdge} from '../utils/BezierEdge'
 
 export default {
   name: 'HomeView',
