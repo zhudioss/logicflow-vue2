@@ -14,7 +14,6 @@ class animationModel extends BezierEdgeModel {
         style.stroke = '#5dc822';
         style.animationDuration = '30s';
         style.animationDirection = 'normal';
-
         style.strokeDasharray = "3 5";
         return style;
     }
