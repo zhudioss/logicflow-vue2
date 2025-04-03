@@ -56,6 +56,7 @@ export default {
           b: 2
         })
         this.bus.$emit("childMethodDone", graph.id);
+
         resolve();
       });
     }
