@@ -10,9 +10,10 @@
     </div>
 
     <div class="container" ref="container" @drop="onDrop" @dragover.prevent="onDragOver"></div>
-    <el-button @click="exportButton" style="position: fixed;right: 10px;top: 70px;z-index: 9999999">导出数据
+    <el-button @click="exportButton" style="position: fixed;right: 10px;top: 67px;right: 5px;z-index: 9999999">导出数据
     </el-button>
-    <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 125px;z-index: 9999999">Edge - A
+    <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 116px;right: 5px;z-index: 9999999">Edge
+      - A
     </el-button>
   </div>
 </template>
@@ -470,6 +471,12 @@ export default {
   .lf-dnd-shape {
     background-size: 30px;
     margin: 0 10px 0 0;
+  }
+
+  .lf-control {
+    right: 0px;
+    box-shadow: none;
+    border: 1px solid #e3e3e3;
   }
 }
 </style>
