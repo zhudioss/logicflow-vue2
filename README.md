@@ -1,6 +1,4 @@
 # logicflow-vue2
-- logicflow针对vue2项目自定义托拉拽
-- 自定义拖拽面板
-- 自定义vue文件的node节点
+- 关于在vue2中使用LogicFlow自定义vue组件节点和自定义拖拽面板
 
 ![img.png](img.png)
