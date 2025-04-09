@@ -35,7 +35,7 @@ import vStartNode from '@/components/v-startNode.vue'
 import vKnowNode from '@/components/v-knowNode.vue'
 import vEndNode from '@/components/v-endNode.vue'
 
-import {noAnimationEdge, animationEdge} from '../utils/BezierEdge'
+import {noAnimationEdge, animationEdge, Highlight, NotHighlighted} from '../utils/BezierEdge'
 
 export default {
   name: 'HomeView',
@@ -221,21 +221,27 @@ export default {
         edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
         plugins: [Menu, DndPanel],
         grid: {
-          size: 30,
+          size: 15, // 点的密集程度
           visible: true,
-          type: 'dot',
+          type: 'dot', // 'dot' | 'mesh'
           config: {
-            color: '#dddddd', // 点的颜色
-            thickness: 1,
+            color: '#e2e4ed', // 点的颜色
+            thickness: 1, // 点的大小
           },
+
         },
         nodeTextEdit: false,// 禁止修改内容
         stopScrollGraph: true, // 禁止鼠标滚动画布
         stopZoomGraph: true, // 禁止缩放画布
+        hoverOutline: false, // 鼠标 hover 的时候是否显示节点的外框。
+        nodeSelectedOutline: false, // 节点被选中时是否显示节点的外框。
+        // hideAnchors: true  // 锚点
       });
 
       this.lf.register(noAnimationEdge);
       this.lf.register(animationEdge);
+      this.lf.register(Highlight);
+      this.lf.register(NotHighlighted);
       // 设置全局默认dege样式
       this.lf.setDefaultEdgeType('EDGE_BEZIER');
 
@@ -274,6 +280,26 @@ export default {
           },
         ], // 覆盖默认的节点右键菜单
         graphMenu: [], // 覆盖默认的边右键菜单，与false表现一样
+      });
+
+
+      _this.lf.on('node:mouseenter', ({data}) => {
+        const nodeId = data.id;
+        const edges = _this.lf.graphModel.edges;
+        edges.forEach(edge => {
+          if (edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) {
+            _this.lf.changeEdgeType(edge.id, 'Highlight');
+          }
+        });
+      });
+      _this.lf.on('node:mouseleave', ({data}) => {
+        const nodeId = data.id;
+        const edges = _this.lf.graphModel.edges;
+        edges.forEach(edge => {
+          if (edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) {
+            _this.lf.changeEdgeType(edge.id, 'NotHighlighted');
+          }
+        });
       });
     },
 
@@ -342,6 +368,7 @@ export default {
     changeLineColor() {
       this.lf.changeEdgeType('55c88f3a-75d5-49ae-9db2-c0e2af484090', 'EDGE_BEZIER_A');
     }
+
   }
 }
 </script>
@@ -355,19 +382,17 @@ export default {
     list-style: none;
   }
 
-  background: #fff;
+  background: #fcfcfd;
   box-sizing: border-box;
-  border: 1px solid rgba(66, 66, 66, 0.15);
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
 
   .head {
     padding: 7px;
-    background: rgba(66, 66, 66, 0.15);
+    /* background: rgba(66, 66, 66, 0.15);*/
     font-size: 12px;
     font-weight: bold;
-    color: #575757;
-    text-align: left;
+    color: #344ada;
   }
 
   .title {
@@ -438,7 +463,7 @@ export default {
     height: 34px;
     background: #fff;
     border: 1px solid #e3e3e3;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -477,6 +502,18 @@ export default {
     right: 0px;
     box-shadow: none;
     border: 1px solid #e3e3e3;
+  }
+
+  .lf-node:hover {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+  }
+
+  .lf-node {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+  }
+
+  .lf-graph {
+    background: #f2f4f7;
   }
 }
 </style>
