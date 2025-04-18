@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     init() {
-      let _this = this
       this.lf = new LogicFlow({
         container: document.querySelector('#lf-container'),
         edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
@@ -97,26 +96,26 @@ export default {
       this.lf.setDefaultEdgeType('EDGE_BEZIER');
 
       // 滑动
-      _this.lf.on('node:mouseenter', ({data}) => {
+      this.lf.on('node:mouseenter', ({data}) => {
         const nodeId = data.id;
-        const edges = _this.lf.graphModel.edges;
+        const edges = this.lf.graphModel.edges;
         edges.forEach(edge => {
           if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-            _this.lf.changeEdgeType(edge.id, 'Highlight');
+            this.lf.changeEdgeType(edge.id, 'Highlight');
           }
         });
       });
-      _this.lf.on('node:mouseleave', ({data}) => {
+      this.lf.on('node:mouseleave', ({data}) => {
         const nodeId = data.id;
-        const edges = _this.lf.graphModel.edges;
+        const edges = this.lf.graphModel.edges;
         edges.forEach(edge => {
           if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-            _this.lf.changeEdgeType(edge.id, 'NotHighlighted');
+            this.lf.changeEdgeType(edge.id, 'NotHighlighted');
           }
         });
       });
 
-      _this.lf.on('node:click', ({data}) => {
+      this.lf.on('node:click', ({data}) => {
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
         vueManager.forEach(item => {
@@ -129,13 +128,13 @@ export default {
       });
 
       // 配置菜单
-      _this.lf.setMenuConfig({
+      this.lf.setMenuConfig({
         // 连接线
         edgeMenu: [
           {
             text: "删除",
             callback(edge) {
-              _this.lf.deleteEdge(edge.id);
+              this.lf.deleteEdge(edge.id);
             }
           }
         ],
@@ -145,7 +144,7 @@ export default {
             text: "删除",
             callback(node) {
               vueInstanceManager.remove(node.id)
-              _this.lf.deleteNode(node.id);
+              this.lf.deleteNode(node.id);
             },
           },
         ], // 覆盖默认的节点右键菜单
