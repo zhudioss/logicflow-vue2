@@ -24,16 +24,13 @@ import "@logicflow/core/lib/style/index.css";
 import {DndPanel} from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css"
 
-// import myNodeView from "@/test/MyNodeView";
-
 import {noAnimationEdge, animationEdge, Highlight, NotHighlighted} from '@/utils/BezierEdge'
 
-// 全局注册管理器
-import vueInstanceManager from '@/test/vueInstanceManager';
+// 全局注册管理器 函数工厂
+import vueInstanceManager from '@/modelVue/js/vueInstanceManager';
+import {createVueHtmlNode} from "./js/createVueHtmlNode";
 
-import VueNode from './MyNode.vue';
-import {createVueHtmlNode} from "./createVueHtmlNode";
-
+import StartV from './component/startV.vue';
 
 export default {
   name: 'App',
@@ -59,7 +56,7 @@ export default {
         {
           label: '开始',
           type: 'start-v',
-          component: VueNode,
+          component: StartV,
           properties: {
             width: 0,
             height: 0,
@@ -69,7 +66,7 @@ export default {
         {
           label: '知识库',
           type: 'start-v',
-          component: VueNode,
+          component: StartV,
           properties: {
             width: 0,
             height: 0,
@@ -79,7 +76,7 @@ export default {
         {
           label: '结束',
           type: 'start-v',
-          component: VueNode,
+          component: StartV,
           properties: {
             width: 0,
             height: 0,
