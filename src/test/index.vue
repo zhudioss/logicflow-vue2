@@ -24,12 +24,15 @@ import "@logicflow/core/lib/style/index.css";
 import {DndPanel} from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css"
 
-import myNodeView from "@/test/MyNodeView";
+// import myNodeView from "@/test/MyNodeView";
 
 import {noAnimationEdge, animationEdge, Highlight, NotHighlighted} from '@/utils/BezierEdge'
 
 // 全局注册管理器
 import vueInstanceManager from '@/test/vueInstanceManager';
+
+import VueNode from './MyNode.vue';
+import {createVueHtmlNode} from "./createVueHtmlNode";
 
 
 export default {
@@ -41,7 +44,8 @@ export default {
         nodes: [
           {
             id: '1',
-            type: 'vue-html',
+            // type: 'vue-html',
+            type: 'start-v',
             x: 300,
             y: 200,
             properties: {
@@ -54,8 +58,8 @@ export default {
       componentsList: [
         {
           label: '开始',
-          type: 'vue-html',
-          component: myNodeView,
+          type: 'start-v',
+          component: VueNode,
           properties: {
             width: 0,
             height: 0,
@@ -64,8 +68,8 @@ export default {
         },
         {
           label: '知识库',
-          type: 'vue-html',
-          component: myNodeView,
+          type: 'start-v',
+          component: VueNode,
           properties: {
             width: 0,
             height: 0,
@@ -74,8 +78,8 @@ export default {
         },
         {
           label: '结束',
-          type: 'vue-html',
-          component: myNodeView,
+          type: 'start-v',
+          component: VueNode,
           properties: {
             width: 0,
             height: 0,
@@ -131,7 +135,10 @@ export default {
 
       // vue model 组件组册
       this.componentsList.forEach(item => {
-        this.lf.register(item.component)
+        this.lf.register(createVueHtmlNode({
+          type: item.type, // 节点类型
+          component: item.component,
+        }))
       })
       // 普通model 注册
       this.lf.register(noAnimationEdge)
@@ -162,13 +169,13 @@ export default {
       });
 
       _this.lf.on('node:click', ({data}) => {
-        console.log(vueInstanceManager.getAll(), '========')
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
-        Object.keys(vueManager).forEach((key) => {
-          vueManager[key].$el.style.border = 'none'
-          if (nodeId === key) {
-            vueManager[key].$el.style.border = '1.5px solid #3f58fd'
+        vueManager.forEach(item => {
+          if (item.id === nodeId) {
+            item.vm.$el.style.border = '1.5px solid #3f58fd'
+          }else {
+            item.vm.$el.style.border = 'none'
           }
         })
       });
