@@ -1,19 +1,21 @@
 // createVueHtmlNode.js
-import { HtmlNode, HtmlNodeModel } from "@logicflow/core";
+import {HtmlNode, HtmlNodeModel} from "@logicflow/core";
 import Vue from "vue";
 import vueInstanceManager from "./vueInstanceManager";
+import {componentsList} from "./componentsList";
 
 // 默认模型类，可根据需要传入自定义
 export class VueHtmlNodeModel extends HtmlNodeModel {
-    setAttributes() {
-        this.width = 300;
-        this.height = 189;
+    async setAttributes() {
+        await componentsList.forEach((item) => {
+            if (this.type === item.type) {
+                this.width = item.properties.width;
+                this.height = item.properties.height;
+                this.anchorsOffset = item.properties.anchorsOffset;
+            }
+        })
         this.text.editable = false;
         this.inputData = this.text.value;
-
-        this.anchorsOffset = [
-            [this.width / 2, 0], // right anchor
-        ];
     }
 
     getOutlineStyle() {
@@ -36,7 +38,7 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
 }
 
 // 工厂方法，返回 LogicFlow 注册配置
-export function createVueHtmlNode({ type, component, modelClass = VueHtmlNodeModel }) {
+export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeModel}) {
     const VueConstructor = Vue.extend(component);
 
     class CustomVueHtmlNode extends HtmlNode {
@@ -63,8 +65,7 @@ export function createVueHtmlNode({ type, component, modelClass = VueHtmlNodeMod
 
             // 注册到全局管理器
             vueInstanceManager.set(this.id, {
-                vm: this.vm,
-                type,
+                vm: this.vm, type,
             });
         }
 
@@ -88,8 +89,6 @@ export function createVueHtmlNode({ type, component, modelClass = VueHtmlNodeMod
     }
 
     return {
-        type,
-        model: modelClass,
-        view: CustomVueHtmlNode,
+        type, model: modelClass, view: CustomVueHtmlNode,
     };
 }

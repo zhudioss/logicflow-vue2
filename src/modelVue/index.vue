@@ -11,6 +11,9 @@
          @dragover.prevent="onDragOver"></div>
     <el-button @click="exportButton" style="position: fixed;right: 10px;top: 67px;right: 5px;z-index: 9999999">导出数据
     </el-button>
+    <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 116px;right: 5px;z-index: 9999999">Edge
+      - A
+    </el-button>
   </div>
 </template>
 
@@ -30,74 +33,30 @@ import {noAnimationEdge, animationEdge, Highlight, NotHighlighted} from '@/utils
 import vueInstanceManager from '@/modelVue/js/vueInstanceManager';
 import {createVueHtmlNode} from "./js/createVueHtmlNode";
 
-import StartV from './component/startV.vue';
+import {componentsList} from "./js/componentsList";
+import {nodeData} from "./js/nodeData";
 
 export default {
   name: 'App',
   data() {
     return {
       lf: '',
-      nodeData: {
-        nodes: [
-          {
-            id: '1',
-            // type: 'vue-html',
-            type: 'start-v',
-            x: 300,
-            y: 200,
-            properties: {
-              text: 'Hello Vue2!',
-            },
-          },
-        ],
-      },
+
+      // 渲染数据
+      nodeData,
+
       // vue组件组册
-      componentsList: [
-        {
-          label: '开始',
-          type: 'start-v',
-          component: StartV,
-          properties: {
-            width: 0,
-            height: 0,
-          },
-          icon: require('@/assets/运行.png'),
-        },
-        {
-          label: '知识库',
-          type: 'start-v',
-          component: StartV,
-          properties: {
-            width: 0,
-            height: 0,
-          },
-          icon: require('@/assets/知识库.png'),
-        },
-        {
-          label: '结束',
-          type: 'start-v',
-          component: StartV,
-          properties: {
-            width: 0,
-            height: 0,
-          },
-          icon: require('@/assets/结束.png'),
-        }
-      ],
+      componentsList,
 
+      // 导出数据 记录vue组件完成情况
       childIds: []
-
     }
   },
   created() {
-
-
   },
 
   mounted() {
     this.init()
-
-
   },
   methods: {
     init() {
@@ -119,15 +78,6 @@ export default {
         nodeTextEdit: false,// 禁止修改内容
         stopScrollGraph: true, // 禁止鼠标滚动画布
         stopZoomGraph: true, // 禁止缩放画布
-        // hoverOutline: false, // 鼠标 hover 的时候是否显示节点的外框。
-        // nodeSelectedOutline: false, // 节点被选中时是否显示节点的外框。
-        style: {
-          rect: {
-            stroke: '#333', // 默认边框颜色
-            strokeWidth: 1
-          }
-        },
-        // hideAnchors: true  // 锚点
       });
 
       // vue model 组件组册
@@ -135,6 +85,7 @@ export default {
         this.lf.register(createVueHtmlNode({
           type: item.type, // 节点类型
           component: item.component,
+          properties: item.properties
         }))
       })
       // 普通model 注册
@@ -150,7 +101,7 @@ export default {
         const nodeId = data.id;
         const edges = _this.lf.graphModel.edges;
         edges.forEach(edge => {
-          if (edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) {
+          if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
             _this.lf.changeEdgeType(edge.id, 'Highlight');
           }
         });
@@ -159,7 +110,7 @@ export default {
         const nodeId = data.id;
         const edges = _this.lf.graphModel.edges;
         edges.forEach(edge => {
-          if (edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) {
+          if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
             _this.lf.changeEdgeType(edge.id, 'NotHighlighted');
           }
         });
@@ -171,7 +122,7 @@ export default {
         vueManager.forEach(item => {
           if (item.id === nodeId) {
             item.vm.$el.style.border = '1.5px solid #3f58fd'
-          }else {
+          } else {
             item.vm.$el.style.border = 'none'
           }
         })
@@ -233,7 +184,6 @@ export default {
       let graph = this.lf.getGraphData()
       this.childIds = graph.nodes.map(item => item.id);
 
-      // this.childIds = ['1'];
       const promises = this.childIds.map(
           (id) =>
               new Promise((resolve) => {
@@ -253,6 +203,11 @@ export default {
       let values = this.lf.getGraphData()// getGraphRawData()获取原始数据，getGraphData()获取加工后的数据
       console.log(values, '+++++++++++')
     },
+
+    // 修改链接线颜色
+    changeLineColor() {
+      this.lf.changeEdgeType('5d7482d7-9a0f-438f-ab56-b83062ffc6dc', 'EDGE_BEZIER_A');
+    }
   }
 
 };
