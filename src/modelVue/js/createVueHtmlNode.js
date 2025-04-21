@@ -33,8 +33,20 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         style.hover.fill = "rgb(24, 125, 255)";
         style.hover.stroke = "rgb(24, 125, 255)";
         style.isShowAnchor = true;
+        style.onclick = (e) => {
+            console.log('点击了锚点：', this);
+            if (this.type === 'end-v') return
+            window.currentNode = this;
+            const menu = document.getElementById('anchor-menu');
+            // 显示菜单
+            menu.style.display = 'flex';
+            menu.style.left = `${e.clientX + 10}px`;
+            menu.style.top = `${e.clientY - 150}px`;
+        }
         return style;
     }
+
+
 }
 
 // 工厂方法，返回 LogicFlow 注册配置
@@ -89,6 +101,9 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
     }
 
     return {
-        type, model: modelClass, view: CustomVueHtmlNode,
+        type,
+        model: modelClass,
+        view: CustomVueHtmlNode,
     };
 }
+

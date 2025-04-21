@@ -14,6 +14,12 @@
     <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 116px;right: 5px;z-index: 9999999">Edge
       - A
     </el-button>
+    <div id="anchor-menu" class="drag-panel">
+      <div style="width: 100%;margin: 0;height: 30px" v-for="item in anchorMenu" :key="item.id" @click="addNodeClick(item.type)">
+        <img :src="item.icon" alt="" draggable="false">
+        <p>{{ item.name }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,6 +41,7 @@ import {createVueHtmlNode} from "./js/createVueHtmlNode";
 
 import {componentsList} from "./js/componentsList";
 import {nodeData} from "./js/nodeData";
+import {anchorMenu} from "./js/anchor-menu";
 
 export default {
   name: 'App',
@@ -49,7 +56,10 @@ export default {
       componentsList,
 
       // 导出数据 记录vue组件完成情况
-      childIds: []
+      childIds: [],
+
+      // 自定义菜单
+      anchorMenu
     }
   },
   created() {
@@ -127,13 +137,19 @@ export default {
         })
       });
 
+      this.lf.on('anchor:dragstart', ({data}) => {
+        console.log('锚点被点击/开始连线：', data);
+        // data.nodeId, data.anchorId, data.type ('source' 或 'target')
+      });
+
       // 配置菜单
       this.lf.setMenuConfig({
         // 连接线
         edgeMenu: [
           {
             text: "删除",
-            callback(edge) {
+            callback: (edge) => {
+              console.log(edge, '------')
               this.lf.deleteEdge(edge.id);
             }
           }
@@ -142,7 +158,7 @@ export default {
         nodeMenu: [
           {
             text: "删除",
-            callback(node) {
+            callback: (node) => {
               vueInstanceManager.remove(node.id)
               this.lf.deleteNode(node.id);
             },
@@ -154,6 +170,7 @@ export default {
       this.lf.render(this.nodeData);
 
     },
+
     onDragStart(event, data) {
       event.dataTransfer.setData("nodeData", data);
     },
@@ -172,7 +189,6 @@ export default {
         properties: resData.properties
       });
     },
-
     onDragOver(event) {
       event.preventDefault();
       event.dataTransfer.dropEffect = "move"; // 让鼠标不会出现“复制”加号
@@ -206,6 +222,34 @@ export default {
     // 修改链接线颜色
     changeLineColor() {
       this.lf.changeEdgeType('5d7482d7-9a0f-438f-ab56-b83062ffc6dc', 'EDGE_BEZIER_A');
+    },
+
+    // 添加节点
+    addNodeClick(type) {
+      const currentNode = window.currentNode;
+      if (!currentNode) return;
+
+      const graphModel = currentNode.graphModel;
+      const x = currentNode.x + 150; // 新节点位置，可按需计算
+      const y = currentNode.y;
+      console.log(currentNode.x, currentNode.y, 'xyxyxyxyxyxyxyx');
+
+
+      const newNode = graphModel.addNode({
+        type,
+        x,
+        y,
+        properties: {}
+      });
+
+      graphModel.addEdge({
+        sourceNodeId: currentNode.id,
+        targetNodeId: newNode.id,
+      });
+
+      // 关闭菜单
+      const menu = document.getElementById('anchor-menu');
+      menu.style.display = 'none';
     }
   }
 
@@ -286,11 +330,7 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-
-.container {
-  width: 100%;
-  height: 100%;
+  position: relative;
 }
 
 .drag-panel {
@@ -317,6 +357,24 @@ export default {
     }
   }
 
+}
+
+#anchor-menu {
+  width: 120px;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  display: none;
+  background: white;
+  font-size: 14px;
+  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 1000;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
 
 ::v-deep {
