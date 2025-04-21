@@ -412,5 +412,15 @@ export default {
   .lf-graph {
     background: #f2f4f7;
   }
+
+  //.lf-menu {
+  //  background: red;
+  //  border-radius: 8px;
+  //  padding: 0;
+  //}
+  //.lf-menu>li:hover {
+  //  background: red;
+  //  border-radius: 8px;
+  //}
 }
 </style>
