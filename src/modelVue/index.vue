@@ -15,7 +15,8 @@
       - A
     </el-button>
     <div id="anchor-menu" class="drag-panel">
-      <div style="width: 100%;margin: 0;height: 30px" v-for="item in anchorMenu" :key="item.id" @click="addNodeClick(item.type)">
+      <div style="width: 100%;margin: 0;height: 30px" v-for="item in anchorMenu" :key="item.id"
+           @click="addNodeClick(item.type)">
         <img :src="item.icon" alt="" draggable="false">
         <p>{{ item.name }}</p>
       </div>
@@ -87,6 +88,7 @@ export default {
         nodeTextEdit: false,// 禁止修改内容
         stopScrollGraph: true, // 禁止鼠标滚动画布
         stopZoomGraph: true, // 禁止缩放画布
+        adjustEdge: false, // 禁止用户拖动中间点
       });
 
       // vue model 组件组册
@@ -230,10 +232,8 @@ export default {
       if (!currentNode) return;
 
       const graphModel = currentNode.graphModel;
-      const x = currentNode.x + 150; // 新节点位置，可按需计算
+      const x = currentNode.x + 450;
       const y = currentNode.y;
-      console.log(currentNode.x, currentNode.y, 'xyxyxyxyxyxyxyx');
-
 
       const newNode = graphModel.addNode({
         type,
@@ -360,7 +360,7 @@ export default {
 }
 
 #anchor-menu {
-  width: 120px;
+  width: 130px;
   height: 300px;
   position: absolute;
   left: 50%;
