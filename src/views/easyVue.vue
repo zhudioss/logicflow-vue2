@@ -54,7 +54,7 @@ export default {
             width: 0,
             height: 0,
           },
-          icon: require('@/assets/运行.png'),
+          icon: require('@/assets/开始.png'),
         },
         {
           label: '知识库',

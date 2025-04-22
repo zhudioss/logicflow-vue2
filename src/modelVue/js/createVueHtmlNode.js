@@ -38,10 +38,32 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
             if (this.type === 'end-v') return
             window.currentNode = this;
             const menu = document.getElementById('anchor-menu');
+            const canvasWidth = window.innerWidth;
+            const canvasHeight = window.innerHeight;
             // 显示菜单
-            menu.style.display = 'flex';
-            menu.style.left = `${e.clientX + 10}px`;
-            menu.style.top = `${e.clientY - 150}px`;
+            menu.style.display = 'block';
+
+            const menuWidth = menu.offsetWidth; // 假设宽度 150px
+            const menuHeight = menu.offsetHeight; // 假设高度 100px
+
+            let left = e.clientX + 10;
+            let top = e.clientY - menuHeight / 2;
+
+            // 调整位置防止超出右边界
+            if (left + menuWidth > canvasWidth) {
+                left = canvasWidth - menuWidth - 10;
+            }
+            // 调整位置防止超出上边界
+            if (top < 0) {
+                top = e.clientY + 10;
+            }
+            // 调整位置防止超出下边界
+            if (top + menuHeight > canvasHeight) {
+                top = canvasHeight - menuHeight - 10;
+            }
+
+            menu.style.left = `${left}px`;
+            menu.style.top = `${top}px`;
         }
         return style;
     }

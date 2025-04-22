@@ -5,7 +5,7 @@
     </div>
     <div style="padding:0 10px">
       <div class="title">
-        <img src="../../assets/运行.png" alt="">
+        <img src="../../assets/结束.png" alt="">
         结束节点
       </div>
       <div style="color: rgba(66,66,66,0.4);font-size: 12px;">结束定义输出参数</div>

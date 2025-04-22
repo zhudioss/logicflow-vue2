@@ -1,0 +1,68 @@
+.warpCard {
+  * {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    list-style: none;
+  }
+
+  background: #fcfcfd;
+  box-sizing: border-box;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .head {
+    padding: 7px;
+    /* background: rgba(66, 66, 66, 0.15);*/
+    font-size: 12px;
+    font-weight: bold;
+    color: #145aef;
+  }
+
+  .title {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 14px;
+    font-weight: bold;
+
+    img {
+      height: 20px;
+      margin-right: 5px;
+    }
+  }
+
+  .el-input__inner {
+    height: 32px;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .el-select {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .el-input__suffix {
+    height: 111%;
+  }
+
+  .el-select-dropdown {
+    width: 100%;
+
+  }
+
+  .el-select-dropdown__item {
+    span {
+      font-size: 12px !important;
+    }
+  }
+
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

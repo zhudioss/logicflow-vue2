@@ -14,8 +14,8 @@
     <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 116px;right: 5px;z-index: 9999999">Edge
       - A
     </el-button>
-    <div id="anchor-menu" class="drag-panel">
-      <div style="width: 100%;margin: 0;height: 30px" v-for="item in anchorMenu" :key="item.id"
+    <div id="anchor-menu">
+      <div class="content" v-for="item in anchorMenu" :key="item.id"
            @click="addNodeClick(item.type)">
         <img :src="item.icon" alt="" draggable="false">
         <p>{{ item.name }}</p>
@@ -60,7 +60,10 @@ export default {
       childIds: [],
 
       // 自定义菜单
-      anchorMenu
+      anchorMenu,
+
+      menuDom: null,
+
     }
   },
   created() {
@@ -68,6 +71,8 @@ export default {
 
   mounted() {
     this.init()
+    this.menuDom = document.getElementById('anchor-menu')
+    window.addEventListener('click', () => this.menuDom.style.display = 'none')
   },
   methods: {
     init() {
@@ -248,179 +253,12 @@ export default {
       });
 
       // 关闭菜单
-      const menu = document.getElementById('anchor-menu');
-      menu.style.display = 'none';
+      this.menuDom.style.display = 'none';
     }
   }
 
 };
 </script>
-<style lang="scss">
-.warpCard {
-  * {
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
-    list-style: none;
-  }
-
-  background: #fcfcfd;
-  box-sizing: border-box;
-  border-radius: 12px;
-  overflow: hidden;
-
-  .head {
-    padding: 7px;
-    /* background: rgba(66, 66, 66, 0.15);*/
-    font-size: 12px;
-    font-weight: bold;
-    color: #145aef;
-  }
-
-  .title {
-    padding-top: 10px;
-    padding-bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    font-size: 14px;
-    font-weight: bold;
-
-    img {
-      height: 20px;
-      margin-right: 5px;
-    }
-  }
-
-  .el-input__inner {
-    height: 32px;
-    margin-top: 5px;
-    font-size: 12px;
-  }
-
-  .el-select {
-    width: 100%;
-    margin-top: 0;
-  }
-
-  .el-input__suffix {
-    height: 111%;
-  }
-
-  .el-select-dropdown {
-    width: 100%;
-
-  }
-
-  .el-select-dropdown__item {
-    span {
-      font-size: 12px !important;
-    }
-  }
-
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-</style>
 <style scoped lang="scss">
-.home {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
-
-.drag-panel {
-  width: 120px;
-  height: 200px;
-  margin: 5px;
-
-  div {
-    height: 34px;
-    background: #fff;
-    border: 1px solid #e3e3e3;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
-
-    img {
-      height: 20px;
-      margin-right: 5px;
-    }
-  }
-
-}
-
-#anchor-menu {
-  width: 130px;
-  height: 300px;
-  position: absolute;
-  left: 50%;
-  top: 0;
-  display: none;
-  background: white;
-  font-size: 14px;
-  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
-  border-radius: 8px;
-  padding: 8px;
-  z-index: 1000;
-  align-items: center;
-  flex-direction: column;
-  gap: 8px;
-}
-
-::v-deep {
-  .lf-dndpanel {
-    padding: 0;
-  }
-
-  .lf-dnd-item {
-    margin: 0;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-  }
-
-  .lf-dnd-shape {
-    background-size: 30px;
-    margin: 0 10px 0 0;
-  }
-
-  .lf-control {
-    right: 0px;
-    box-shadow: none;
-    border: 1px solid #e3e3e3;
-  }
-
-  .lf-node:hover {
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
-  }
-
-  .lf-node {
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
-  }
-
-  .lf-graph {
-    background: #f2f4f7;
-  }
-
-  //.lf-menu {
-  //  background: red;
-  //  border-radius: 8px;
-  //  padding: 0;
-  //}
-  //.lf-menu>li:hover {
-  //  background: red;
-  //  border-radius: 8px;
-  //}
-}
+@import "@/assets/css/index.scss";
 </style>

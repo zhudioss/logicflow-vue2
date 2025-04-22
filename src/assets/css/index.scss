@@ -1,0 +1,114 @@
+.home {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.drag-panel {
+  width: 150px;
+  height: 200px;
+  margin: 5px;
+
+  div {
+    height: 34px;
+    background: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 25px;
+    //justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+
+    &:hover {
+      filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+    }
+
+    img {
+      height: 20px;
+      margin-right: 10px;
+    }
+  }
+
+}
+
+#anchor-menu {
+  width: 150px;
+  position: absolute;
+  display: none;
+  background: white;
+  font-size: 14px;
+  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+  border-radius: 8px;
+  padding: 6px;
+
+  &:hover {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+  }
+
+  .content {
+    width: auto;
+    display: flex;
+    height: 34px;
+    align-items: center;
+    padding-left: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+      background: #f3f3f3;
+    }
+
+    img {
+      height: 20px;
+      margin-right: 10px;
+    }
+  }
+}
+
+::v-deep {
+  .lf-dndpanel {
+    padding: 0;
+  }
+
+  .lf-dnd-item {
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+
+  .lf-dnd-shape {
+    background-size: 30px;
+    margin: 0 10px 0 0;
+  }
+
+  .lf-control {
+    right: 0px;
+    box-shadow: none;
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+  }
+
+  .lf-node:hover {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+  }
+
+  .lf-node {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+  }
+
+  .lf-graph {
+    background: #f2f4f7;
+  }
+
+  .el-button {
+    border: none;
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+  }
+}

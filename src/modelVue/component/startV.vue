@@ -5,10 +5,10 @@
     </div>
     <div style="padding:0 10px">
       <div class="title">
-        <img src="../../assets/运行.png" alt="">
+        <img src="../../assets/开始.png" alt="">
         开始节点
       </div>
-      <div style="color: rgba(66,66,66,0.4);font-size: 12px;">结束定义输出参数</div>
+      <div style="color: rgba(66,66,66,0.4);font-size: 12px;">开始定义输出参数</div>
       <div style="font-weight: bold;margin-top: 15px">输出参数</div>
       <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">参数名称</div>
       <el-input v-model="input2" placeholder="请输入参数名称" clearable></el-input>

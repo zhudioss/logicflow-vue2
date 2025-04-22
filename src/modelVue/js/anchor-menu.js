@@ -3,7 +3,7 @@ export const anchorMenu = [
         id:Math.random(),
         name:'开始',
         type:'start-v',
-        icon: require('@/assets/运行.png'),
+        icon: require('@/assets/开始.png'),
     },
     {
         id:Math.random(),
