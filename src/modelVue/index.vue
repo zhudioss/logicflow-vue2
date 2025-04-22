@@ -133,6 +133,7 @@ export default {
       });
 
       this.lf.on('node:click', ({data}) => {
+        console.log(data, '---------')
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
         vueManager.forEach(item => {
@@ -260,5 +261,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import "@/assets/css/index.scss";
+@use "@/assets/css/index.scss" as *;
 </style>
