@@ -3,8 +3,8 @@ export const nodeData = {
         {
             "id": "1",
             "type": "start-v",
-            "x": 236,
-            "y": 363,
+            "x": 188,
+            "y": 488,
             "properties": {
                 "text": "Hello Vue2!",
                 "width": 300,
@@ -17,8 +17,8 @@ export const nodeData = {
         {
             "id": "a6776c04-6307-4c0a-81d2-39ebaf98773f",
             "type": "know-v",
-            "x": 739,
-            "y": 364,
+            "x": 727,
+            "y": 383,
             "properties": {
                 "width": 300,
                 "height": 600,
@@ -40,8 +40,8 @@ export const nodeData = {
         {
             "id": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16",
             "type": "end-v",
-            "x": 1217,
-            "y": 364,
+            "x": 1219,
+            "y": 271,
             "properties": {
                 "width": 300,
                 "height": 189,
@@ -67,29 +67,29 @@ export const nodeData = {
             "sourceAnchorId": "1_0",
             "targetAnchorId": "a6776c04-6307-4c0a-81d2-39ebaf98773f_0",
             "startPoint": {
-                "x": 386,
-                "y": 363
+                "x": 338,
+                "y": 488
             },
             "endPoint": {
-                "x": 589,
-                "y": 364
+                "x": 577,
+                "y": 383
             },
             "pointsList": [
                 {
-                    "x": 386,
-                    "y": 363
+                    "x": 338,
+                    "y": 488
                 },
                 {
-                    "x": 486,
-                    "y": 363
+                    "x": 438,
+                    "y": 488
                 },
                 {
-                    "x": 489,
-                    "y": 364
+                    "x": 477,
+                    "y": 383
                 },
                 {
-                    "x": 589,
-                    "y": 364
+                    "x": 577,
+                    "y": 383
                 }
             ]
         },
@@ -102,29 +102,29 @@ export const nodeData = {
             "sourceAnchorId": "a6776c04-6307-4c0a-81d2-39ebaf98773f_1",
             "targetAnchorId": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16_0",
             "startPoint": {
-                "x": 889,
-                "y": 364
+                "x": 877,
+                "y": 383
             },
             "endPoint": {
-                "x": 1067,
-                "y": 364
+                "x": 1069,
+                "y": 271
             },
             "pointsList": [
                 {
-                    "x": 889,
-                    "y": 364
+                    "x": 877,
+                    "y": 383
                 },
                 {
-                    "x": 989,
-                    "y": 364
+                    "x": 977,
+                    "y": 383
                 },
                 {
-                    "x": 967,
-                    "y": 364
+                    "x": 969,
+                    "y": 271
                 },
                 {
-                    "x": 1067,
-                    "y": 364
+                    "x": 1069,
+                    "y": 271
                 }
             ]
         }
