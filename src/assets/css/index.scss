@@ -77,19 +77,31 @@
   left: 20%;
   top: 50%;
   display: block;
-  background: white;
-
   border-radius: 8px;
   padding: 0px;
+  filter: none;
   background: #fef0f0;
+  color: #f56c6c;
+  border: 1px solid #fbc4c4;
+  overflow: hidden;
+
+
+  &:hover {
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+  }
 
   .content {
     cursor: pointer;
+    padding-left: 25px;
 
     p {
       font-size: 13px !important;
     }
 
+    &:hover {
+      background: #fef0f0;
+      //color: #fff;
+    }
   }
 
 }

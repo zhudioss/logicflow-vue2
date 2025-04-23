@@ -157,6 +157,7 @@ export default {
 
       this.lf.on('node:click', ({data}) => {
         console.log(data, '---------')
+        this.rightMenuShow = false
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
         vueManager.forEach(item => {
@@ -167,6 +168,9 @@ export default {
           }
         })
       });
+      this.lf.on('blank:click', () => {
+        this.rightMenuShow = false
+      })
 
       this.lf.on('anchor:dragstart', ({data}) => {
         console.log('锚点被点击/开始连线：', data);
@@ -175,29 +179,17 @@ export default {
 
       // 监听节点右键事件
       this.lf.on('node:contextmenu', ({e, data}) => {
-        console.log(e, data, 'daafafdasfdsafdafdasfadsf')
-        e.preventDefault();
-        this.currentNode = data;
-        this.menuPosition = {x: e.clientX, y: e.clientY};
-        this.rightMenuShow = true
+        this.contextmenuFun(e, data, true)
       });
 
       // 监听连接线右键事件
       this.lf.on('edge:contextmenu', ({e, data}) => {
-        console.log(e, data, 'daafafdasfdsafdafdasfadsf')
-        e.preventDefault();
-        this.currentNode = data;
-        this.menuPosition = {x: e.clientX, y: e.clientY};
-        this.rightMenuShow = true
+        this.contextmenuFun(e, data, true)
       });
 
       // 空白处右键也可以监听
       this.lf.on('blank:contextmenu', ({e}) => {
-        console.log(e, 'daafafdasfdsafdafdasfadsf')
-        e.preventDefault();
-        this.menuPosition = {x: e.clientX, y: e.clientY};
-        this.rightMenuShow = false
-        this.currentNode = null; // 说明右键在空白处
+        this.contextmenuFun(e, null, false)
       });
 
       this.lf.render(this.nodeData);
@@ -286,6 +278,36 @@ export default {
     handleMenuClick() {
       this.lf.deleteNode(this.currentNode.id) || this.lf.deleteEdge(this.currentNode.id);
       this.rightMenuShow = false
+    },
+    // 右键公共事件
+    contextmenuFun(e, data, show) {
+      e.preventDefault();
+      const menu = document.querySelector('#custom-menu')
+
+      const canvasWidth = window.innerWidth;
+      const canvasHeight = window.innerHeight;
+
+      const menuWidth = menu.offsetWidth;
+      const menuHeight = menu.offsetHeight;
+
+      let x = e.clientX;
+      let y = e.clientY;
+      // 调整位置防止超出右边界
+      if (x + menuWidth > canvasWidth) {
+        x = canvasWidth - menuWidth - 10;
+      }
+      // 调整位置防止超出上边界
+      if (y < 0) {
+        y = e.clientY + 10;
+      }
+      // 调整位置防止超出下边界
+      if (y + menuHeight > canvasHeight) {
+        y = canvasHeight - menuHeight - 10;
+      }
+
+      this.currentNode = data;
+      this.menuPosition = {x, y};
+      this.rightMenuShow = show
     }
   }
 
