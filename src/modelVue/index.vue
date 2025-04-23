@@ -113,10 +113,14 @@ export default {
           },
 
         },
-        nodeTextEdit: false,// 禁止修改内容
+        nodeTextEdit: false,// 禁止修改node内容
+        edgeTextEdit: false,// 禁止修改edge内容
         stopScrollGraph: true, // 禁止鼠标滚动画布
         stopZoomGraph: true, // 禁止缩放画布
-        adjustEdge: false, // 禁止用户拖动中间点
+        adjustEdge: false, // 禁止用户拖动中间
+        // 取消连线边框
+        edgeSelectedOutline: false,
+        hoverOutline: false
       });
 
       // vue model 组件组册

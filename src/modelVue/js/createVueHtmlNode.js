@@ -28,8 +28,8 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
     getAnchorStyle(anchorInfo) {
         const style = super.getAnchorStyle(anchorInfo);
         style.stroke = "rgb(24, 125, 255)";
-        style.r = 3;
-        style.hover.r = 8;
+        style.r = 6;
+        style.hover.r = 10;
         style.hover.fill = "rgb(24, 125, 255)";
         style.hover.stroke = "rgb(24, 125, 255)";
         style.isShowAnchor = true;
