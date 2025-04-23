@@ -172,9 +172,15 @@ export default {
         this.rightMenuShow = false
       })
 
-      this.lf.on('anchor:dragstart', ({data}) => {
-        console.log('锚点被点击/开始连线：', data);
-        // data.nodeId, data.anchorId, data.type ('source' 或 'target')
+      this.lf.on('custom:anchorClick', ({node}) => {
+        console.log('锚点被点击/开始连线：', node);
+        const menu = document.getElementById('anchor-menu');
+        if (node.type === "start-v") {
+          this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
+        } else {
+          this.anchorMenu = anchorMenu
+        }
+        menu.style.display = 'block';
       });
 
       // 监听节点右键事件

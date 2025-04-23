@@ -35,13 +35,17 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         style.isShowAnchor = true;
         style.onclick = (e) => {
             console.log('点击了锚点：', this);
-            if (this.type === 'end-v') return
-            window.currentNode = this;
             const menu = document.getElementById('anchor-menu');
+            if (this.type === 'end-v') {
+                menu.style.display = 'none';
+                return
+            }
+            //向外派发事件
+            this.graphModel.eventCenter.emit('custom:anchorClick', {node: this});
+            window.currentNode = this;
+
             const canvasWidth = window.innerWidth;
             const canvasHeight = window.innerHeight;
-            // 显示菜单
-            menu.style.display = 'block';
 
             const menuWidth = menu.offsetWidth; // 假设宽度 150px
             const menuHeight = menu.offsetHeight; // 假设高度 100px
