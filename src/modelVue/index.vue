@@ -182,6 +182,9 @@ export default {
         }
         menu.style.display = 'block';
       });
+      this.lf.on('anchor:click', () => {
+        this.rightMenuShow = false
+      });
 
       // 监听节点右键事件
       this.lf.on('node:contextmenu', ({e, data}) => {
