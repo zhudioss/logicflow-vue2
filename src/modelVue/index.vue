@@ -14,6 +14,8 @@
     <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 116px;right: 5px;z-index: 9999999">Edge
       - A
     </el-button>
+
+    <!--    锚点菜单-->
     <div id="anchor-menu">
       <div class="content" v-for="item in anchorMenu" :key="item.id"
            @click="addNodeClick(item.type)">
@@ -21,6 +23,17 @@
         <p>{{ item.name }}</p>
       </div>
     </div>
+
+    <!--    右键菜单-->
+    <div id="custom-menu" v-show="rightMenuShow" :style="{ top: menuPosition.y + 'px', left: menuPosition.x + 'px' }">
+      <div class="content" v-for="item in rightMenuShowList" :key="item.id"
+           @click="handleMenuClick('delete')">
+        <img :src="item.icon" alt="" draggable="false">
+        <p>{{ item.name }}</p>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -29,7 +42,6 @@ import LogicFlow from '@logicflow/core';
 import {Control} from "@logicflow/extension";
 
 LogicFlow.use(Control);
-import {Menu} from "@logicflow/extension";
 import "@logicflow/core/lib/style/index.css";
 import {DndPanel} from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css"
@@ -63,6 +75,17 @@ export default {
       anchorMenu,
 
       menuDom: null,
+      rightMenuShow: false,
+
+      rightMenuShowList: [
+        {
+          id: Math.random(),
+          name: '删除',
+          icon: require('@/assets/删除.png'),
+        },
+      ],
+
+      menuPosition: {x: 0, y: 0},
 
     }
   },
@@ -79,7 +102,7 @@ export default {
       this.lf = new LogicFlow({
         container: document.querySelector('#lf-container'),
         edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
-        plugins: [Menu, DndPanel],
+        plugins: [DndPanel],
         grid: {
           size: 15, // 点的密集程度
           visible: true,
@@ -150,29 +173,31 @@ export default {
         // data.nodeId, data.anchorId, data.type ('source' 或 'target')
       });
 
-      // 配置菜单
-      this.lf.setMenuConfig({
-        // 连接线
-        edgeMenu: [
-          {
-            text: "删除",
-            callback: (edge) => {
-              console.log(edge, '------')
-              this.lf.deleteEdge(edge.id);
-            }
-          }
-        ],
-        // 节点
-        nodeMenu: [
-          {
-            text: "删除",
-            callback: (node) => {
-              vueInstanceManager.remove(node.id)
-              this.lf.deleteNode(node.id);
-            },
-          },
-        ], // 覆盖默认的节点右键菜单
-        graphMenu: [], // 覆盖默认的边右键菜单，与false表现一样
+      // 监听节点右键事件
+      this.lf.on('node:contextmenu', ({e, data}) => {
+        console.log(e, data, 'daafafdasfdsafdafdasfadsf')
+        e.preventDefault();
+        this.currentNode = data;
+        this.menuPosition = {x: e.clientX, y: e.clientY};
+        this.rightMenuShow = true
+      });
+
+      // 监听连接线右键事件
+      this.lf.on('edge:contextmenu', ({e, data}) => {
+        console.log(e, data, 'daafafdasfdsafdafdasfadsf')
+        e.preventDefault();
+        this.currentNode = data;
+        this.menuPosition = {x: e.clientX, y: e.clientY};
+        this.rightMenuShow = true
+      });
+
+      // 空白处右键也可以监听
+      this.lf.on('blank:contextmenu', ({e}) => {
+        console.log(e, 'daafafdasfdsafdafdasfadsf')
+        e.preventDefault();
+        this.menuPosition = {x: e.clientX, y: e.clientY};
+        this.rightMenuShow = false
+        this.currentNode = null; // 说明右键在空白处
       });
 
       this.lf.render(this.nodeData);
@@ -255,6 +280,12 @@ export default {
 
       // 关闭菜单
       this.menuDom.style.display = 'none';
+    },
+
+    // 右键菜单点击
+    handleMenuClick() {
+      this.lf.deleteNode(this.currentNode.id) || this.lf.deleteEdge(this.currentNode.id);
+      this.rightMenuShow = false
     }
   }
 

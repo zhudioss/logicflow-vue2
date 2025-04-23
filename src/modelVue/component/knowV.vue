@@ -137,9 +137,10 @@ export default {
       return new Promise((resolve) => {
         const graph = this.model
         graph.setProperties({
-          a: 1,
-          b: 2,
-          c: 3
+          input1:this.input1,
+          input2:this.input2,
+          value:this.value,
+          groupList:this.groupList,
         })
         this.bus.$emit("childMethodDone", graph.id);
         resolve();

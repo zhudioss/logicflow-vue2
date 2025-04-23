@@ -9,9 +9,6 @@ export const nodeData = {
                 "text": "Hello Vue2!",
                 "width": 300,
                 "height": 189,
-                "a": 1,
-                "b": 2,
-                "c": 3
             }
         },
         {
@@ -32,16 +29,13 @@ export const nodeData = {
                         0
                     ]
                 ],
-                "a": 1,
-                "b": 2,
-                "c": 3
             }
         },
         {
             "id": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16",
             "type": "end-v",
-            "x": 1219,
-            "y": 271,
+            "x": 1256,
+            "y": 272,
             "properties": {
                 "width": 300,
                 "height": 189,
@@ -51,9 +45,6 @@ export const nodeData = {
                         0
                     ]
                 ],
-                "a": 1,
-                "b": 2,
-                "c": 3
             }
         }
     ],
@@ -106,8 +97,8 @@ export const nodeData = {
                 "y": 383
             },
             "endPoint": {
-                "x": 1069,
-                "y": 271
+                "x": 1106,
+                "y": 272
             },
             "pointsList": [
                 {
@@ -119,12 +110,12 @@ export const nodeData = {
                     "y": 383
                 },
                 {
-                    "x": 969,
-                    "y": 271
+                    "x": 1006,
+                    "y": 272
                 },
                 {
-                    "x": 1069,
-                    "y": 271
+                    "x": 1106,
+                    "y": 272
                 }
             ]
         }

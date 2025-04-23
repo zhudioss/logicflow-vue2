@@ -6,7 +6,7 @@
 }
 
 .drag-panel {
-  width: 150px;
+  width: 140px;
   height: 200px;
   margin: 5px;
 
@@ -36,7 +36,7 @@
 
 }
 
-#anchor-menu {
+#anchor-menu, #custom-menu {
   width: 150px;
   position: absolute;
   display: none;
@@ -69,6 +69,29 @@
       margin-right: 10px;
     }
   }
+}
+
+#custom-menu {
+  width: 150px;
+  position: absolute;
+  left: 20%;
+  top: 50%;
+  display: block;
+  background: white;
+
+  border-radius: 8px;
+  padding: 0px;
+  background: #fef0f0;
+
+  .content {
+    cursor: pointer;
+
+    p {
+      font-size: 13px !important;
+    }
+
+  }
+
 }
 
 ::v-deep {
@@ -111,4 +134,5 @@
     border: none;
     filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
   }
+
 }

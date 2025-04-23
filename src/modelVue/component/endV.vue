@@ -11,7 +11,7 @@
       <div style="color: rgba(66,66,66,0.4);font-size: 12px;">结束定义输出参数</div>
       <div style="font-weight: bold;margin-top: 15px">输出参数</div>
       <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">参数名称</div>
-      <el-input v-model="input2" placeholder="请输入参数名称" clearable></el-input>
+      <el-input v-model="input" placeholder="请输入参数名称" clearable></el-input>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
   computed: {},
   data() {
     return {
-      input2: '',
+      input: '',
     }
   },
   watch: {},
@@ -39,9 +39,7 @@ export default {
       return new Promise((resolve) => {
         const graph = this.model
         graph.setProperties({
-          a: 1,
-          b: 2,
-          c: 3
+          endInput:this.input
         })
         this.bus.$emit("childMethodDone", graph.id);
         resolve();
