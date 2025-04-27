@@ -41,7 +41,7 @@ export const componentsList = [
             height: 189,
             anchorsOffset: [
                 // [ x ,y ]
-                [-300 / 2, 0],
+                [],
             ]
         },
         icon: require('@/assets/结束.png'),

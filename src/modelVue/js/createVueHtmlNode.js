@@ -29,8 +29,8 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
     // getAnchorStyle(anchorInfo) {
     //     const style = super.getAnchorStyle(anchorInfo);
     //     console.log(this, 'kdjkajkajkl;a')
+    //     return style;
     // }
-
 
 }
 
@@ -87,7 +87,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
         // 自定义锚点
         getAnchorShape(anchorData) {
             const {x, y, id} = anchorData;
-            console.log(this, '-=-=-=-=-=')
+            // console.log(this, '-=-=-=-=-=')
             return h(
                 'g', // 分组元素，可以放多个图形
                 {key: `anchor-${id}`},
