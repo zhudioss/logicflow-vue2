@@ -103,9 +103,9 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                     h('image', {
                         href: require('@/assets/添加.png'),
                         background: '#fff',
-                        width: 20,
-                        height: 20,
-                        transform: `translate(${x - 10}, ${y - 10})`,
+                        width: 18,
+                        height: 18,
+                        transform: this.props.model.type !== 'end-v' ? `translate(${x - 9}, ${y - 9})` : null,
                         onclick: (e) => {
                             e.stopPropagation(); // 防止事件冒泡到别的地方
                             // console.log('点击了锚点：', this);
@@ -150,6 +150,8 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                 ]
             );
         }
+
+
     }
 
     return {

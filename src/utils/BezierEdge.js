@@ -90,8 +90,6 @@ class NotHighlightedModel extends BezierEdgeModel {
     }
 }
 
-//
-
 
 // 默认无动画
 export const noAnimationEdge = {
