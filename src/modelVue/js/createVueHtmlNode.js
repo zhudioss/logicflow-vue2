@@ -1,5 +1,5 @@
 // createVueHtmlNode.js
-import {HtmlNode, HtmlNodeModel} from "@logicflow/core";
+import {HtmlNode, HtmlNodeModel, h} from "@logicflow/core";
 import Vue from "vue";
 import vueInstanceManager from "./vueInstanceManager";
 import {componentsList} from "./componentsList";
@@ -25,52 +25,11 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         return style;
     }
 
-    getAnchorStyle(anchorInfo) {
-        const style = super.getAnchorStyle(anchorInfo);
-        style.stroke = "rgb(24, 125, 255)";
-        style.r = 6;
-        style.hover.r = 10;
-        style.hover.fill = "rgb(24, 125, 255)";
-        style.hover.stroke = "rgb(24, 125, 255)";
-        style.isShowAnchor = true;
-        style.onclick = (e) => {
-            console.log('点击了锚点：', this);
-            const menu = document.getElementById('anchor-menu');
-            if (this.type === 'end-v') {
-                menu.style.display = 'none';
-                return
-            }
-            //向外派发事件
-            this.graphModel.eventCenter.emit('custom:anchorClick', {node: this});
-            window.currentNode = this;
-
-            const canvasWidth = window.innerWidth;
-            const canvasHeight = window.innerHeight;
-
-            const menuWidth = menu.offsetWidth; // 假设宽度 150px
-            const menuHeight = menu.offsetHeight; // 假设高度 100px
-
-            let left = e.clientX + 10;
-            let top = e.clientY - menuHeight / 2;
-
-            // 调整位置防止超出右边界
-            if (left + menuWidth > canvasWidth) {
-                left = canvasWidth - menuWidth - 10;
-            }
-            // 调整位置防止超出上边界
-            if (top < 0) {
-                top = e.clientY + 10;
-            }
-            // 调整位置防止超出下边界
-            if (top + menuHeight > canvasHeight) {
-                top = canvasHeight - menuHeight - 10;
-            }
-
-            menu.style.left = `${left}px`;
-            menu.style.top = `${top}px`;
-        }
-        return style;
-    }
+    // 默认锚点样式
+    // getAnchorStyle(anchorInfo) {
+    //     const style = super.getAnchorStyle(anchorInfo);
+    //     console.log(this, 'kdjkajkajkl;a')
+    // }
 
 
 }
@@ -123,6 +82,73 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
 
         getText() {
             return null;
+        }
+
+        // 自定义锚点
+        getAnchorShape(anchorData) {
+            const {x, y, id} = anchorData;
+            console.log(this, '-=-=-=-=-=')
+            return h(
+                'g', // 分组元素，可以放多个图形
+                {key: `anchor-${id}`},
+                [
+                    // 两种方式 path和image
+                    // h('path', {
+                    //     d: 'M10 0 L20 20 L0 20 Z', // 这里是个三角形的 path，自由定义
+                    //     fill: 'red',
+                    //     stroke: 'black',
+                    //     strokeWidth: 1,
+                    //     transform: `translate(${x - 10}, ${y - 10})`,
+                    // }),
+                    h('image', {
+                        href: require('@/assets/添加.png'),
+                        background: '#fff',
+                        width: 20,
+                        height: 20,
+                        transform: `translate(${x - 10}, ${y - 10})`,
+                        onclick: (e) => {
+                            e.stopPropagation(); // 防止事件冒泡到别的地方
+                            // console.log('点击了锚点：', this);
+                            const menu = document.getElementById('anchor-menu');
+                            if (this.props.model.type === 'end-v') {
+                                menu.style.display = 'none';
+                                return
+                            }
+                            //向外派发事件
+                            this.props.graphModel.eventCenter.emit('custom:anchorClick', {node: this.props.model});
+                            window.currentNode = this;
+
+                            const canvasWidth = window.innerWidth;
+                            const canvasHeight = window.innerHeight;
+
+                            const menuWidth = menu.offsetWidth; // 假设宽度 150px
+                            const menuHeight = menu.offsetHeight; // 假设高度 100px
+
+                            let left = e.clientX + 10;
+                            let top = e.clientY - menuHeight / 2;
+
+                            // 调整位置防止超出右边界
+                            if (left + menuWidth > canvasWidth) {
+                                left = canvasWidth - menuWidth - 10;
+                            }
+                            // 调整位置防止超出上边界
+                            if (top < 0) {
+                                top = e.clientY + 10;
+                            }
+                            // 调整位置防止超出下边界
+                            if (top + menuHeight > canvasHeight) {
+                                top = canvasHeight - menuHeight - 10;
+                            }
+
+                            menu.style.left = `${left}px`;
+                            menu.style.top = `${top}px`;
+                        },
+                        onmouseenter: (e) => {
+                            e.target.style.cursor = 'pointer'; // 鼠标移入，变小手
+                        },
+                    })
+                ]
+            );
         }
     }
 
