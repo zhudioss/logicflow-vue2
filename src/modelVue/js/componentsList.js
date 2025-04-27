@@ -26,7 +26,7 @@ export const componentsList = [
             height: 600,
             anchorsOffset: [
                 // [ x ,y ]
-                [-300 / 2, 0],
+                // [-300 / 2, 0],
                 [300 / 2, 0],
             ]
         },
