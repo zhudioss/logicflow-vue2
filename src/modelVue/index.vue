@@ -46,7 +46,7 @@ import "@logicflow/core/lib/style/index.css";
 import {DndPanel} from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css"
 
-import {noAnimationEdge, animationEdge, Highlight, NotHighlighted} from '@/utils/BezierEdge'
+import {defaultEdge, animationEdge, Highlight} from '@/utils/BezierEdge'
 
 // 全局注册管理器 函数工厂
 import vueInstanceManager from '@/modelVue/js/vueInstanceManager';
@@ -101,7 +101,7 @@ export default {
     init() {
       this.lf = new LogicFlow({
         container: document.querySelector('#lf-container'),
-        edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
+        // edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
         plugins: [DndPanel],
         grid: {
           size: 15, // 点的密集程度
@@ -132,10 +132,9 @@ export default {
         }))
       })
       // 普通model 注册
-      this.lf.register(noAnimationEdge)
+      this.lf.register(defaultEdge)
       this.lf.register(animationEdge)
       this.lf.register(Highlight)
-      this.lf.register(NotHighlighted)
       // 设置全局默认dege样式
       this.lf.setDefaultEdgeType('EDGE_BEZIER');
 
@@ -154,7 +153,7 @@ export default {
         const edges = this.lf.graphModel.edges;
         edges.forEach(edge => {
           if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-            this.lf.changeEdgeType(edge.id, 'NotHighlighted');
+            this.lf.changeEdgeType(edge.id, 'EDGE_BEZIER');
           }
         });
       });
@@ -179,10 +178,11 @@ export default {
       this.lf.on('custom:anchorClick', ({node}) => {
         console.log('锚点被点击/开始连线：', node);
         const menu = document.getElementById('anchor-menu');
+        this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
         if (node.type === "start-v") {
           this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
         } else {
-          this.anchorMenu = anchorMenu
+          this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v' && item.type !== node.type)
         }
         menu.style.display = 'block';
       });
@@ -267,9 +267,10 @@ export default {
       const currentNode = window.currentNode;
       if (!currentNode) return;
 
-      const graphModel = currentNode.graphModel;
-      const x = currentNode.x + 450;
-      const y = currentNode.y;
+      const graphModel = currentNode.props.graphModel;
+      console.log(currentNode, '-=-=-=-=-=')
+      const x = currentNode.props.model.x + 450;
+      const y = currentNode.props.model.y;
 
       const newNode = graphModel.addNode({
         type,

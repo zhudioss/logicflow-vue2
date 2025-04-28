@@ -10,10 +10,6 @@ export const componentsList = [
         properties: {
             width: 300,
             height: 189,
-            anchorsOffset: [
-                // [ x ,y ]
-                [300 / 2, 0],
-            ]
         },
         icon: require('@/assets/开始.png'),
     },
@@ -24,11 +20,6 @@ export const componentsList = [
         properties: {
             width: 300,
             height: 600,
-            anchorsOffset: [
-                // [ x ,y ]
-                // [-300 / 2, 0],
-                [300 / 2, 0],
-            ]
         },
         icon: require('@/assets/知识库.png'),
     },
@@ -39,10 +30,6 @@ export const componentsList = [
         properties: {
             width: 300,
             height: 189,
-            anchorsOffset: [
-                // [ x ,y ]
-                [],
-            ]
         },
         icon: require('@/assets/结束.png'),
     }

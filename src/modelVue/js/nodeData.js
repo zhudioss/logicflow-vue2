@@ -51,7 +51,7 @@ export const nodeData = {
     "edges": [
         {
             "id": "5d7482d7-9a0f-438f-ab56-b83062ffc6dc",
-            "type": "NotHighlighted",
+            "type": "EDGE_BEZIER",
             "properties": {},
             "sourceNodeId": "1",
             "targetNodeId": "a6776c04-6307-4c0a-81d2-39ebaf98773f",
@@ -86,7 +86,7 @@ export const nodeData = {
         },
         {
             "id": "cb55a32d-8944-420e-a74e-1721c156b6fb",
-            "type": "NotHighlighted",
+            "type": "EDGE_BEZIER",
             "properties": {},
             "sourceNodeId": "a6776c04-6307-4c0a-81d2-39ebaf98773f",
             "targetNodeId": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16",

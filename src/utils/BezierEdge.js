@@ -1,6 +1,35 @@
-import {BezierEdge, BezierEdgeModel} from '@logicflow/core'
+import {BezierEdgeModel, BezierEdge, h} from '@logicflow/core'
 
-// 有动画
+// 线的 view
+class CustomEdge extends BezierEdge {
+    getEndArrow() {
+        const {stroke} = this.props.model.getArrowStyle();
+        return h("path", {
+            stroke,
+            fill: stroke,
+            d: 'M0 0 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0',
+            transform: `translate(2,0)`, // 🔥 加固定旋转
+        });
+    }
+}
+
+// 默认
+class defaultBezierEdgeModel extends BezierEdgeModel {
+    constructor(data, graphModel) {
+        super(data, graphModel);
+    }
+
+    // 连接线的样式
+    getEdgeStyle() {
+        const style = super.getEdgeStyle();
+        style.stroke = "#d0d5dc";
+        // 虚线间隔
+        style.strokeDasharray = "10 0";
+        return style;
+    }
+}
+
+// 动画
 class animationModel extends BezierEdgeModel {
     constructor(data, graphModel) {
         super(data, graphModel);
@@ -15,45 +44,6 @@ class animationModel extends BezierEdgeModel {
         style.animationDuration = '30s';
         style.animationDirection = 'normal';
         style.strokeDasharray = "10 5";
-        return style;
-    }
-
-    // 箭头颜色
-    getArrowStyle() {
-        const style = super.getArrowStyle();
-        style.stroke = '#5dc822';
-        return style;
-    }
-
-    // 连接线的样式
-    getEdgeStyle() {
-        const style = super.getEdgeStyle();
-        style.stroke = "#5dc822";
-        // 虚线间隔
-        style.strokeDasharray = "3 5";
-        return style;
-    }
-}
-
-// 默认样式
-class customBezierEdgeModel extends BezierEdgeModel {
-    constructor(data, graphModel) {
-        super(data, graphModel);
-    }
-
-    // 箭头
-    getArrowStyle() {
-        const style = super.getArrowStyle();
-        style.stroke = '#d0d5dc';
-        return style;
-    }
-
-    // 连接线的样式
-    getEdgeStyle() {
-        const style = super.getEdgeStyle();
-        style.stroke = "#d0d5dc";
-        // 虚线间隔
-        style.strokeDasharray = "10 0";
         return style;
     }
 }
@@ -74,50 +64,29 @@ class HighlightModel extends BezierEdgeModel {
     }
 }
 
-// 非高亮
-class NotHighlightedModel extends BezierEdgeModel {
-    constructor(data, graphModel) {
-        super(data, graphModel);
-    }
 
-    // 连接线的样式
-    getEdgeStyle() {
-        const style = super.getEdgeStyle();
-        style.stroke = "#d0d5dc";
-        // 虚线间隔
-        style.strokeDasharray = "10 0";
-        return style;
-    }
-}
-
-
-// 默认无动画
-export const noAnimationEdge = {
+// 默认 - 导出
+export const defaultEdge = {
     type: 'EDGE_BEZIER',
-    view: BezierEdge,
-    model: customBezierEdgeModel,
+    view: CustomEdge,
+    model: defaultBezierEdgeModel,
 }
-
-// 有动画
+// 动画 - 导出
 export const animationEdge = {
     type: 'EDGE_BEZIER_A',
-    view: BezierEdge,
+    view: CustomEdge,
     model: animationModel,
 }
-
-// 滑动节点高亮
+// 高亮 - 导出
 export const Highlight = {
     type: 'Highlight',
-    view: BezierEdge,
+    view: CustomEdge,
     model: HighlightModel,
 }
 
-// 离开取消高亮
-export const NotHighlighted = {
-    type: 'NotHighlighted',
-    view: BezierEdge,
-    model: NotHighlightedModel,
-}
+
+
+
 
 
 

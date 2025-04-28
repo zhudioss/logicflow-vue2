@@ -25,12 +25,25 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         return style;
     }
 
-    // 默认锚点样式
-    // getAnchorStyle(anchorInfo) {
-    //     const style = super.getAnchorStyle(anchorInfo);
-    //     console.log(this, 'kdjkajkajkl;a')
-    //     return style;
-    // }
+    // 设置锚点数据
+    get anchors() {
+        const {x, y, width, type, id} = this;
+
+        if (type === 'start-v') {
+            return [
+                {x: x + width / 2, y, show: 'block', id: `${id}_right`}, // 右边
+            ];
+        } else if (type === 'end-v') {
+            return [
+                {x: x - width / 2, y, show: 'none', id: `${id}_left`}, // 左边
+            ];
+        } else {
+            return [
+                {x: x - width / 2, y, show: 'none', id: `${id}_left`}, // 左边
+                {x: x + width / 2, y, show: 'block', id: `${id}_right`}, // 右边
+            ];
+        }
+    }
 
 }
 
@@ -86,26 +99,18 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
 
         // 自定义锚点
         getAnchorShape(anchorData) {
-            const {x, y, id} = anchorData;
-            // console.log(this, '-=-=-=-=-=')
+            const {x, y, id, show} = anchorData;
             return h(
                 'g', // 分组元素，可以放多个图形
                 {key: `anchor-${id}`},
                 [
-                    // 两种方式 path和image
-                    // h('path', {
-                    //     d: 'M10 0 L20 20 L0 20 Z', // 这里是个三角形的 path，自由定义
-                    //     fill: 'red',
-                    //     stroke: 'black',
-                    //     strokeWidth: 1,
-                    //     transform: `translate(${x - 10}, ${y - 10})`,
-                    // }),
                     h('image', {
                         href: require('@/assets/添加.png'),
                         background: '#fff',
                         width: 18,
                         height: 18,
-                        transform: this.props.model.type !== 'end-v' ? `translate(${x - 9}, ${y - 9})` : null,
+                        display: show,
+                        transform: `translate(${x - 9}, ${y - 9})`,
                         onclick: (e) => {
                             e.stopPropagation(); // 防止事件冒泡到别的地方
                             // console.log('点击了锚点：', this);
@@ -124,7 +129,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                             const menuWidth = menu.offsetWidth; // 假设宽度 150px
                             const menuHeight = menu.offsetHeight; // 假设高度 100px
 
-                            let left = e.clientX + 10;
+                            let left = e.clientX + 15;
                             let top = e.clientY - menuHeight / 2;
 
                             // 调整位置防止超出右边界
@@ -150,7 +155,6 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                 ]
             );
         }
-
 
     }
 
