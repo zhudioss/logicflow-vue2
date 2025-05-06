@@ -12,13 +12,14 @@ export const nodeData = {
             }
         },
         {
-            "id": "a6776c04-6307-4c0a-81d2-39ebaf98773f",
+            "id": "node-2",
             "type": "know-v",
             "x": 727,
             "y": 383,
             "properties": {
                 "width": 300,
                 "height": 600,
+                "hideAnchor":'true',
                 "anchorsOffset": [
                     [
                         -150,
@@ -32,13 +33,14 @@ export const nodeData = {
             }
         },
         {
-            "id": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16",
+            "id": "node-3",
             "type": "end-v",
             "x": 1256,
             "y": 272,
             "properties": {
                 "width": 300,
                 "height": 189,
+                "hideAnchor":'true',
                 "anchorsOffset": [
                     [
                         -150,
@@ -50,13 +52,13 @@ export const nodeData = {
     ],
     "edges": [
         {
-            "id": "5d7482d7-9a0f-438f-ab56-b83062ffc6dc",
+            "id": "edges1",
             "type": "EDGE_BEZIER",
             "properties": {},
             "sourceNodeId": "1",
-            "targetNodeId": "a6776c04-6307-4c0a-81d2-39ebaf98773f",
+            "targetNodeId": "node-2",
             "sourceAnchorId": "1_0",
-            "targetAnchorId": "a6776c04-6307-4c0a-81d2-39ebaf98773f_0",
+            "targetAnchorId": "node-2_0",
             "startPoint": {
                 "x": 338,
                 "y": 488
@@ -85,13 +87,13 @@ export const nodeData = {
             ]
         },
         {
-            "id": "cb55a32d-8944-420e-a74e-1721c156b6fb",
+            "id": "edges2",
             "type": "EDGE_BEZIER",
             "properties": {},
-            "sourceNodeId": "a6776c04-6307-4c0a-81d2-39ebaf98773f",
-            "targetNodeId": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16",
-            "sourceAnchorId": "a6776c04-6307-4c0a-81d2-39ebaf98773f_1",
-            "targetAnchorId": "6fe0b31e-09af-497b-8f23-dbe6ffca1f16_0",
+            "sourceNodeId": "node-2",
+            "targetNodeId": "node-3",
+            "sourceAnchorId": "node-2_1",
+            "targetAnchorId": "node-3_0",
             "startPoint": {
                 "x": 877,
                 "y": 383

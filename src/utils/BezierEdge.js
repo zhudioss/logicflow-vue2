@@ -2,11 +2,19 @@ import {BezierEdgeModel, BezierEdge, h} from '@logicflow/core'
 
 // 线的 view
 class CustomEdge extends BezierEdge {
-    getEndArrow() {
-        const {stroke} = this.props.model.getArrowStyle();
+    getStartArrow() {
         return h("path", {
-            stroke,
-            fill: stroke,
+            stroke: '#ccc',
+            fill: '#3f58fd',
+            d: 'M0 0 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0',
+            transform: `translate(-2,0)`, // 🔥 加固定旋转
+        });
+    }
+
+    getEndArrow() {
+        return h("path", {
+            stroke: '#ccc',
+            fill: '#3f58fd',
             d: 'M0 0 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0',
             transform: `translate(2,0)`, // 🔥 加固定旋转
         });

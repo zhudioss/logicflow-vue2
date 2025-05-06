@@ -16,6 +16,7 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         })
         this.text.editable = false;
         this.inputData = this.text.value;
+
     }
 
     getOutlineStyle() {
@@ -26,25 +27,67 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
     }
 
     // 设置锚点数据
-    get anchors() {
-        const {x, y, width, type, id} = this;
-
+    getDefaultAnchor() {
+        const {x, y, width, type, id, properties} = this;
+        const left_A = x - width / 2
+        const right_A = x + width / 2
         if (type === 'start-v') {
             return [
-                {x: x + width / 2, y, show: 'block', id: `${id}_right`}, // 右边
+                {
+                    x: right_A,
+                    y,
+                    show: 'block',
+                    id: `right_${id}`,
+                    tag: 'end',
+                },
             ];
-        } else if (type === 'end-v') {
+        }
+        if (type === 'know-v') {
             return [
-                {x: x - width / 2, y, show: 'none', id: `${id}_left`}, // 左边
+                {
+                    x: left_A,
+                    y,
+                    show: properties.hideAnchor ? 'none' : 'block',
+                    id: `left_${id}`,
+                    tag: 'start',
+                },
+                {
+                    x: right_A,
+                    y,
+                    show: 'block',
+                    id: `right_${id}`,
+                    tag: 'end',
+                }
             ];
-        } else {
+        }
+        if (type === 'end-v') {
             return [
-                {x: x - width / 2, y, show: 'none', id: `${id}_left`}, // 左边
-                {x: x + width / 2, y, show: 'block', id: `${id}_right`}, // 右边
+                {
+                    x: left_A,
+                    y,
+                    show: properties.hideAnchor ? 'none' : 'block',
+                    id: `left_${id}`,
+                    tag: 'start',
+                },
             ];
         }
     }
 
+    initNodeData(data) {
+        super.initNodeData(data);
+        // 禁止节点文本可以编辑
+        // this.text.editable = false;
+        // 定义连接规则，只允许出口节点连接入口节点
+        const rule = {
+            validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
+                return (
+                    sourceAnchor.tag === "end" &&
+                    targetAnchor.tag === "start"
+                );
+            }
+        };
+        this.sourceRules.push(rule);
+    }
 }
 
 // 工厂方法，返回 LogicFlow 注册配置
@@ -73,6 +116,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                 props.graphModel.eventCenter.emit("custom:onBtnClick", data);
             });
 
+
             // 注册到全局管理器
             vueInstanceManager.set(this.id, {
                 vm: this.vm, type,
@@ -99,10 +143,10 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
 
         // 自定义锚点
         getAnchorShape(anchorData) {
-            const {x, y, id, show} = anchorData;
+            const {x, y, id, show, className} = anchorData;
             return h(
                 'g', // 分组元素，可以放多个图形
-                {key: `anchor-${id}`},
+                {key: id},
                 [
                     h('image', {
                         href: require('@/assets/添加.png'),
@@ -110,6 +154,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                         width: 18,
                         height: 18,
                         display: show,
+                        className,
                         transform: `translate(${x - 9}, ${y - 9})`,
                         onclick: (e) => {
                             e.stopPropagation(); // 防止事件冒泡到别的地方
@@ -149,7 +194,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                             menu.style.top = `${top}px`;
                         },
                         onmouseenter: (e) => {
-                            e.target.style.cursor = 'pointer'; // 鼠标移入，变小手
+                            e.target.style.cursor = 'pointer';
                         },
                     })
                 ]

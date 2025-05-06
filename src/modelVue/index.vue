@@ -56,6 +56,11 @@ import {componentsList} from "./js/componentsList";
 import {nodeData} from "./js/nodeData";
 import {anchorMenu} from "./js/anchor-menu";
 
+// node edge anchor 事件导入
+import nodeEvent from './event/node'
+import edgeEvent from './event/edge'
+import anchorEvent from './event/anchor'
+
 export default {
   name: 'App',
   data() {
@@ -74,6 +79,8 @@ export default {
       // 自定义菜单
       anchorMenu,
 
+      clickEdgeId: null,
+
       menuDom: null,
       rightMenuShow: false,
 
@@ -86,7 +93,6 @@ export default {
       ],
 
       menuPosition: {x: 0, y: 0},
-
     }
   },
   created() {
@@ -111,7 +117,6 @@ export default {
             color: '#e2e4ed', // 点的颜色
             thickness: 1, // 点的大小
           },
-
         },
         nodeTextEdit: false,// 禁止修改node内容
         edgeTextEdit: false,// 禁止修改edge内容
@@ -131,79 +136,19 @@ export default {
           properties: item.properties
         }))
       })
+
       // 普通model 注册
       this.lf.register(defaultEdge)
       this.lf.register(animationEdge)
       this.lf.register(Highlight)
+
       // 设置全局默认dege样式
       this.lf.setDefaultEdgeType('EDGE_BEZIER');
 
-      // 滑动
-      this.lf.on('node:mouseenter', ({data}) => {
-        const nodeId = data.id;
-        const edges = this.lf.graphModel.edges;
-        edges.forEach(edge => {
-          if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-            this.lf.changeEdgeType(edge.id, 'Highlight');
-          }
-        });
-      });
-      this.lf.on('node:mouseleave', ({data}) => {
-        const nodeId = data.id;
-        const edges = this.lf.graphModel.edges;
-        edges.forEach(edge => {
-          if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-            this.lf.changeEdgeType(edge.id, 'EDGE_BEZIER');
-          }
-        });
-      });
-
-      this.lf.on('node:click', ({data}) => {
-        console.log(data, '---------')
-        this.rightMenuShow = false
-        const nodeId = data.id;
-        const vueManager = vueInstanceManager.getAll()
-        vueManager.forEach(item => {
-          if (item.id === nodeId) {
-            item.vm.$el.style.border = '1.5px solid #3f58fd'
-          } else {
-            item.vm.$el.style.border = 'none'
-          }
-        })
-      });
-      this.lf.on('blank:click', () => {
-        this.rightMenuShow = false
-      })
-
-      this.lf.on('custom:anchorClick', ({node}) => {
-        console.log('锚点被点击/开始连线：', node);
-        const menu = document.getElementById('anchor-menu');
-        this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        if (node.type === "start-v") {
-          this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        } else {
-          this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v' && item.type !== node.type)
-        }
-        menu.style.display = 'block';
-      });
-      this.lf.on('anchor:click', () => {
-        this.rightMenuShow = false
-      });
-
-      // 监听节点右键事件
-      this.lf.on('node:contextmenu', ({e, data}) => {
-        this.contextmenuFun(e, data, true)
-      });
-
-      // 监听连接线右键事件
-      this.lf.on('edge:contextmenu', ({e, data}) => {
-        this.contextmenuFun(e, data, true)
-      });
-
-      // 空白处右键也可以监听
-      this.lf.on('blank:contextmenu', ({e}) => {
-        this.contextmenuFun(e, null, false)
-      });
+      // node edge anchor 事件
+      nodeEvent(this)
+      edgeEvent(this)
+      anchorEvent(this)
 
       this.lf.render(this.nodeData);
 
@@ -227,6 +172,7 @@ export default {
         properties: resData.properties
       });
     },
+
     onDragOver(event) {
       event.preventDefault();
       event.dataTransfer.dropEffect = "move"; // 让鼠标不会出现“复制”加号
@@ -259,7 +205,7 @@ export default {
 
     // 修改链接线颜色
     changeLineColor() {
-      this.lf.changeEdgeType('5d7482d7-9a0f-438f-ab56-b83062ffc6dc', 'EDGE_BEZIER_A');
+      this.lf.changeEdgeType('edges1', 'EDGE_BEZIER_A');
     },
 
     // 添加节点
@@ -268,7 +214,6 @@ export default {
       if (!currentNode) return;
 
       const graphModel = currentNode.props.graphModel;
-      console.log(currentNode, '-=-=-=-=-=')
       const x = currentNode.props.model.x + 450;
       const y = currentNode.props.model.y;
 
@@ -289,40 +234,17 @@ export default {
     },
 
     // 右键菜单点击
-    handleMenuClick() {
-      this.lf.deleteNode(this.currentNode.id) || this.lf.deleteEdge(this.currentNode.id);
+    handleMenuClick(name) {
+      if (name === 'delete') {
+        this.lf.deleteNode(this.currentNode.id) || this.lf.deleteEdge(this.currentNode.id);
+        const sourceNodeModel = this.lf.getNodeModelById(this.currentNode.sourceNodeId);
+        const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId);
+        [sourceNodeModel, targetNodeModel].forEach(model => {
+          model.setProperties({hideAnchor: false});
+        });
+      }
       this.rightMenuShow = false
     },
-    // 右键公共事件
-    contextmenuFun(e, data, show) {
-      e.preventDefault();
-      const menu = document.querySelector('#custom-menu')
-
-      const canvasWidth = window.innerWidth;
-      const canvasHeight = window.innerHeight;
-
-      const menuWidth = menu.offsetWidth;
-      const menuHeight = menu.offsetHeight;
-
-      let x = e.clientX;
-      let y = e.clientY;
-      // 调整位置防止超出右边界
-      if (x + menuWidth > canvasWidth) {
-        x = canvasWidth - menuWidth - 10;
-      }
-      // 调整位置防止超出上边界
-      if (y < 0) {
-        y = e.clientY + 10;
-      }
-      // 调整位置防止超出下边界
-      if (y + menuHeight > canvasHeight) {
-        y = canvasHeight - menuHeight - 10;
-      }
-
-      this.currentNode = data;
-      this.menuPosition = {x, y};
-      this.rightMenuShow = show
-    }
   }
 
 };
