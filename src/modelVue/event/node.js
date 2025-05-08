@@ -2,37 +2,37 @@
 import vueInstanceManager from "@/modelVue/js/vueInstanceManager";
 import contextmenuFun from '../event/contextmenuFun'
 
-export default (_this) => {
+export default function nodeEvent() {
 
     // 经过node
-    _this.lf.on('node:mouseenter', ({data}) => {
+    this.lf.on('node:mouseenter', ({data}) => {
         const nodeId = data.id;
         // 元素置顶
-        _this.lf.toFront(nodeId);
+        this.lf.toFront(nodeId);
 
-        const edges = _this.lf.graphModel.edges;
+        const edges = this.lf.graphModel.edges;
         edges.forEach(edge => {
             if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-                _this.lf.changeEdgeType(edge.id, 'Highlight');
+                this.lf.changeEdgeType(edge.id, 'Highlight');
             }
         });
     });
 
     // 离开node
-    _this.lf.on('node:mouseleave', ({data}) => {
+    this.lf.on('node:mouseleave', ({data}) => {
         const nodeId = data.id;
-        const edges = _this.lf.graphModel.edges;
+        const edges = this.lf.graphModel.edges;
         edges.forEach(edge => {
             if ((edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) && edge.type !== 'EDGE_BEZIER_A') {
-                _this.lf.changeEdgeType(edge.id, 'EDGE_BEZIER');
-                _this.clickEdgeId ? _this.lf.changeEdgeType(_this.clickEdgeId, 'Highlight') : null
+                this.lf.changeEdgeType(edge.id, 'EDGE_BEZIER');
+                this.clickEdgeId ? this.lf.changeEdgeType(this.clickEdgeId, 'Highlight') : null
             }
         });
     });
 
     // 点击node
-    _this.lf.on('node:click', ({data}) => {
-        _this.rightMenuShow = false
+    this.lf.on('node:click', ({data}) => {
+        this.rightMenuShow = false
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
         vueManager.forEach(item => {
@@ -45,20 +45,20 @@ export default (_this) => {
     });
 
     // 点击空白区域
-    _this.lf.on('blank:click', () => {
-        _this.rightMenuShow = false
-        _this.clickEdgeId ? _this.lf.changeEdgeType(_this.clickEdgeId, 'EDGE_BEZIER') : null
-        _this.clickEdgeId = null
+    this.lf.on('blank:click', () => {
+        this.rightMenuShow = false
+        this.clickEdgeId ? this.lf.changeEdgeType(this.clickEdgeId, 'EDGE_BEZIER') : null
+        this.clickEdgeId = null
     })
 
 
     // 空白处右键也可以监听
-    _this.lf.on('blank:contextmenu', ({e}) => {
-        contextmenuFun(e, null, false, _this)
+    this.lf.on('blank:contextmenu', ({e}) => {
+        contextmenuFun.call(this, e, null, false)
     });
 
     // 监听节点右键事件
-    _this.lf.on('node:contextmenu', ({e, data}) => {
-        contextmenuFun(e, data, true, _this)
+    this.lf.on('node:contextmenu', ({e, data}) => {
+        contextmenuFun.call(this, e, data, true)
     });
-};
+}

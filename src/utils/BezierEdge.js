@@ -1,4 +1,5 @@
 import {BezierEdgeModel, BezierEdge, h} from '@logicflow/core'
+import {anchorPublic} from "@/modelVue/js/anchor-menu";
 
 // 线的 view
 class CustomEdge extends BezierEdge {
@@ -49,8 +50,7 @@ class CustomEdge extends BezierEdge {
                 pointerEvents: 'all',
                 style: 'cursor: pointer;transition:0.3s',
                 onclick: (e) => {
-                    e.stopPropagation();
-
+                    anchorPublic.call(this, e)
                     console.log('点击了 logo 图片！');
                 },
                 onmouseover: (e) => {

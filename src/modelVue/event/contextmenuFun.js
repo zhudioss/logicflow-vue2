@@ -1,4 +1,4 @@
-export default (e, data, show, _this) => {
+export default function contextmenuFun(e, data, show) {
     e.preventDefault();
     const menu = document.querySelector('#custom-menu')
 
@@ -23,7 +23,7 @@ export default (e, data, show, _this) => {
         y = canvasHeight - menuHeight - 10;
     }
 
-    _this.currentNode = data;
-    _this.menuPosition = {x, y};
-    _this.rightMenuShow = show
+    this.currentNode = data;
+    this.menuPosition = {x, y};
+    this.rightMenuShow = show
 }

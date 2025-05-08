@@ -158,9 +158,9 @@ export default {
       });
 
       // node edge anchor 事件
-      nodeEvent(this)
-      edgeEvent(this)
-      anchorEvent(this)
+      nodeEvent.call(this)
+      edgeEvent.call(this)
+      anchorEvent.call(this)
     },
 
     onDragStart(event, data) {

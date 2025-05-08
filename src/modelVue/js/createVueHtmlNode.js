@@ -3,6 +3,8 @@ import {HtmlNode, HtmlNodeModel, h} from "@logicflow/core";
 import Vue from "vue";
 import vueInstanceManager from "./vueInstanceManager";
 import {componentsList} from "./componentsList";
+import {anchorPublic} from "@/modelVue/js/anchor-menu";
+
 
 // 默认模型类，可根据需要传入自定义
 export class VueHtmlNodeModel extends HtmlNodeModel {
@@ -158,41 +160,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                         transform: `translate(${x - 9}, ${y - 9})`,
                         style: 'cursor: pointer;transition:0.3s',
                         onclick: (e) => {
-                            e.stopPropagation(); // 防止事件冒泡到别的地方
-                            // console.log('点击了锚点：', this);
-                            const menu = document.getElementById('anchor-menu');
-                            if (this.props.model.type === 'end-v') {
-                                menu.style.display = 'none';
-                                return
-                            }
-                            //向外派发事件
-                            this.props.graphModel.eventCenter.emit('custom:anchorClick', {node: this.props.model});
-                            window.currentNode = this;
-
-                            const canvasWidth = window.innerWidth;
-                            const canvasHeight = window.innerHeight;
-
-                            const menuWidth = menu.offsetWidth; // 假设宽度 150px
-                            const menuHeight = menu.offsetHeight; // 假设高度 100px
-
-                            let left = e.clientX + 15;
-                            let top = e.clientY - menuHeight / 2;
-
-                            // 调整位置防止超出右边界
-                            if (left + menuWidth > canvasWidth) {
-                                left = canvasWidth - menuWidth - 10;
-                            }
-                            // 调整位置防止超出上边界
-                            if (top < 0) {
-                                top = e.clientY + 10;
-                            }
-                            // 调整位置防止超出下边界
-                            if (top + menuHeight > canvasHeight) {
-                                top = canvasHeight - menuHeight - 10;
-                            }
-
-                            menu.style.left = `${left}px`;
-                            menu.style.top = `${top}px`;
+                            anchorPublic.call(this, e);
                         },
                         onmouseenter: (e) => {
                             const image = e.target;
