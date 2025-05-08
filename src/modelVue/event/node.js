@@ -51,6 +51,7 @@ export default (_this) => {
         _this.clickEdgeId = null
     })
 
+
     // 空白处右键也可以监听
     _this.lf.on('blank:contextmenu', ({e}) => {
         contextmenuFun(e, null, false, _this)

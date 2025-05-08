@@ -1,10 +1,33 @@
 import contextmenuFun from '../event/contextmenuFun'
+import {anchorMenu} from "@/modelVue/js/anchor-menu";
 
 export default (_this) => {
     // 点击edge
-    _this.lf.on('edge:click', ({data}) => {
-        _this.clickEdgeId = data.id;
-        _this.lf.changeEdgeType(data.id, 'Highlight');
+    _this.lf.on('edge:click', ({data, e}) => {
+        const edgeModel = _this.lf.getEdgeModelById(data.id);
+        console.log(data, '-=-=-=-=')
+        console.log(_this.lf,'lflflflffl')
+        console.log(edgeModel,'edgeModeledgeModeledgeModel')
+
+        // _this.clickEdgeId = data.id;
+        // const edgeModel = _this.lf.getEdgeModelById(data.id);
+        // _this.lf.changeEdgeType(data.id, 'Highlight');
+    })
+
+    // 经过
+    _this.lf.on('edge:mouseenter', ({data, e}) => {
+        const edgeModel = _this.lf.getEdgeModelById(data.id);
+        edgeModel.setProperties({
+            showAddMark: true
+        });
+    })
+
+    // // 离开
+    _this.lf.on('edge:mouseleave', ({data, e}) => {
+        const edgeModel = _this.lf.getEdgeModelById(data.id);
+        edgeModel.setProperties({
+            showAddMark: false
+        });
     })
 
     // 监听连接线右键事件

@@ -156,6 +156,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                         display: show,
                         className,
                         transform: `translate(${x - 9}, ${y - 9})`,
+                        style: 'cursor: pointer;transition:0.3s',
                         onclick: (e) => {
                             e.stopPropagation(); // 防止事件冒泡到别的地方
                             // console.log('点击了锚点：', this);
@@ -194,8 +195,17 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                             menu.style.top = `${top}px`;
                         },
                         onmouseenter: (e) => {
-                            e.target.style.cursor = 'pointer';
+                            const image = e.target;
+                            image.setAttribute('width', 22); // 放大
+                            image.setAttribute('height', 22);
+                            image.setAttribute('transform', `translate(${x - 10}, ${y - 10})`);
                         },
+                        onmouseout: (e) => {
+                            const image = e.target;
+                            image.setAttribute('width', 18); // 还原
+                            image.setAttribute('height', 18);
+                            image.setAttribute('transform', `translate(${x - 9}, ${y - 9})`);
+                        }
                     })
                 ]
             );

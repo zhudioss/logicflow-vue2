@@ -39,11 +39,11 @@
 
 <script>
 import LogicFlow from '@logicflow/core';
-import {Control} from "@logicflow/extension";
+import {Control, DndPanel} from "@logicflow/extension";
 
 LogicFlow.use(Control);
+
 import "@logicflow/core/lib/style/index.css";
-import {DndPanel} from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css"
 
 import {defaultEdge, animationEdge, Highlight} from '@/utils/BezierEdge'
@@ -145,13 +145,22 @@ export default {
       // 设置全局默认dege样式
       this.lf.setDefaultEdgeType('EDGE_BEZIER');
 
+      this.lf.render(this.nodeData);
+
+      // 全局控制，点击edge线变色
+      this.lf.setTheme({
+        bezier: {
+          onClick: (e) => {
+            e.stopPropagation()
+            e.target.setAttribute('stroke', '#3f58fd'); // 放大
+          }
+        }
+      });
+
       // node edge anchor 事件
       nodeEvent(this)
       edgeEvent(this)
       anchorEvent(this)
-
-      this.lf.render(this.nodeData);
-
     },
 
     onDragStart(event, data) {

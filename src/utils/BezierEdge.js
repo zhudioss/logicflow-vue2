@@ -19,6 +19,57 @@ class CustomEdge extends BezierEdge {
             transform: `translate(2,0)`, // 🔥 加固定旋转
         });
     }
+
+
+    getShape() {
+        const path = super.getShape(); // 默认贝塞尔路径
+        const {startPoint, endPoint, id} = this.props.model;
+        // 计算中点（近似）
+        const x = (startPoint.x + endPoint.x) / 2;
+        const y = (startPoint.y + endPoint.y) / 2;
+        // 构造 path 路径（和 super.getShape() 一致的路径）
+        const pathD = `M ${startPoint.x} ${startPoint.y} L ${endPoint.x} ${endPoint.y}`;
+
+        return h('g', {}, [
+            h('path', {
+                d: pathD,
+                stroke: 'transparent',
+                strokeWidth: 50,
+                fill: 'none',
+            }),
+            path,
+            h('image', {
+                href: require('@/assets/添加.png'),
+                x: x - 10,
+                y: y - 10,
+                className: 'edgeMarkClass',
+                display: this.props.model.properties.showAddMark ? 'block' : 'none',
+                width: 18,
+                height: 18,
+                pointerEvents: 'all',
+                style: 'cursor: pointer;transition:0.3s',
+                onclick: (e) => {
+                    e.stopPropagation();
+
+                    console.log('点击了 logo 图片！');
+                },
+                onmouseover: (e) => {
+                    const image = e.target;
+                    image.setAttribute('width', 22); // 放大
+                    image.setAttribute('height', 22);
+                    image.setAttribute('x', x - 12);
+                    image.setAttribute('y', y - 12);
+                },
+                onmouseout: (e) => {
+                    const image = e.target;
+                    image.setAttribute('width', 18); // 还原
+                    image.setAttribute('height', 18);
+                    image.setAttribute('x', x - 10);
+                    image.setAttribute('y', y - 10);
+                }
+            })
+        ]);
+    }
 }
 
 // 默认
@@ -31,6 +82,7 @@ class defaultBezierEdgeModel extends BezierEdgeModel {
     getEdgeStyle() {
         const style = super.getEdgeStyle();
         style.stroke = "#d0d5dc";
+        style.cursor = 'pointer'
         // 虚线间隔
         style.strokeDasharray = "10 0";
         return style;
