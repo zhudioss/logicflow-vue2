@@ -198,7 +198,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                             const image = e.target;
                             image.setAttribute('width', 22); // 放大
                             image.setAttribute('height', 22);
-                            image.setAttribute('transform', `translate(${x - 10}, ${y - 10})`);
+                            image.setAttribute('transform', `translate(${x - 11}, ${y - 11})`);
                         },
                         onmouseout: (e) => {
                             const image = e.target;
