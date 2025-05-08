@@ -75,6 +75,7 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         }
     }
 
+    // 连接规则
     initNodeData(data) {
         super.initNodeData(data);
         // 禁止节点文本可以编辑
@@ -83,8 +84,8 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         const rule = {
             validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
                 return (
-                    sourceAnchor.tag === "end" &&
-                    targetAnchor.tag === "start"
+                    sourceAnchor.tag !== "end" ||
+                    targetAnchor.tag !== "end"
                 );
             }
         };
