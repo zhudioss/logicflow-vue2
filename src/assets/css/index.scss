@@ -13,7 +13,7 @@
   div {
     height: 34px;
     background: #fff;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -107,10 +107,6 @@
 }
 
 ::v-deep {
-  .lf-dndpanel {
-    padding: 0;
-  }
-
   .lf-dnd-item {
     margin: 0;
     padding: 10px;

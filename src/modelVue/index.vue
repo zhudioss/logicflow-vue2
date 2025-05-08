@@ -248,12 +248,17 @@ export default {
     // 右键菜单点击
     handleMenuClick(name) {
       if (name === 'delete') {
+        if (this.currentNode.sourceNodeId && this.currentNode.targetNodeId) {
+          const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId); // 下级model
+          targetNodeModel.setProperties({hideAnchor: false});
+        } else {
+          const targetNodeModel = this.lf.getNodeOutgoingEdge(this.currentNode.id); // 所有下级edge
+          targetNodeModel.forEach(edge => {
+            const edgeModel = this.lf.getNodeModelById(edge.targetNodeId); // 下级model
+            edgeModel.setProperties({hideAnchor: false});
+          });
+        }
         this.lf.deleteNode(this.currentNode.id) || this.lf.deleteEdge(this.currentNode.id);
-        const sourceNodeModel = this.lf.getNodeModelById(this.currentNode.sourceNodeId);
-        const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId);
-        [sourceNodeModel, targetNodeModel].forEach(model => {
-          model.setProperties({hideAnchor: false});
-        });
       }
       this.rightMenuShow = false
     },
