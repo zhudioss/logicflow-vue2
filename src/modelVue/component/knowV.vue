@@ -10,43 +10,44 @@
       </div>
       <div style="color: rgba(66,66,66,0.4);font-size: 12px;">通过知识库获取内容</div>
       <div style="font-weight: bold;margin-top: 15px">输入参数</div>
+      <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">参数名称</div>
       <el-input v-model="input1" placeholder="请输入参数" clearable></el-input>
-      <div style="font-weight: bold;margin-top: 15px">知识库设置</div>
-      <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">知识库</div>
-      <el-select v-model="value" placeholder="请选择知识库" :popper-append-to-body="false" clearable>
-        <el-option
-            v-for="item in options1"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-        </el-option>
-      </el-select>
-      <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">获取数据量</div>
-      <el-input v-model="input2" placeholder="搜索的数据条数" clearable></el-input>
-      <div style="font-weight: bold;margin-top: 15px">输出参数</div>
-      <ul>
-        <li>
-          <div>参数名称</div>
-          <div>参数类型</div>
-        </li>
-        <li v-for="(item,index) in groupList" :key="index">
-          <div>
-            <el-input :placeholder="item.title" style="width: 100%" disabled></el-input>
-          </div>
-          <div>
-            <el-select clearable placement="top" v-model="item.val" placeholder="请选择参数"
-                       :popper-append-to-body="false"
-                       style="width: 100%;height: 100%">
-              <el-option
-                  v-for="item in options2"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
-        </li>
-      </ul>
+<!--      <div style="font-weight: bold;margin-top: 15px">知识库设置</div>-->
+<!--      <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">知识库</div>-->
+<!--      <el-select v-model="value" placeholder="请选择知识库" :popper-append-to-body="false" clearable>-->
+<!--        <el-option-->
+<!--            v-for="item in options1"-->
+<!--            :key="item.value"-->
+<!--            :label="item.label"-->
+<!--            :value="item.value">-->
+<!--        </el-option>-->
+<!--      </el-select>-->
+<!--      <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">获取数据量</div>-->
+<!--      <el-input v-model="input2" placeholder="搜索的数据条数" clearable></el-input>-->
+<!--      <div style="font-weight: bold;margin-top: 15px">输出参数</div>-->
+<!--      <ul>-->
+<!--        <li>-->
+<!--          <div>参数名称</div>-->
+<!--          <div>参数类型</div>-->
+<!--        </li>-->
+<!--        <li v-for="(item,index) in groupList" :key="index">-->
+<!--          <div>-->
+<!--            <el-input :placeholder="item.title" style="width: 100%" disabled></el-input>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <el-select clearable placement="top" v-model="item.val" placeholder="请选择参数"-->
+<!--                       :popper-append-to-body="false"-->
+<!--                       style="width: 100%;height: 100%">-->
+<!--              <el-option-->
+<!--                  v-for="item in options2"-->
+<!--                  :key="item.value"-->
+<!--                  :label="item.label"-->
+<!--                  :value="item.value">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </div>-->
+<!--        </li>-->
+<!--      </ul>-->
     </div>
   </div>
 </template>
@@ -152,7 +153,7 @@ export default {
 <style scoped lang="scss">
 .warpCard {
   width: 300px;
-  height: 600px;
+  height: 189px;
   padding-bottom: 5px;
   overflow-y: auto;
 }

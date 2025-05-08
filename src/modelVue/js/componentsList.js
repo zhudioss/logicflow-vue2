@@ -19,7 +19,7 @@ export const componentsList = [
         component: KnowV,
         properties: {
             width: 300,
-            height: 600,
+            height: 189,
         },
         icon: require('@/assets/知识库.png'),
     },

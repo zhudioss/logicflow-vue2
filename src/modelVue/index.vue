@@ -219,10 +219,13 @@ export default {
 
     // 添加节点
     addNodeClick(type) {
+      console.log(window.currentNode, '-=-=-=-=-=-=-=')
       const currentNode = window.currentNode;
       if (!currentNode) return;
 
       const graphModel = currentNode.props.graphModel;
+      const model = window.currentNode.props.model
+
       const x = currentNode.props.model.x + 450;
       const y = currentNode.props.model.y;
 
