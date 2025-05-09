@@ -32,10 +32,15 @@ export default function edgeEvent() {
 
     // 添加连线后隐藏锚点
     this.lf.on('edge:add', ({data}) => {
-        const targetNodeId = data.targetNodeId;
+        const {targetNodeId, sourceNodeId, sourceAnchorId} = data
+
+        const sourceNodeModel = this.lf.getNodeModelById(sourceNodeId);
         const targetNodeModel = this.lf.getNodeModelById(targetNodeId);
-        targetNodeModel.setProperties({
-            hideAnchor: true
-        });
+
+        if (sourceNodeModel.anchors.find(item => item.id === sourceAnchorId)?.tag === 'start') {
+            sourceNodeModel.setProperties({hideAnchor: true});
+        } else {
+            targetNodeModel.setProperties({hideAnchor: true});
+        }
     });
 }

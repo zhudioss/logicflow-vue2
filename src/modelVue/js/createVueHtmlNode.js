@@ -81,12 +81,17 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         // 禁止节点文本可以编辑
         // this.text.editable = false;
         // 定义连接规则，只允许出口节点连接入口节点
-        const rule = {
+        const rule1 = {
             validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
                 return sourceAnchor.tag !== "start" || targetAnchor.tag !== "start"
             }
         };
-        this.sourceRules.push(rule);
+        const rule2 = {
+            validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
+                return sourceAnchor.tag !== 'end' || targetAnchor.tag !== "end"
+            }
+        };
+        this.sourceRules.push(rule1, rule2);
     }
 }
 
