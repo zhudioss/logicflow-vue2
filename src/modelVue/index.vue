@@ -228,28 +228,34 @@ export default {
       if (model.BaseType === 'node') {
         x = currentNode.props.model.x + 450;
         y = currentNode.props.model.y;
-        startIdArr.push(currentNode.id);
+        newNode = this.lf.addNode({
+          type,
+          x,
+          y,
+        });
+        startIdArr.push({sourceNodeId: currentNode.id, targetNodeId: newNode.id});
       } else {
         const image = currentNode.nativeEvent.target;
         x = Number(image.getAttribute('x'))
         y = Number(image.getAttribute('y'))
+        newNode = this.lf.addNode({
+          type,
+          x,
+          y,
+        });
 
         const edgeModel = this.lf.getEdgeModelById(currentNode.id)
-        startIdArr.push(edgeModel.sourceNodeId, edgeModel.targetNodeId);
+        startIdArr.push({sourceNodeId: edgeModel.sourceNodeId, targetNodeId: newNode.id}, {
+          sourceNodeId: newNode.id,
+          targetNodeId: edgeModel.targetNodeId
+        });
+
         this.lf.deleteEdge(currentNode.id);
       }
 
-      newNode = this.lf.addNode({
-        type,
-        x,
-        y,
-      });
 
-      startIdArr.forEach(id => {
-        this.lf.addEdge({
-          sourceNodeId: id,
-          targetNodeId: newNode.id,
-        });
+      startIdArr.forEach(item => {
+        this.lf.addEdge(item);
       })
 
       // 关闭菜单
@@ -259,6 +265,7 @@ export default {
     // 右键菜单点击
     handleMenuClick(name) {
       if (name === 'delete') {
+        console.log(this.currentNode, '-=-=-=-=-=-=')
         if (this.currentNode.sourceNodeId && this.currentNode.targetNodeId) {
           const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId); // 下级model
           targetNodeModel.setProperties({hideAnchor: false});

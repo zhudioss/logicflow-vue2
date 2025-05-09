@@ -83,7 +83,7 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
         // 定义连接规则，只允许出口节点连接入口节点
         const rule = {
             validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
-                return sourceAnchor.tag !== "end" || targetAnchor.tag !== "end"
+                return sourceAnchor.tag !== "start" || targetAnchor.tag !== "start"
             }
         };
         this.sourceRules.push(rule);
