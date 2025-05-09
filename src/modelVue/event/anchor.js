@@ -4,12 +4,11 @@ export default function anchorEvent() {
     // 点击锚点
     this.lf.on('custom:anchorClick', ({node}) => {
         const menu = document.getElementById('anchor-menu');
-        this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        // if (node.type === "start-v") {
-        //     this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        // } else {
-        //     this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        // }
+        if (node.BaseType === 'edge') {
+            this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v' && item.type !== 'end-v');
+        } else {
+            this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
+        }
         menu.style.display = 'block';
     });
 
