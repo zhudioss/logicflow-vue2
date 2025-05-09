@@ -1,7 +1,7 @@
 export const nodeData = {
     "nodes": [
         {
-            "id": "1",
+            "id": "node-1",
             "type": "start-v",
             "x": 188,
             "y": 488,
@@ -55,9 +55,9 @@ export const nodeData = {
             "id": "edges1",
             "type": "EDGE_BEZIER",
             "properties": {},
-            "sourceNodeId": "1",
+            "sourceNodeId": "node-1",
             "targetNodeId": "node-2",
-            "sourceAnchorId": "1_0",
+            "sourceAnchorId": "node-1_0",
             "targetAnchorId": "node-2_0",
             "startPoint": {
                 "x": 338,

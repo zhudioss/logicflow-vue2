@@ -158,7 +158,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                         transform: `translate(${x - 9}, ${y - 9})`,
                         style: 'cursor: pointer;transition:0.3s',
                         onclick: (e) => {
-                            anchorPublic.call(this, e);
+                            anchorPublic.call(this, e, this.id);
                         },
                         onmouseenter: (e) => {
                             const image = e.target;

@@ -50,8 +50,7 @@ class CustomEdge extends BezierEdge {
                 pointerEvents: 'all',
                 style: 'cursor: pointer;transition:0.3s',
                 onclick: (e) => {
-                    anchorPublic.call(this, e)
-                    console.log('点击了 logo 图片！');
+                    anchorPublic.call(this, e, id)
                 },
                 onmouseover: (e) => {
                     const image = e.target;

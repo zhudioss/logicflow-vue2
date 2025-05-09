@@ -19,7 +19,7 @@ export const anchorMenu = [
     },
 ]
 
-export function anchorPublic(e) {
+export function anchorPublic(e, id) {
     e.stopPropagation(); // 防止事件冒泡
     const menu = document.getElementById('anchor-menu');
     if (this.props.model.type === 'end-v') {
@@ -28,7 +28,7 @@ export function anchorPublic(e) {
     }
     //向外派发事件
     this.props.graphModel.eventCenter.emit('custom:anchorClick', {node: this.props.model});
-    window.currentNode = this;
+    window.currentNode = {...this, ...e, id};
 
     const canvasWidth = window.innerWidth;
     const canvasHeight = window.innerHeight;

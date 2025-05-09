@@ -219,27 +219,38 @@ export default {
 
     // 添加节点
     addNodeClick(type) {
-      console.log(window.currentNode, '-=-=-=-=-=-=-=')
       const currentNode = window.currentNode;
       if (!currentNode) return;
 
-      const graphModel = currentNode.props.graphModel;
       const model = window.currentNode.props.model
 
-      const x = currentNode.props.model.x + 450;
-      const y = currentNode.props.model.y;
+      let x, y, newNode, startIdArr = []
+      if (model.BaseType === 'node') {
+        x = currentNode.props.model.x + 450;
+        y = currentNode.props.model.y;
+        startIdArr.push(currentNode.id);
+      } else {
+        const image = currentNode.nativeEvent.target;
+        x = Number(image.getAttribute('x'))
+        y = Number(image.getAttribute('y'))
 
-      const newNode = graphModel.addNode({
+        const edgeModel = this.lf.getEdgeModelById(currentNode.id)
+        startIdArr.push(edgeModel.sourceNodeId, edgeModel.targetNodeId);
+        this.lf.deleteEdge(currentNode.id);
+      }
+
+      newNode = this.lf.addNode({
         type,
         x,
         y,
-        properties: {}
       });
 
-      graphModel.addEdge({
-        sourceNodeId: currentNode.id,
-        targetNodeId: newNode.id,
-      });
+      startIdArr.forEach(id => {
+        this.lf.addEdge({
+          sourceNodeId: id,
+          targetNodeId: newNode.id,
+        });
+      })
 
       // 关闭菜单
       this.menuDom.style.display = 'none';

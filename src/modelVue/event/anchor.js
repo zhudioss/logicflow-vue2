@@ -5,11 +5,11 @@ export default function anchorEvent() {
     this.lf.on('custom:anchorClick', ({node}) => {
         const menu = document.getElementById('anchor-menu');
         this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        if (node.type === "start-v") {
-            this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
-        } else {
-            this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v' && item.type !== node.type)
-        }
+        // if (node.type === "start-v") {
+        //     this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
+        // } else {
+        //     this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
+        // }
         menu.style.display = 'block';
     });
 
