@@ -61,6 +61,9 @@ import nodeEvent from './event/node'
 import edgeEvent from './event/edge'
 import anchorEvent from './event/anchor'
 
+// 插入节点
+import insertFormat from './js/insertFormat'
+
 export default {
   name: 'App',
   data() {
@@ -125,7 +128,7 @@ export default {
         adjustEdge: false, // 禁止用户拖动中间
         // 取消连线边框
         edgeSelectedOutline: false,
-        hoverOutline: false
+        hoverOutline: false,
       });
 
       // vue model 组件组册
@@ -146,6 +149,11 @@ export default {
       this.lf.setDefaultEdgeType('EDGE_BEZIER');
 
       this.lf.render(this.nodeData);
+
+      // 缩放居中
+      this.lf.zoom(0.7)
+      this.lf.translateCenter()
+
 
       // 全局控制，点击edge线变色
       this.lf.setTheme({
@@ -233,30 +241,57 @@ export default {
           x,
           y,
         });
-        startIdArr.push({sourceNodeId: currentNode.id, targetNodeId: newNode.id});
+
+        this.lf.addEdge({
+          sourceNodeId: currentNode.id,
+          targetNodeId: newNode.id
+        });
+
       } else {
-        const image = currentNode.nativeEvent.target;
-        x = Number(image.getAttribute('x'))
-        y = Number(image.getAttribute('y'))
-        newNode = this.lf.addNode({
-          type,
-          x,
-          y,
-        });
+        insertFormat.call(this, model,type)
 
-        const edgeModel = this.lf.getEdgeModelById(currentNode.id)
-        startIdArr.push({sourceNodeId: edgeModel.sourceNodeId, targetNodeId: newNode.id}, {
-          sourceNodeId: newNode.id,
-          targetNodeId: edgeModel.targetNodeId
-        });
 
-        this.lf.deleteEdge(currentNode.id);
+        // this.lf.getNodeModelById(outgoingEdge.targetNodeId).move(300, 0)
+
+        // const {x, y} = this.lf.getNodeModelById(outgoingEdge.targetNodeId); // 线的下级节点然后生成在下级几点位置新节点
+        // newNode = this.lf.addNode({
+        //   type,
+        //   x,
+        //   y,
+        // });
+        // console.log(targetNodeModel, 'targetNodeModel')
+
+        // const edgeAll = this.lf.graphModel.edges
+        // const edgeAddParams = edgeAll.map(edge => ({
+        //   sourceNodeId: edge.sourceNodeId,
+        //   targetNodeId: edge.targetNodeId,
+        //   startPoint: {
+        //     ...edge.startPoint,
+        //     x: edge.startPoint.x + 100,
+        //   },
+        //   endPoint: {
+        //     ...edge.endPoint,
+        //     x: edge.endPoint.x + 100,
+        //   },
+        // }))
+        // const edgeIdArr = edgeAll.map(edge => edge.id)
+        //
+        // console.log(edgeAll, edgeIdArr, edgeAddParams, '-=-=-=-=-=-=')
+        //
+        // console.log(this.lf.getGraphData().nodes)
+        // this.lf.getGraphData().nodes.forEach(node => {
+        //   this.lf.getNodeModelById(node.id).move(100, 0)
+        // })
+        //
+
+        // const edgeModel = this.lf.getEdgeModelById(currentNode.id)
+        // startIdArr.push({sourceNodeId: edgeModel.sourceNodeId, targetNodeId: newNode.id}, {
+        //   sourceNodeId: newNode.id,
+        //   targetNodeId: edgeModel.targetNodeId
+        // });
+        // this.lf.deleteEdge(currentNode.id);
       }
 
-
-      startIdArr.forEach(item => {
-        this.lf.addEdge(item);
-      })
 
       // 关闭菜单
       this.menuDom.style.display = 'none';
@@ -265,7 +300,6 @@ export default {
     // 右键菜单点击
     handleMenuClick(name) {
       if (name === 'delete') {
-        console.log(this.currentNode, '-=-=-=-=-=-=')
         if (this.currentNode.sourceNodeId && this.currentNode.targetNodeId) {
           const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId); // 下级model
           targetNodeModel.setProperties({hideAnchor: false});
@@ -280,6 +314,7 @@ export default {
       }
       this.rightMenuShow = false
     },
+
   }
 
 };
