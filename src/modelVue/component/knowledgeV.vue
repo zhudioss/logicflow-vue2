@@ -1,16 +1,15 @@
 <template>
   <div class="warpCard start-class">
     <div class="title">
-      <img src="@/assets/开始.png" alt="">
-      开始节点
+      <img src="@/assets/知识检索.png" alt="">
+      知识检索
     </div>
   </div>
 </template>
-
 <script>
 
 export default {
-  name: 'startV',
+  name: 'endV',
   props: ['properties', 'model'],
   computed: {},
   data() {

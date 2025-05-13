@@ -1,8 +1,8 @@
 <template>
-  <div class="warpCard start-class">
+  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
-      <img src="@/assets/开始.png" alt="">
-      开始节点
+      <img src="@/assets/llm.png" alt="">
+      LLM
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@ export default {
   },
   watch: {},
   mounted() {
+    console.log(this.properties, this.model,'-=-=-=-=-=====-=-=')
     this.bus.$on('runChildMethod', () => this.updateNodeData())
   },
   methods: {

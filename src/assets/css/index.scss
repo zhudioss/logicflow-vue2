@@ -6,26 +6,24 @@
 }
 
 .drag-panel {
-  width: 140px;
-  height: 200px;
+  width: 130px;
   margin: 5px;
 
   div {
     height: 34px;
     background: #fff;
-    border-radius: 10px;
+    border-radius: 9px;
     cursor: pointer;
     display: flex;
     align-items: center;
     padding-left: 25px;
-    //justify-content: center;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     margin-bottom: 10px;
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.2));
 
     &:hover {
-      filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+      filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.4));
     }
 
     img {
@@ -37,18 +35,14 @@
 }
 
 #anchor-menu, #custom-menu {
-  width: 150px;
+  width: 130px;
   position: absolute;
   display: none;
   background: white;
-  font-size: 14px;
+  font-size: 12px;
   filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
   border-radius: 8px;
   padding: 6px;
-
-  &:hover {
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
-  }
 
   .content {
     width: auto;
@@ -72,38 +66,7 @@
 }
 
 #custom-menu {
-  width: 150px;
-  position: absolute;
-  left: 20%;
-  top: 50%;
   display: block;
-  border-radius: 8px;
-  padding: 0px;
-  filter: none;
-  background: #fef0f0;
-  color: #f56c6c;
-  border: 1px solid #fbc4c4;
-  overflow: hidden;
-
-
-  &:hover {
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
-  }
-
-  .content {
-    cursor: pointer;
-    padding-left: 25px;
-
-    p {
-      font-size: 13px !important;
-    }
-
-    &:hover {
-      background: #fef0f0;
-      //color: #fff;
-    }
-  }
-
 }
 
 ::v-deep {
@@ -127,11 +90,11 @@
   }
 
   .lf-node:hover {
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.2));
   }
 
   .lf-node {
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.2));
   }
 
   .lf-graph {

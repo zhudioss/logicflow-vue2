@@ -2,8 +2,13 @@
   text-align: left;
   margin: 0;
   padding: 0;
-  font-size: 14px;
+  //font-size: 14px;
   list-style: none;
+
+  img {
+    -webkit-user-drag: none; /* Safari/Chrome */
+    user-drag: none; /* 非标准，部分浏览器支持 */
+  }
 }
 
 .warpCard {
@@ -11,27 +16,25 @@
   box-sizing: border-box;
   border-radius: 12px;
   overflow: hidden;
+  padding: 0 15px;
 
   .head {
     padding: 7px;
-    /* background: rgba(66, 66, 66, 0.15);*/
     font-size: 12px;
     font-weight: bold;
     color: #145aef;
   }
 
   .title {
-    padding-top: 10px;
-    padding-bottom: 5px;
     display: flex;
     align-items: center;
     justify-content: start;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
 
     img {
-      height: 20px;
-      margin-right: 5px;
+      height: 25px;
+      margin-right: 10px;
     }
   }
 

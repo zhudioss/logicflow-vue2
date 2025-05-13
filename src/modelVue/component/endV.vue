@@ -1,17 +1,8 @@
 <template>
   <div class="warpCard start-class">
-    <div class="head">
-      TestComponent
-    </div>
-    <div style="padding:0 10px">
-      <div class="title">
-        <img src="../../assets/结束.png" alt="">
-        结束节点
-      </div>
-      <div style="color: rgba(66,66,66,0.4);font-size: 12px;">结束定义输出参数</div>
-      <div style="font-weight: bold;margin-top: 15px">输出参数</div>
-      <div style="color: rgba(66,66,66,0.4);font-size: 13px;margin-top: 5px">参数名称</div>
-      <el-input v-model="input" placeholder="请输入参数名称" clearable></el-input>
+    <div class="title">
+      <img src="@/assets/结束.png" alt="">
+      结束节点
     </div>
   </div>
 </template>
@@ -20,7 +11,7 @@
 
 export default {
   name: 'endV',
-  props: ['width', 'height', 'model'],
+  props: ['properties', 'model'],
   computed: {},
   data() {
     return {
@@ -29,9 +20,6 @@ export default {
   },
   watch: {},
   mounted() {
-    this.bus.$on('node:click', (res)=>{
-      console.log(res,'res res res res ')
-    });
     this.bus.$on('runChildMethod', () => this.updateNodeData())
   },
   methods: {
@@ -39,7 +27,7 @@ export default {
       return new Promise((resolve) => {
         const graph = this.model
         graph.setProperties({
-          endInput:this.input
+          startInput: this.input
         })
         this.bus.$emit("childMethodDone", graph.id);
         resolve();
@@ -50,10 +38,11 @@ export default {
 </script>
 <style scoped lang="scss">
 .warpCard {
-  width: 300px;
-  height: 189px;
-  //border: 2px solid #145aef;
-  padding-bottom: 5px;
+  width: 240px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   overflow-y: auto;
 }
 

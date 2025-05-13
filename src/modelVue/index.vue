@@ -9,9 +9,9 @@
     </div>
     <div id="lf-container" style="width: 100%; height:100vh;overflow: hidden" @drop="onDrop"
          @dragover.prevent="onDragOver"></div>
-    <el-button @click="exportButton" style="position: fixed;right: 10px;top: 67px;right: 5px;z-index: 9999999">导出数据
+    <el-button @click="exportButton" style="position: fixed;right: 10px;top: 5px;right: 5px;z-index: 9999999">导出数据
     </el-button>
-    <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 116px;right: 5px;z-index: 9999999">Edge
+    <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 53px;right: 5px;z-index: 9999999">Edge
       - A
     </el-button>
 
@@ -41,7 +41,7 @@
 import LogicFlow from '@logicflow/core';
 import {Control, DndPanel} from "@logicflow/extension";
 
-LogicFlow.use(Control);
+// LogicFlow.use(Control);
 
 import "@logicflow/core/lib/style/index.css";
 import "@logicflow/extension/lib/style/index.css"
@@ -111,7 +111,7 @@ export default {
       this.lf = new LogicFlow({
         container: document.querySelector('#lf-container'),
         // edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
-        plugins: [DndPanel],
+        // plugins: [DndPanel],
         grid: {
           size: 15, // 点的密集程度
           visible: true,
@@ -151,7 +151,7 @@ export default {
       this.lf.render(this.nodeData);
 
       // 缩放居中
-      this.lf.zoom(0.7)
+      this.lf.zoom(0.8)
       this.lf.translateCenter()
 
 
@@ -222,7 +222,18 @@ export default {
 
     // 修改链接线颜色
     changeLineColor() {
-      this.lf.changeEdgeType('edges1', 'EDGE_BEZIER_A');
+      const {nodes} = this.lf.getGraphData();
+      let outEdges
+      nodes.forEach(item => {
+        if (item.type === 'start-v') {
+          outEdges = this.lf.getNodeOutgoingEdge(item.id)
+        }
+      })
+      outEdges.forEach(edge => {
+        this.lf.changeEdgeType(edge.id, 'EDGE_BEZIER_A')
+      })
+      // console.log(nodes, '-=-=-=-=-=-=-=-=');
+      // this.lf.changeEdgeType('edges1', 'EDGE_BEZIER_A');
     },
 
     // 添加节点
@@ -248,7 +259,7 @@ export default {
         });
 
       } else {
-        insertFormat.call(this, model,type)
+        insertFormat.call(this, model, type)
 
 
         // this.lf.getNodeModelById(outgoingEdge.targetNodeId).move(300, 0)

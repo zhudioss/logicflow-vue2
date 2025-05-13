@@ -13,6 +13,30 @@ export const anchorMenu = [
     },
     {
         id: Math.random(),
+        name: 'LLM',
+        type: 'llm-v',
+        icon: require('@/assets/llm.png'),
+    },
+    {
+        id: Math.random(),
+        name: 'Agent',
+        type: 'agent-v',
+        icon: require('@/assets/Agent.png'),
+    },
+    {
+        id: Math.random(),
+        name: '知识检索',
+        type: 'knowledge-v',
+        icon: require('@/assets/知识检索.png'),
+    },
+    {
+        id: Math.random(),
+        name: '代码执行',
+        type: 'code-v',
+        icon: require('@/assets/代码执行.png'),
+    },
+    {
+        id: Math.random(),
         name: '结束',
         type: 'end-v',
         icon: require('@/assets/结束.png'),

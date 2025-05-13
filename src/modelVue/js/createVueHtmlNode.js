@@ -44,7 +44,7 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
                 },
             ];
         }
-        if (type === 'know-v') {
+        if (type !== 'start-v' && type !== 'end-v') {
             return [
                 {
                     x: left_A,
