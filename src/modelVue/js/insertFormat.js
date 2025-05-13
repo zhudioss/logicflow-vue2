@@ -1,54 +1,34 @@
 export default function insertFormat(model, type) {
-    console.log(model, '-=-=-=-=-0000')
-    const {sourceNodeId, targetNodeId} = model
-    const outgoingEdge = this.lf.getEdgeDataById(model.id) // 当前edge的model
+    const {sourceNodeId, targetNodeId} = model // 当前点击线
+    const {x, y} = this.lf.getNodeModelById(model.targetNodeId) // 新增节点的下级节点
 
-    const beforeEdge = this.lf.getNodeIncomingEdge(outgoingEdge.targetNodeId) // 新增节点的下级节点的所有上级线
-    const {x, y} = this.lf.getNodeModelById(outgoingEdge.targetNodeId) // 新增节点的下级节点
-
-
-    // 重新定义所有上级线要连接的位置，因为布局是依次想向右推进，所以开始位置不变，结束位置只调整 x 轴
-    const beforePointer = beforeEdge.map(edge => ({
-        sourceNodeId: edge.sourceNodeId,
-        targetNodeId: edge.targetNodeId,
-        endPoint: {
-            ...edge.endPoint,
-            x: edge.endPoint.x + 450
-        },
-    }))
-    beforeEdge.forEach(edge => this.lf.deleteEdge(edge.id)) // 删除 上级线
-
-    const {nodes, edges} = childNodeEdgesAll(this.lf, outgoingEdge.targetNodeId);
-    const edgesPointer = edges.map(edge => ({
-        sourceNodeId: edge.sourceNodeId,
-        targetNodeId: edge.targetNodeId,
-        endPoint: {
-            ...edge.endPoint,
-            x: edge.endPoint.x + 450
-        },
-    }))
-    edges.forEach(edge => this.lf.deleteEdge(edge.id)) // 删除 下级线
-
+    //主要 node 和 线
+    const {nodes, edges} = childNodeEdgesAll(this.lf, model.targetNodeId);
     nodes.forEach(node => {
-        this.lf.getNodeModelById(node.id).move(450, 0)
+        this.lf.getNodeModelById(node.id).move(450, 0)  // 移动主要 node
     })
-
-    const newNode = this.lf.addNode({
+    const newNode = this.lf.addNode({  // 添加插入 node
         type,
         x,
         y,
     });
-    this.lf.addEdge({
-        sourceNodeId,
-        targetNodeId: newNode.id
-    });
-    this.lf.addEdge({
-        sourceNodeId: newNode.id,
-        targetNodeId
-    });
 
-    // edgesPointer.concat(beforePointer).forEach(item => this.lf.addEdge(item))  // 重新绘制移动后的线
-    edgesPointer.forEach(item => this.lf.addEdge(item))  // 重新绘制移动后的线
+    this.lf.deleteEdge(model.id)// 删除 点击边
+    edges.forEach(edge => this.lf.deleteEdge(edge.id)) // 删除主要线
+
+    const otherEdges = this.lf.getGraphData().edges  // 其他线
+    otherEdges.forEach(edge => this.lf.deleteEdge(edge.id)) // 删除其他线
+
+    // 绘制线
+    const newNodeEdges = [
+        {sourceNodeId, targetNodeId: newNode.id}, // 左
+        {sourceNodeId: newNode.id, targetNodeId}, // 右
+    ]
+    newNodeEdges.forEach(item => this.lf.addEdge(item))
+    edges.concat(otherEdges).forEach(edge => this.lf.addEdge({
+        sourceNodeId: edge.sourceNodeId,
+        targetNodeId: edge.targetNodeId
+    }))
 }
 
 function childNodeEdgesAll(logicFlow, startNodeId) {
