@@ -10,7 +10,7 @@
 <script>
 
 export default {
-  name: 'endV',
+  name: 'agentV',
   props: ['properties', 'model'],
   computed: {},
   data() {

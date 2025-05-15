@@ -148,7 +148,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
 
         // 自定义锚点
         getAnchorShape(anchorData) {
-            const {x, y, id, show, className} = anchorData;
+            const {x, y, id, show, className, tag} = anchorData;
             return h(
                 'g', // 分组元素，可以放多个图形
                 {key: id},
@@ -163,7 +163,7 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                         transform: `translate(${x - 9}, ${y - 9})`,
                         style: 'cursor: pointer;transition:0.3s',
                         onclick: (e) => {
-                            anchorPublic.call(this, e, this.id);
+                            anchorPublic.call(this, e, this.id, tag);
                         },
                         onmouseenter: (e) => {
                             const image = e.target;

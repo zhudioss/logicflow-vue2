@@ -2,19 +2,38 @@ import {anchorMenu} from "@/modelVue/js/anchor-menu";
 
 export default function anchorEvent() {
     // 点击锚点
-    this.lf.on('custom:anchorClick', ({node}) => {
+    this.lf.on('custom:anchorClick', ({node, tag}) => {
         const menu = document.getElementById('anchor-menu');
-        if (node.BaseType === 'edge') {
-            this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v' && item.type !== 'end-v');
-        } else {
-            this.anchorMenu = anchorMenu.filter(item => item.type !== 'start-v')
+
+        let baseTypeList = []
+
+        // 整合判断
+        const handlers = {
+            edge: () => ['start-v', 'end-v'],
+            node: () => tag === 'start' ? ['end-v'] : ['start-v']
         }
+        baseTypeList = handlers[node.BaseType]?.() || []
+
+        this.anchorMenu = anchorMenu.filter(item => !baseTypeList.includes(item.type))
         menu.style.display = 'block';
     });
 
 
     // 锚点监听
     this.lf.on('anchor:drop', ({data, nodeModel, edgeModel}) => {
+        this.lf.getNodeIncomingEdge(edgeModel.targetNodeId).length > 0 &&
+        this.lf.getNodeOutgoingEdge(nodeModel.id).length > 1 ? this.lf.deleteEdge(edgeModel.id) : null
+
+        if (data.tag === 'start') {
+            const sourceNodeId = edgeModel.targetNodeId
+            const targetNodeId = edgeModel.sourceNodeId
+            this.lf.deleteEdge(edgeModel.id)
+            this.lf.addEdge({
+                sourceNodeId,
+                targetNodeId
+            });
+
+        }
         // 获取当前节点所有边
         const nodeEdgesList = this.lf.getNodeEdges(nodeModel.id);
 

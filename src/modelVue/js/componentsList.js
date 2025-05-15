@@ -5,6 +5,11 @@ import agentV from "@/modelVue/component/agentV.vue";
 import knowledgeV from "@/modelVue/component/knowledgeV.vue";
 import endV from "@/modelVue/component/endV.vue";
 import codeV from "@/modelVue/component/codeV.vue";
+import templateV from "@/modelVue/component/templateV.vue";
+import httpV from "@/modelVue/component/httpV.vue";
+import branchV from "@/modelVue/component/branchV.vue";
+import updateV from "@/modelVue/component/updateV.vue";
+import listV from "@/modelVue/component/listV.vue";
 
 export const componentsList = [
     {
@@ -66,6 +71,56 @@ export const componentsList = [
             height: 50,
         },
         icon: require('@/assets/代码执行.png'),
+    },
+    {
+        label: '模版转换',
+        type: 'template-v',
+        component: templateV,
+        properties: {
+            width: 240,
+            height: 50,
+        },
+        icon: require('@/assets/模版转换.png'),
+    },
+    {
+        label: 'http请求',
+        type: 'http-v',
+        component: httpV,
+        properties: {
+            width: 240,
+            height: 50,
+        },
+        icon: require('@/assets/http请求.png'),
+    },
+    {
+        label: '条件分支',
+        type: 'branch-v',
+        component: branchV,
+        properties: {
+            width: 240,
+            height: 50,
+        },
+        icon: require('@/assets/条件分支.png'),
+    },
+    {
+        label: '迭代',
+        type: 'update-v',
+        component: updateV,
+        properties: {
+            width: 240,
+            height: 50,
+        },
+        icon: require('@/assets/迭代.png'),
+    },
+    {
+        label: '列表操作',
+        type: 'list-v',
+        component: listV,
+        properties: {
+            width: 240,
+            height: 50,
+        },
+        icon: require('@/assets/列表操作.png'),
     },
     {
         label: '结束',

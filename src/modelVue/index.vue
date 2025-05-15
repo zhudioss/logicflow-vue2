@@ -63,6 +63,7 @@ import anchorEvent from './event/anchor'
 
 // 插入节点
 import insertFormat from './js/insertFormat'
+import clickNodeAdd from './js/clickNodeAdd'
 
 export default {
   name: 'App',
@@ -232,77 +233,19 @@ export default {
       outEdges.forEach(edge => {
         this.lf.changeEdgeType(edge.id, 'EDGE_BEZIER_A')
       })
-      // console.log(nodes, '-=-=-=-=-=-=-=-=');
-      // this.lf.changeEdgeType('edges1', 'EDGE_BEZIER_A');
     },
 
     // 添加节点
     addNodeClick(type) {
       const currentNode = window.currentNode;
       if (!currentNode) return;
-
       const model = window.currentNode.props.model
 
-      let x, y, newNode, startIdArr = []
-      if (model.BaseType === 'node') {
-        x = currentNode.props.model.x + 450;
-        y = currentNode.props.model.y;
-        newNode = this.lf.addNode({
-          type,
-          x,
-          y,
-        });
-
-        this.lf.addEdge({
-          sourceNodeId: currentNode.id,
-          targetNodeId: newNode.id
-        });
-
+      if (model.BaseType === 'node') {  // 判断点击的 node 或 edge
+        clickNodeAdd.call(this, currentNode, type);
       } else {
         insertFormat.call(this, model, type)
-
-
-        // this.lf.getNodeModelById(outgoingEdge.targetNodeId).move(300, 0)
-
-        // const {x, y} = this.lf.getNodeModelById(outgoingEdge.targetNodeId); // 线的下级节点然后生成在下级几点位置新节点
-        // newNode = this.lf.addNode({
-        //   type,
-        //   x,
-        //   y,
-        // });
-        // console.log(targetNodeModel, 'targetNodeModel')
-
-        // const edgeAll = this.lf.graphModel.edges
-        // const edgeAddParams = edgeAll.map(edge => ({
-        //   sourceNodeId: edge.sourceNodeId,
-        //   targetNodeId: edge.targetNodeId,
-        //   startPoint: {
-        //     ...edge.startPoint,
-        //     x: edge.startPoint.x + 100,
-        //   },
-        //   endPoint: {
-        //     ...edge.endPoint,
-        //     x: edge.endPoint.x + 100,
-        //   },
-        // }))
-        // const edgeIdArr = edgeAll.map(edge => edge.id)
-        //
-        // console.log(edgeAll, edgeIdArr, edgeAddParams, '-=-=-=-=-=-=')
-        //
-        // console.log(this.lf.getGraphData().nodes)
-        // this.lf.getGraphData().nodes.forEach(node => {
-        //   this.lf.getNodeModelById(node.id).move(100, 0)
-        // })
-        //
-
-        // const edgeModel = this.lf.getEdgeModelById(currentNode.id)
-        // startIdArr.push({sourceNodeId: edgeModel.sourceNodeId, targetNodeId: newNode.id}, {
-        //   sourceNodeId: newNode.id,
-        //   targetNodeId: edgeModel.targetNodeId
-        // });
-        // this.lf.deleteEdge(currentNode.id);
       }
-
 
       // 关闭菜单
       this.menuDom.style.display = 'none';
@@ -313,7 +256,7 @@ export default {
       if (name === 'delete') {
         if (this.currentNode.sourceNodeId && this.currentNode.targetNodeId) {
           const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId); // 下级model
-          targetNodeModel.setProperties({hideAnchor: false});
+          this.lf.getNodeIncomingEdge(targetNodeModel.id).length < 2 ? targetNodeModel.setProperties({hideAnchor: false}) : null
         } else {
           const targetNodeModel = this.lf.getNodeOutgoingEdge(this.currentNode.id); // 所有下级edge
           targetNodeModel.forEach(edge => {

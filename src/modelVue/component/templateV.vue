@@ -1,16 +1,15 @@
 <template>
-  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
+  <div class="warpCard start-class">
     <div class="title">
-      <img src="@/assets/llm.png" alt="">
-      LLM
+      <img src="@/assets/模版转换.png" alt="">
+      模版转换
     </div>
   </div>
 </template>
-
 <script>
 
 export default {
-  name: 'llmV',
+  name: 'templateV',
   props: ['properties', 'model'],
   computed: {},
   data() {
@@ -20,7 +19,6 @@ export default {
   },
   watch: {},
   mounted() {
-    // console.log(this.properties, this.model,'-=-=-=-=-=====-=-=')
     this.bus.$on('runChildMethod', () => this.updateNodeData())
   },
   methods: {

@@ -9,7 +9,7 @@
 <script>
 
 export default {
-  name: 'endV',
+  name: 'codeV',
   props: ['properties', 'model'],
   computed: {},
   data() {
