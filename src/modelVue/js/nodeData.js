@@ -121,15 +121,15 @@ export const nodeData =
                 }
             },
             {
-                "id": "b099605c-2e52-455f-bfb2-3012b74f27a1",
+                "id": "b2dbbf74-f77b-4e8b-a34c-6a83736a0ffc",
                 "type": "end-v",
-                "x": 1376.625,
-                "y": 182.6249999999999,
+                "x": 1195,
+                "y": 190,
                 "properties": {
-                    "width": 240,
-                    "height": 50,
                     "hideAnchor": true,
-                    "startInput": ""
+                    "startInput": "",
+                    "width": 240,
+                    "height": 50
                 }
             }
         ],
@@ -468,22 +468,20 @@ export const nodeData =
                 ]
             },
             {
-                "id": "adf7fe05-46cb-45ef-b13b-85e8cdf235c8",
+                "id": "616be8a2-2c80-455b-ab85-d3adec90487e",
                 "type": "EDGE_BEZIER",
-                "properties": {
-                    "showAddMark": false
-                },
+                "properties": {},
                 "sourceNodeId": "95649741-6fba-4a07-88c6-4b8ab7d34844",
-                "targetNodeId": "b099605c-2e52-455f-bfb2-3012b74f27a1",
+                "targetNodeId": "b2dbbf74-f77b-4e8b-a34c-6a83736a0ffc",
                 "sourceAnchorId": "right_95649741-6fba-4a07-88c6-4b8ab7d34844",
-                "targetAnchorId": "left_b099605c-2e52-455f-bfb2-3012b74f27a1",
+                "targetAnchorId": "left_b2dbbf74-f77b-4e8b-a34c-6a83736a0ffc",
                 "startPoint": {
                     "x": 865,
                     "y": 190
                 },
                 "endPoint": {
-                    "x": 1256.625,
-                    "y": 182.6249999999999
+                    "x": 1075,
+                    "y": 190
                 },
                 "pointsList": [
                     {
@@ -495,12 +493,12 @@ export const nodeData =
                         "y": 190
                     },
                     {
-                        "x": 1156.625,
-                        "y": 182.6249999999999
+                        "x": 975,
+                        "y": 190
                     },
                     {
-                        "x": 1256.625,
-                        "y": 182.6249999999999
+                        "x": 1075,
+                        "y": 190
                     }
                 ]
             }

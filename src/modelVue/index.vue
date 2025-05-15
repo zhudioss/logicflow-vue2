@@ -244,7 +244,7 @@ export default {
       if (model.BaseType === 'node') {  // 判断点击的 node 或 edge
         clickNodeAdd.call(this, currentNode, type);
       } else {
-        insertFormat.call(this, model, type)
+        insertFormat.call(this, model, type, currentNode)
       }
 
       // 关闭菜单
