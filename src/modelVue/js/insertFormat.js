@@ -1,58 +1,79 @@
 export default function insertFormat(model, type, currentNode) {
-    const {sourceNodeId, targetNodeId} = model // 当前点击线
+    const {sourceNodeId, targetNodeId} = model;
+    const lf = this.lf;
 
-    // 判断节点直接的距离
-    const num = Number(this.lf.getNodeModelById(model.targetNodeId).x) - Number(this.lf.getNodeModelById(model.sourceNodeId).x)
+    const getAnchorByTag = (nodeId, tag) =>
+        lf.getNodeModelById(nodeId).anchors.find(item => item.tag === tag);
 
-    let x, y
-    if (num >= 800) {
+    const pointerEnd = getAnchorByTag(sourceNodeId, 'end');
+    const pointerStart = getAnchorByTag(targetNodeId, 'start');
+
+    const horizontalGap = Number(pointerStart.x) - Number(pointerEnd.x);
+    const isWideEnough = Math.abs(horizontalGap) >= 800;
+
+    // 计算新节点位置
+    let x, y;
+    if (isWideEnough) {
         const image = currentNode.nativeEvent.target;
-        x = Number(image.getAttribute('x'))
-        y = Number(image.getAttribute('y'))
+        x = Number(image.getAttribute('x'));
+        y = Number(image.getAttribute('y'));
     } else {
-        x = this.lf.getNodeModelById(model.targetNodeId).x // 新增节点的下级节点
-        y = this.lf.getNodeModelById(model.targetNodeId).y // 新增节点的下级节点
+        const targetNodeModel = lf.getNodeModelById(targetNodeId);
+        x = targetNodeModel.x;
+        y = targetNodeModel.y;
     }
 
-    // 主要 node 和 线
-    const nodes = JSON.parse(JSON.stringify(childNodeEdgesAll(this.lf, model.targetNodeId).nodes)) // 深拷贝
-    const edges = JSON.parse(JSON.stringify(childNodeEdgesAll(this.lf, model.targetNodeId).edges))
+    // 获取目标节点及其所有子节点和边（深拷贝）
+    const {nodes, edges} = JSON.parse(
+        JSON.stringify(childNodeEdgesAll(lf, targetNodeId))
+    );
 
-    this.lf.deleteEdge(model.id)// 删除 点击边
-    edges.forEach(edge => this.lf.deleteEdge(edge.id)) // 删除主要线
+    // 删除原始连接线和子边
+    lf.deleteEdge(model.id);
+    edges.forEach(edge => lf.deleteEdge(edge.id));
 
-    if (num < 800) {
-        nodes.forEach(node => {
-            this.lf.getNodeModelById(node).move(320, 0)  // 移动主要 node
-        })
+    // 向右移动子节点（如果间距不足）
+    if (!isWideEnough) {
+        nodes.forEach(nodeId => {
+            lf.getNodeModelById(nodeId).move(320, 0);
+        });
     }
 
-    const newNode = this.lf.addNode({  // 添加插入 node
-        type,
-        x,
-        y,
+    // 添加插入节点
+    const newNode = lf.addNode({type, x, y});
+
+    // 添加两条连接新节点的边
+    const sourceEnd = getAnchorByTag(sourceNodeId, 'end');
+    const targetStart = getAnchorByTag(targetNodeId, 'start');
+    lf.addEdge({
+        sourceNodeId,
+        targetNodeId: newNode.id,
+        startPoint: {x: sourceEnd.x, y: sourceEnd.y},
+        endPoint: {x: newNode.anchors[0].x, y: newNode.anchors[0].y},
     });
 
-    // 绘制线
-    const newNodeEdges = [
-        {sourceNodeId, targetNodeId: newNode.id}, // 左
-        {sourceNodeId: newNode.id, targetNodeId}, // 右
-    ]
-    newNodeEdges.forEach(item => this.lf.addEdge(item))
+    lf.addEdge({
+        sourceNodeId: newNode.id,
+        targetNodeId,
+        startPoint: {x: newNode.anchors[1].x, y: newNode.anchors[1].y},
+        endPoint: {x: targetStart.x, y: targetStart.y},
+    });
+
+    // 重新添加原边（根据是否需要偏移）
     edges.forEach(edge => {
-        this.lf.addEdge({
+        lf.addEdge({
             sourceNodeId: edge.sourceNodeId,
             targetNodeId: edge.targetNodeId,
             startPoint: {
-                x: num < 800 ? edge.startPoint.x + 320 : edge.startPoint.x,
+                x: isWideEnough ? edge.startPoint.x : edge.startPoint.x + 320,
                 y: edge.startPoint.y,
             },
             endPoint: {
-                x: num < 800 ? edge.endPoint.x + 320 : edge.endPoint.x,
+                x: isWideEnough ? edge.endPoint.x : edge.endPoint.x + 320,
                 y: edge.endPoint.y,
-            }
-        })
-    })
+            },
+        });
+    });
 }
 
 function childNodeEdgesAll(logicFlow, startNodeId) {
