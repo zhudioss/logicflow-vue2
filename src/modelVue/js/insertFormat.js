@@ -9,7 +9,7 @@ export default function insertFormat(model, type, currentNode) {
     const pointerStart = getAnchorByTag(targetNodeId, 'start');
 
     const horizontalGap = Number(pointerStart.x) - Number(pointerEnd.x);
-    const isWideEnough = Math.abs(horizontalGap) >= 800;
+    const isWideEnough = Math.abs(horizontalGap) >= 600;
 
     // 计算新节点位置
     let x, y;
