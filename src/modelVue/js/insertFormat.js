@@ -35,7 +35,7 @@ export default function insertFormat(model, type, currentNode) {
     // 向右移动子节点（如果间距不足）
     if (!isWideEnough) {
         nodes.forEach(nodeId => {
-            lf.getNodeModelById(nodeId).move(320, 0);
+            lf.getNodeModelById(nodeId).move(450, 0);
         });
     }
 
@@ -65,11 +65,11 @@ export default function insertFormat(model, type, currentNode) {
             sourceNodeId: edge.sourceNodeId,
             targetNodeId: edge.targetNodeId,
             startPoint: {
-                x: isWideEnough ? edge.startPoint.x : edge.startPoint.x + 320,
+                x: isWideEnough ? edge.startPoint.x : edge.startPoint.x + 450,
                 y: edge.startPoint.y,
             },
             endPoint: {
-                x: isWideEnough ? edge.endPoint.x : edge.endPoint.x + 320,
+                x: isWideEnough ? edge.endPoint.x : edge.endPoint.x + 450,
                 y: edge.endPoint.y,
             },
         });
