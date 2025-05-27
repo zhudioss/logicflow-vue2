@@ -3,7 +3,6 @@ import vueInstanceManager from "@/modelVue/js/vueInstanceManager";
 import contextmenuFun from '../event/contextmenuFun'
 
 export default function nodeEvent() {
-
     // 经过node
     this.lf.on('node:mouseenter', ({data}) => {
         const nodeId = data.id;
@@ -38,6 +37,23 @@ export default function nodeEvent() {
         vueManager.forEach(item => {
             if (item.id === nodeId) {
                 item.vm.$el.style.border = '1.5px solid #3f58fd'
+
+                const {
+                    label,
+                    icon,
+                } = this.componentsList.find(item => item.type === data.type)
+                this.detailForm.label = label
+                this.detailForm.icon = icon
+
+                const childAll = this.lf.getNodeOutgoingNode(data.id) // 所有子节点
+                this.detailBranchList = childAll.map(child => {
+                    return ({
+                        ...child,
+                        componentsData: this.componentsList.find(item => item.type === child.type)
+                    })
+                })
+
+                this.drawer = true
             } else {
                 item.vm.$el.style.border = 'none'
             }

@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="home">
-    <div class="drag-panel" style="position: fixed;z-index: 999999999999;">
+    <div class="drag-panel" style="position: fixed;z-index:999;">
       <div v-for="(item,index) in componentsList" :key="index" draggable="true"
            @dragstart="onDragStart($event, JSON.stringify(item))">
         <img :src="item.icon" alt="" draggable="false">
@@ -9,11 +9,14 @@
     </div>
     <div id="lf-container" style="width: 100%; height:100vh;overflow: hidden" @drop="onDrop"
          @dragover.prevent="onDragOver"></div>
-    <el-button @click="exportButton" style="position: fixed;right: 10px;top: 5px;right: 5px;z-index: 9999999">导出数据
-    </el-button>
-    <el-button @click="changeLineColor" style="position: fixed;right: 10px;top: 53px;right: 5px;z-index: 9999999">Edge
-      - A
-    </el-button>
+    <div style="position: fixed;top: 5px;right: 5px;z-index: 99">
+      <el-button @click="exportButton">导出数据
+      </el-button>
+      <el-button @click="changeLineColor">Edge
+        - A
+      </el-button>
+    </div>
+
 
     <!--    锚点菜单-->
     <div id="anchor-menu">
@@ -33,13 +36,32 @@
       </div>
     </div>
 
-
+    <!--  弹窗-->
+    <transition enter-active-class="animate__animated animate__fadeInRight animate__faster"
+                leave-active-class="animate__animated animate__fadeOut animate__faster">
+      <div class="drawer-class" v-if="drawer">
+        <div class="drawer-header">
+          <div class="title">
+            <img :src="detailForm.icon" alt="">
+            {{ detailForm.label }}
+          </div>
+          <div class="close" @click="handlerClose">
+            <i class="el-icon-close"></i>
+          </div>
+        </div>
+        <div style="padding:0 10px">
+          <el-input ref="describe_ref" v-model="describeInput" placeholder="添加描述..."></el-input>
+        </div>
+        <div class="line-class"></div>
+        <branchComponent :detailBranchList="detailBranchList" style="flex: 1;overflow-y: auto"/>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import LogicFlow from '@logicflow/core';
-import {Control, DndPanel} from "@logicflow/extension";
+import {Control, DndPanel, MiniMap} from "@logicflow/extension";
 
 // LogicFlow.use(Control);
 
@@ -65,8 +87,13 @@ import anchorEvent from './event/anchor'
 import insertFormat from './js/insertFormat'
 import clickNodeAdd from './js/clickNodeAdd'
 
+import branchComponent from './formComponent/branchComponent.vue'
+
 export default {
   name: 'App',
+  components: {
+    branchComponent,
+  },
   data() {
     return {
       lf: '',
@@ -97,11 +124,19 @@ export default {
       ],
 
       menuPosition: {x: 0, y: 0},
+
+      drawer: false,
+
+      detailForm: {
+        label: '',
+        icon: '',
+      },
+      detailBranchList: [],
+      describeInput: ''
     }
   },
   created() {
   },
-
   mounted() {
     this.init()
     this.menuDom = document.getElementById('anchor-menu')
@@ -112,7 +147,16 @@ export default {
       this.lf = new LogicFlow({
         container: document.querySelector('#lf-container'),
         // edgeType: 'bezier', // line 直线、polyline 折线、 bezier 曲线
-        // plugins: [DndPanel],
+        plugins: [MiniMap],
+        pluginsOptions: {
+          miniMap: {
+            width: 200,
+            height: 100,
+            showEdge: true,
+            rightPosition: 5,
+            bottomPosition: 5,
+          },
+        },
         grid: {
           size: 15, // 点的密集程度
           visible: true,
@@ -130,6 +174,7 @@ export default {
         // 取消连线边框
         edgeSelectedOutline: false,
         hoverOutline: false,
+        snapline: false,// 禁用辅助线
       });
 
       // vue model 组件组册
@@ -151,6 +196,7 @@ export default {
 
       this.lf.render(this.nodeData);
 
+
       // 缩放居中
       this.lf.zoom(0.8)
       this.lf.translateCenter()
@@ -170,6 +216,8 @@ export default {
       nodeEvent.call(this)
       edgeEvent.call(this)
       anchorEvent.call(this)
+
+      // this.lf.extension.miniMap.show()  // 小地图
     },
 
     onDragStart(event, data) {
@@ -268,6 +316,10 @@ export default {
       }
       this.rightMenuShow = false
     },
+
+    handlerClose() {
+      this.drawer = false
+    }
 
   }
 

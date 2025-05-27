@@ -1,0 +1,136 @@
+.warp-detail {
+  display: flex;
+  flex-direction: column;
+  /* 整个滚动条 */
+  ::-webkit-scrollbar {
+    width: 8px; /* 纵向滚动条宽度 */
+    height: 8px; /* 横向滚动条高度 */
+  }
+
+  /* 滚动条滑块（拖动的部分） */
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  .line-class {
+    height: 1px;
+    background: #ecedee;
+    margin: 13px 0;
+  }
+
+  .inputField {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    padding: 0 16px;
+
+    i {
+      font-weight: bold;
+      cursor: pointer;
+      padding: 3px;
+      border-radius: 5px;
+
+      &:hover {
+        background: rgba(119, 119, 119, 0.1);
+      }
+    }
+  }
+
+  .next-content {
+    padding: 5px 16px;
+
+    .describe-class {
+      color: #c0c4cc;
+    }
+
+    .nodeBranch-class {
+      padding-top: 13px;
+      display: flex;
+      align-items: start;
+
+      .left {
+        display: flex;
+        align-items: center;
+
+        .start-class {
+          width: 35px;
+          height: 35px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 5px;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+
+          img {
+            height: 23px;
+          }
+        }
+
+
+        .edge {
+          display: flex;
+          align-items: center;
+
+
+          div:nth-of-type(1), div:nth-of-type(3) {
+            width: 1px;
+            height: 5px;
+            background: #96a0b1;
+          }
+
+          div:nth-of-type(2) {
+            width: 22px;
+            height: 1px;
+            background: #d0d5dc
+          }
+        }
+      }
+
+      .right {
+        flex: 1;
+        background: #eff1f5;
+        border-radius: 10px;
+        padding: 3px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 3px;
+
+        .right-content {
+          background: #fff;
+          border-radius: 5px;
+          height: 35px;
+          display: flex;
+          align-items: center;
+          justify-content: start;
+          font-weight: bold;
+          padding-left: 10px;
+          cursor: pointer;
+
+          &:hover {
+            background: #fafafa;
+          }
+
+          img {
+            height: 22px;
+            margin-right: 10px;
+          }
+        }
+
+        .addNode-class {
+          background: #ecf5ff;
+          color: #409eff;
+          border: 1px dashed #409eff;
+
+          &:hover {
+            background: #409eff;
+            color: #ecf5ff;
+          }
+        }
+      }
+
+
+    }
+  }
+}
