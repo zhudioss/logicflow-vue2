@@ -21,7 +21,9 @@ export default function anchorEvent() {
 
     // 锚点监听
     this.lf.on('anchor:drop', ({data, nodeModel, edgeModel}) => {
-        this.lf.getNodeIncomingEdge(edgeModel.targetNodeId).length > 0 &&
+        // console.log(this.lf.getNodeIncomingEdge(edgeModel.targetNodeId),'获取目标的所有上一级节点')
+        // console.log(this.lf.getNodeOutgoingEdge(nodeModel.id).length ,'获取节点所有的下一级节点')
+        this.lf.getNodeIncomingEdge(edgeModel.targetNodeId).length > 1 &&
         this.lf.getNodeOutgoingEdge(nodeModel.id).length > 1 ? this.lf.deleteEdge(edgeModel.id) : null
 
         if (data.tag === 'start') {
