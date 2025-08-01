@@ -1,10 +1,11 @@
 <template>
   <div class="warp-detail">
     <div>
-      <div class="inputField">
-        <p>输入字段</p>
-        <i class="el-icon-plus"></i>
-      </div>
+      <startInputV v-if="detailForm.label=='开始'"></startInputV>
+      <!--      <div class="inputField">-->
+      <!--        <p>输入字段</p>-->
+      <!--        <i class="el-icon-plus"></i>-->
+      <!--      </div>-->
       <div class="line-class"></div>
       <div class="inputField">
         <p>下一步</p>
@@ -41,10 +42,14 @@
 </template>
 
 <script>
+import startInputV from '@/modelVue/formComponent/component/startInput.vue'
 
 export default {
   name: 'branchComponent',
-  props: ['detailBranchList'],
+  props: ['detailBranchList', 'detailForm'],
+  components: {
+    startInputV,
+  },
   computed: {},
   data() {
     return {
@@ -53,10 +58,12 @@ export default {
   },
   watch: {},
   mounted() {
+    console.log(this.detailBranchList, '--=-=-=-=')
+    console.log(this.detailForm, 'detailForm')
   },
   methods: {}
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 @use "@/assets/css/detailPublic" as *;
 </style>

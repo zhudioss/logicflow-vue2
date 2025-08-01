@@ -53,7 +53,10 @@
           <el-input ref="describe_ref" v-model="describeInput" placeholder="添加描述..."></el-input>
         </div>
         <div class="line-class"></div>
-        <branchComponent :detailBranchList="detailBranchList" style="flex: 1;overflow-y: auto"/>
+        <branchComponent
+            :detailBranchList="detailBranchList"
+            :detailForm="detailForm"
+            style="flex: 1;overflow-y: auto"/>
       </div>
     </transition>
   </div>

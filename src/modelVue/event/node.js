@@ -44,7 +44,6 @@ export default function nodeEvent() {
                 } = this.componentsList.find(item => item.type === data.type)
                 this.detailForm.label = label
                 this.detailForm.icon = icon
-
                 const childAll = this.lf.getNodeOutgoingNode(data.id) // 所有子节点
                 this.detailBranchList = childAll.map(child => {
                     return ({
