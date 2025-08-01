@@ -5,8 +5,8 @@
     </div>
     <div style="padding:0 10px">
       <div class="title">
-        <img src="../assets/结束.png" alt="">
-        结束节点
+        <img src="../assets/直接回复.png" alt="">
+        直接回复
       </div>
       <div style="color: rgba(66,66,66,0.4);font-size: 12px;">结束定义输出参数</div>
       <div style="font-weight: bold;margin-top: 15px">输出参数</div>

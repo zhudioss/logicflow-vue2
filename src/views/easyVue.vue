@@ -67,14 +67,14 @@ export default {
           icon: require('@/assets/知识库.png'),
         },
         {
-          label: '结束',
+          label: '直接回复',
           type: 'endNode',
           component: vEndNode,
           properties: {
             width: 0,
             height: 0,
           },
-          icon: require('@/assets/结束.png'),
+          icon: require('@/assets/直接回复.png'),
         }
       ],
 

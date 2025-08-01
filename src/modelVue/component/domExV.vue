@@ -1,8 +1,8 @@
 <template>
-  <div class="warpCard start-class">
+  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
-      <img src="@/assets/直接回复.png" alt="">
-      直接回复
+      <img src="../../assets/文档提取.png" alt="">
+      文档提取
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 
 export default {
-  name: 'endV',
+  name: 'domExV',
   props: ['properties', 'model'],
   computed: {},
   data() {
@@ -20,6 +20,7 @@ export default {
   },
   watch: {},
   mounted() {
+    // console.log(this.properties, this.model,'-=-=-=-=-=====-=-=')
     this.bus.$on('runChildMethod', () => this.updateNodeData())
   },
   methods: {

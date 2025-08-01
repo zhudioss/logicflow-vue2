@@ -10,6 +10,8 @@ import httpV from "@/modelVue/component/httpV.vue";
 import branchV from "@/modelVue/component/branchV.vue";
 import updateV from "@/modelVue/component/updateV.vue";
 import listV from "@/modelVue/component/listV.vue";
+import aggV from "@/modelVue/component/aggV.vue";
+import domExV from "@/modelVue/component/domExV.vue";
 
 export const componentsList = [
     {
@@ -22,16 +24,16 @@ export const componentsList = [
         },
         icon: require('@/assets/开始.png'),
     },
-    {
-        label: '知识库',
-        type: 'know-v',
-        component: knowV,
-        properties: {
-            width: 240,
-            height: 50,
-        },
-        icon: require('@/assets/知识库.png'),
-    },
+    // {
+    //     label: '知识库',
+    //     type: 'know-v',
+    //     component: knowV,
+    //     properties: {
+    //         width: 240,
+    //         height: 50,
+    //     },
+    //     icon: require('@/assets/知识库.png'),
+    // },
     {
         label: 'LLM',
         type: 'llm-v',
@@ -42,16 +44,16 @@ export const componentsList = [
         },
         icon: require('@/assets/llm.png'),
     },
-    {
-        label: 'Agent',
-        type: 'agent-v',
-        component: agentV,
-        properties: {
-            width: 240,
-            height: 50,
-        },
-        icon: require('@/assets/Agent.png'),
-    },
+    // {
+    //     label: 'Agent',
+    //     type: 'agent-v',
+    //     component: agentV,
+    //     properties: {
+    //         width: 240,
+    //         height: 50,
+    //     },
+    //     icon: require('@/assets/Agent.png'),
+    // },
     {
         label: '知识检索',
         type: 'knowledge-v',
@@ -72,16 +74,16 @@ export const componentsList = [
         },
         icon: require('@/assets/代码执行.png'),
     },
-    {
-        label: '模版转换',
-        type: 'template-v',
-        component: templateV,
-        properties: {
-            width: 240,
-            height: 50,
-        },
-        icon: require('@/assets/模版转换.png'),
-    },
+    // {
+    //     label: '模版转换',
+    //     type: 'template-v',
+    //     component: templateV,
+    //     properties: {
+    //         width: 240,
+    //         height: 50,
+    //     },
+    //     icon: require('@/assets/模版转换.png'),
+    // },
     {
         label: 'http请求',
         type: 'http-v',
@@ -102,34 +104,54 @@ export const componentsList = [
         },
         icon: require('@/assets/条件分支.png'),
     },
+    // {
+    //     label: '迭代',
+    //     type: 'update-v',
+    //     component: updateV,
+    //     properties: {
+    //         width: 240,
+    //         height: 50,
+    //     },
+    //     icon: require('@/assets/迭代.png'),
+    // },
+    // {
+    //     label: '列表操作',
+    //     type: 'list-v',
+    //     component: listV,
+    //     properties: {
+    //         width: 240,
+    //         height: 50,
+    //     },
+    //     icon: require('@/assets/列表操作.png'),
+    // },
     {
-        label: '迭代',
-        type: 'update-v',
-        component: updateV,
+        label: '变量聚合',
+        type: 'agg-v',
+        component: aggV,
         properties: {
             width: 240,
             height: 50,
         },
-        icon: require('@/assets/迭代.png'),
+        icon: require('@/assets/变量聚合.png'),
     },
     {
-        label: '列表操作',
-        type: 'list-v',
-        component: listV,
+        label: '文档提取',
+        type: 'domEx-v',
+        component: domExV,
         properties: {
             width: 240,
             height: 50,
         },
-        icon: require('@/assets/列表操作.png'),
+        icon: require('@/assets/文档提取.png'),
     },
     {
-        label: '结束',
+        label: '直接回复',
         type: 'end-v',
         component: endV,
         properties: {
             width: 240,
             height: 50,
         },
-        icon: require('@/assets/结束.png'),
-    }
+        icon: require('@/assets/直接回复.png'),
+    },
 ]

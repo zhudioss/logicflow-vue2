@@ -2,7 +2,7 @@
   <div class="warpCard start-class">
     <div class="title">
       <img src="@/assets/开始.png" alt="">
-      开始节点
+      开始
     </div>
   </div>
 </template>
