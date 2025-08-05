@@ -1,6 +1,7 @@
 .warp-detail {
   display: flex;
   flex-direction: column;
+  padding-bottom: 5px;
   /* 整个滚动条 */
   ::-webkit-scrollbar {
     width: 8px; /* 纵向滚动条宽度 */
@@ -129,8 +130,8 @@
           border: 1px dashed #409eff;
 
           &:hover {
-            background: #409eff;
-            color: #ecf5ff;
+            background: #ecf5ff;
+            //color: #ecf5ff;
           }
         }
       }
