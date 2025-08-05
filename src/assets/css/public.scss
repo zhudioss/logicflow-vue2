@@ -2,7 +2,6 @@
   text-align: left;
   margin: 0;
   padding: 0;
-  //font-size: 14px;
   list-style: none;
 
   img {
@@ -68,4 +67,13 @@
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.el-button--primary {
+  background: #3f58fd;
+  border: 0;
+
+  &:hover {
+    background: #3f58fdb2;
+  }
 }

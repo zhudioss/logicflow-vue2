@@ -105,12 +105,26 @@
 
     }
 
-    .close {
+    .el-button {
       font-weight: bold;
       cursor: pointer;
       padding: 3px;
       font-size: 15px;
       border-radius: 5px;
+      filter: none
+    }
+
+    .moreAlert-class {
+      position: absolute;
+      width: 200px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 5px;
+      border: 1px solid #ecedee;
+      z-index: 99;
+      right: 0px;
+      top: 28px;
+      filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
     }
   }
 

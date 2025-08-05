@@ -8,6 +8,10 @@ import {bus} from './utils/bus'
 import "@/assets/css/public.scss";
 import 'animate.css';
 
+import ClickOutsideClose from '@/utils/click-outside-close'
+
+Vue.directive('click-outside-close', ClickOutsideClose)
+
 Vue.use(ElementUI)
 
 Vue.prototype.bus = bus

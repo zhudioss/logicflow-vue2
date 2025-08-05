@@ -45,8 +45,20 @@
             <img :src="detailForm.icon" alt="">
             {{ detailForm.label }}
           </div>
-          <div class="close" @click="handlerClose">
-            <i class="el-icon-close"></i>
+          <!--关闭关于更多-->
+          <div style="display: flex;align-items: center;column-gap: 10px;position: relative">
+            <el-button plain icon="el-icon-more" @click="moreAlertShow=true"></el-button>
+            <el-divider direction="vertical"></el-divider>
+            <el-button plain type="danger" icon="el-icon-close" @click="handlerClose"></el-button>
+            <div class="moreAlert-class" v-if="moreAlertShow" v-click-outside-close="()=>{moreAlertShow=false}"
+                 ref="moreAlertRef">
+              <div v-if="detailForm.label == '开始'">
+                <p style="margin-bottom: 5px;color:#667085;">关于</p>
+                <p>
+                  定义一个workflow启动的初始参数
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <div style="padding:0 10px">
@@ -135,7 +147,8 @@ export default {
         icon: '',
       },
       detailBranchList: [],
-      describeInput: ''
+      describeInput: '',
+      moreAlertShow: false,
     }
   },
   created() {
@@ -322,12 +335,12 @@ export default {
 
     handlerClose() {
       this.drawer = false
-    }
-
+    },
   }
 
 };
 </script>
+
 <style scoped lang="scss">
 @use "@/assets/css/index.scss" as *;
 </style>

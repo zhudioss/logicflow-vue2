@@ -378,7 +378,7 @@ export default {
     text-align: left;
     margin: 0;
     padding: 0;
-    font-size: 14px;
+    //font-size: 14px;
     list-style: none;
   }
 
@@ -401,7 +401,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: start;
-    font-size: 14px;
+    //font-size: 14px;
     font-weight: bold;
 
     img {
@@ -468,7 +468,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    //font-size: 14px;
     font-weight: bold;
     margin-bottom: 10px;
 
