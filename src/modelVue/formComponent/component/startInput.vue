@@ -276,14 +276,13 @@ export default {
     .el-button--danger {
       border: 0;
       background: #fff;
-      padding: 8px;
+      padding: 7px;
       border-radius: 8px;
 
 
       i {
         font-weight: bold;
         font-size: 15px;
-
       }
     }
 
@@ -291,7 +290,8 @@ export default {
       color: #667085;
 
       &:hover {
-        color: #fff;
+        background: #fee4e2;
+        color: #d92d20;
       }
     }
   }
