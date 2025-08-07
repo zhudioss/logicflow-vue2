@@ -23,8 +23,8 @@
       <el-form :model="form">
         <div>
           <p class="title">字段类型</p>
-          <el-radio-group v-model="form.radio">
-            <el-radio-button :label="item.text" v-for="(item,index) in radioList" :key="index">
+          <el-radio-group v-model="form.fieldName">
+            <el-radio-button :label="item.text" v-for="(item,index) in fieldList" :key="index">
               <i :class="item.icon"></i>
               {{ item.text }}
             </el-radio-button>
@@ -38,11 +38,11 @@
           <p class="title">显示名称</p>
           <el-input v-model="form.showName" placeholder="请输入"></el-input>
         </div>
-        <div v-if="form.radio=='文本'||form.radio=='段落'">
+        <div v-if="form.fieldName=='文本'||form.fieldName=='段落'">
           <p class="title">最大长度</p>
           <el-input-number v-model="form.maxLang" :min="1" :max="256"></el-input-number>
         </div>
-        <div v-if="form.radio=='下拉选项'">
+        <div v-if="form.fieldName=='下拉选项'">
           <p class="title">选项</p>
           <draggable v-model="form.selectList" handle=".drag-handle" animation="200">
             <transition-group>
@@ -73,6 +73,64 @@
             </div>
             添加选项
           </div>
+        </div>
+        <div v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'">
+          <p class="title">支持的文件类型</p>
+          <el-checkbox-group v-model="form.checkboxGroup">
+            <el-checkbox
+                :label="item.label"
+                border v-for="(item,index) in checkboxList" :key="index"
+                @change="checkboxClick(item.label)"
+            >
+              <img :src="item.img" alt="" height="20">
+              <div style="flex: 1">
+                <p style="color: #101828">{{ item.label }}</p>
+                <p style="font-size: 12px;margin-top: 5px;line-height: 14px">{{ item.refer }}</p>
+              </div>
+              <div v-if="item.label=='其他文件类型'&&otherTagShow"
+                   style="width: 100%;text-wrap: wrap;margin-top: 9px;line-height: 40px">
+                <el-tag
+                    :key="tag"
+                    v-for="tag in form.dynamicTags"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleClose(tag)">
+                  {{ tag }}
+                </el-tag>
+                <el-input
+                    class="input-new-tag"
+                    v-if="inputVisible"
+                    v-model="inputValue"
+                    ref="saveTagInput"
+                    @keyup.enter.native="handleInputConfirm"
+                    @blur="handleInputConfirm"
+                >
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 文件扩展名，例如.doc
+                </el-button>
+              </div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <div v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'">
+          <p class="title">上传文件类型</p>
+          <el-radio-group v-model="form.fileType">
+            <el-radio-button :label="item.text" v-for="(item,index) in fileTypeList" :key="index" style="height: 32px">
+              {{ item.text }}
+            </el-radio-button>
+          </el-radio-group>
+        </div>
+        <div v-if="form.fieldName=='文件列表'">
+          <p class="title">最大上传数</p>
+          <p style="font-size: 13px;margin-bottom: 5px">{{
+              '文档 < 15.00MB，图片 < 10.00MB，音频 < 50.00MB，视频 < 100.00MB'
+            }}</p>
+          <el-slider
+              class="slider-class"
+              v-model="form.sliderVal"
+              :max="10"
+              show-input>
+          </el-slider>
         </div>
 
       </el-form>
@@ -137,17 +195,22 @@ export default {
       ],
       dialogFormVisible: false,
       form: {
-        radio: '文本',
+        fieldName: '文本',
         varName: '',
         showName: '',
         maxLang: '',
         selectList: [
           {id: 1, value: ''},
-        ]
+        ],
+        fileType: '本地上传',
+        sliderVal: 5,
+        checkboxGroup: [],
+        otherCheck: false,
+        dynamicTags: [],
       },
       formLabelWidth: '120px',
 
-      radioList: [
+      fieldList: [
         {
           icon: 'el-icon-edit-outline',
           text: '文本'
@@ -174,8 +237,50 @@ export default {
         },
       ],
 
+      checkboxList: [
+        {
+          label: '文档',
+          img: require('@/assets/文档.png'),
+          refer: 'TXT,MD,MDX,MARKDOWN,PDF,HTML,XLSX,XLS,DOC,DOCX,CSV,EML,MSG,PPTX,PPT,XML,EPUB'
+        },
+        {
+          label: '图片',
+          img: require('@/assets/图片.png'),
+          refer: 'JPG,JPEG,PNG,GIF,WEBP,SVG'
+        },
+        {
+          label: '音频',
+          img: require('@/assets/音频.png'),
+          refer: 'MP3,M4A,WAV,WEBM,AMR,MPGA'
+        },
+        {
+          label: '视频',
+          img: require('@/assets/视频.png'),
+          refer: 'MP4,MOV,MPEG,MPGA'
+        },
+        {
+          label: '其他文件类型',
+          img: require('@/assets/其他文件.png'),
+          refer: '指定其他文件类型'
+        },
+      ],
+      fileTypeList: [
+        {
+          text: '本地上传'
+        },
+        {
+          text: 'URL'
+        },
+        {
+          text: '两者'
+        },
+      ],
+
       nextId: 2,
 
+      otherTagShow: false,
+      inputVisible: false,
+      inputValue: ''
     }
   },
   watch: {},
@@ -192,6 +297,36 @@ export default {
     remove(index) {
       this.form.selectList.splice(index, 1)
     },
+    checkboxClick(val) {
+      if (val === '其他文件类型') {
+        this.form.checkboxGroup = ['其他文件类型']
+        this.otherTagShow = true
+      } else {
+        this.form.checkboxGroup = this.form.checkboxGroup.filter(item => item !== '其他文件类型')
+        this.otherTagShow = false
+      }
+    },
+
+
+    handleClose(tag) {
+      this.form.dynamicTags.splice(this.form.dynamicTags.indexOf(tag), 1);
+    },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.form.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
+    }
   }
 }
 </script>
@@ -293,6 +428,14 @@ export default {
         background: #fee4e2;
         color: #d92d20;
       }
+    }
+  }
+}
+
+.slider-class {
+  ::v-deep {
+    .el-input-number {
+      width: 30%;
     }
   }
 }
@@ -402,6 +545,82 @@ export default {
 
   .el-input-number {
     width: 100%;
+  }
+
+  .el-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 5px;
+  }
+
+  .el-checkbox {
+    margin: 0 !important;
+  }
+
+  .el-checkbox__input {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .el-checkbox.is-bordered {
+    height: auto;
+    padding: 0 15px;
+    border-radius: 8px;
+  }
+
+  .el-checkbox__label {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    width: calc(100% - 35px);
+    column-gap: 15px;
+    padding: 9px 0;
+    font-weight: normal !important;
+    flex-wrap: wrap;
+
+    p {
+      text-wrap: wrap;
+    }
+
+  }
+
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #667085;
+  }
+
+  .el-tag {
+    margin-right: 10px;
+    border-radius: 8px;
+  }
+
+  .button-new-tag {
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 8px;
+    border-style: dashed;
+    color: #bec4ce;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #fff;
+      color: #667085 !important;
+      border-color: #bec4ce;
+    }
+  }
+
+  .input-new-tag {
+    width: 161px;
+
+    .el-input__inner {
+      height: 32px;
+      transform: translateY(1px);
+      border-style: dashed;
+    }
   }
 
 }
