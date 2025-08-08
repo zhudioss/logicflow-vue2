@@ -52,10 +52,10 @@
             <el-button plain type="danger" icon="el-icon-close" @click="handlerClose"></el-button>
             <div class="moreAlert-class" v-if="moreAlertShow" v-click-outside-close="()=>{moreAlertShow=false}"
                  ref="moreAlertRef">
-              <div v-if="detailForm.label == '开始'">
+              <div>
                 <p style="margin-bottom: 5px;color:#667085;">关于</p>
                 <p>
-                  定义一个workflow启动的初始参数
+                  {{ moreAlertAbout.find(item => item.name === detailForm.label)?.text }}
                 </p>
               </div>
             </div>
@@ -104,10 +104,15 @@ import clickNodeAdd from './js/clickNodeAdd'
 
 import branchComponent from './formComponent/branchComponent.vue'
 
+import {mapState} from 'vuex'
+
 export default {
   name: 'App',
   components: {
     branchComponent,
+  },
+  computed: {
+    ...mapState(['moreAlertAbout'])  // 自动映射 this.moreAlertAbout 到 store 中
   },
   data() {
     return {

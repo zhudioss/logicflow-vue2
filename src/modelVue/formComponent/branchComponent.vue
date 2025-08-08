@@ -1,11 +1,10 @@
 <template>
   <div class="warp-detail">
     <div>
+      <!-- 组件 -->
       <startInputV v-if="detailForm.label=='开始'"></startInputV>
-      <!--      <div class="inputField">-->
-      <!--        <p>输入字段</p>-->
-      <!--        <i class="el-icon-plus"></i>-->
-      <!--      </div>-->
+      <startInputV v-if="detailForm.label=='LLM'"></startInputV>
+
       <div class="line-class"></div>
       <div class="inputField">
         <p>下一步</p>
