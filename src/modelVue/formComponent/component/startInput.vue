@@ -2,12 +2,33 @@
   <div>
     <div class="inputField">
       <p>输入字段</p>
-      <i class="el-icon-plus" @click="dialogFormVisible=true"></i>
+      <i class="el-icon-plus" @click="addClick"></i>
     </div>
-    <div class="inputField">
-      <div class="set-class">
+    <div class="inputField" style="display: block">
+      <div class="set-class" v-if="varEdit.length<=0">
         设置的输入可在工作流程中使用
       </div>
+
+      <div class="varList-class" v-for="(item,index) in varEdit" :key="index" style="margin: 5px 0 0">
+        <div class="left">
+          <div>{{ item.symbol }}</div>
+          <div>{{ item.varName }}.{{ item.showName }}</div>
+        </div>
+        <div>
+          <el-button
+              plain
+              icon="el-icon-edit"
+              @click="editClick(item)"
+          />
+          <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              @click="remove(index,'编辑')"
+          />
+        </div>
+      </div>
+
     </div>
     <div class="content-line"></div>
     <div class="inputField" style="display: block">
@@ -19,31 +40,27 @@
         {{ item.type }}
       </div>
     </div>
-    <el-dialog :append-to-body="true" title="添加变量" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <div>
-          <p class="title">字段类型</p>
+    <el-dialog :append-to-body="true" title="添加变量" :visible.sync="dialogFormVisible" @close="closeDialog">
+      <el-form :model="form" :rules="rules" ref="formRef">
+        <el-form-item label="字段类型" prop="fieldName">
           <el-radio-group v-model="form.fieldName">
             <el-radio-button :label="item.text" v-for="(item,index) in fieldList" :key="index">
               <i :class="item.icon"></i>
               {{ item.text }}
             </el-radio-button>
           </el-radio-group>
-        </div>
-        <div>
-          <p class="title">变量名称</p>
+        </el-form-item>
+        <el-form-item label="变量名称" prop="varName">
           <el-input v-model="form.varName" placeholder="请输入"></el-input>
-        </div>
-        <div>
-          <p class="title">显示名称</p>
-          <el-input v-model="form.showName" placeholder="请输入"></el-input>
-        </div>
-        <div v-if="form.fieldName=='文本'||form.fieldName=='段落'">
-          <p class="title">最大长度</p>
+        </el-form-item>
+        <el-form-item label="显示名称" prop="showName">
+          <el-input v-model="form.showName" placeholder="请输入"
+                    @focus="form.showName?null:form.showName=form.varName"></el-input>
+        </el-form-item>
+        <el-form-item label="最大长度" prop="maxLang" v-if="form.fieldName=='文本'||form.fieldName=='段落'">
           <el-input-number v-model="form.maxLang" :min="1" :max="256"></el-input-number>
-        </div>
-        <div v-if="form.fieldName=='下拉选项'">
-          <p class="title">选项</p>
+        </el-form-item>
+        <el-form-item label="选项" v-if="form.fieldName=='下拉选项'" prop="selectList">
           <draggable v-model="form.selectList" handle=".drag-handle" animation="200">
             <transition-group>
               <div
@@ -62,7 +79,7 @@
                     type="danger"
                     plain
                     icon="el-icon-delete"
-                    @click="remove(index)"
+                    @click="remove(index,'选项')"
                 />
               </div>
             </transition-group>
@@ -73,9 +90,9 @@
             </div>
             添加选项
           </div>
-        </div>
-        <div v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'">
-          <p class="title">支持的文件类型</p>
+        </el-form-item>
+        <el-form-item label="支持的文件类型" v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'"
+                      prop="checkboxGroup">
           <el-checkbox-group v-model="form.checkboxGroup">
             <el-checkbox
                 :label="item.label"
@@ -111,32 +128,30 @@
               </div>
             </el-checkbox>
           </el-checkbox-group>
-        </div>
-        <div v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'">
-          <p class="title">上传文件类型</p>
+        </el-form-item>
+        <el-form-item label="上传文件类型" v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'" prop="fileType">
           <el-radio-group v-model="form.fileType">
             <el-radio-button :label="item.text" v-for="(item,index) in fileTypeList" :key="index" style="height: 32px">
               {{ item.text }}
             </el-radio-button>
           </el-radio-group>
-        </div>
-        <div v-if="form.fieldName=='文件列表'">
-          <p class="title">最大上传数</p>
+        </el-form-item>
+        <el-form-item label="最大上传数" v-if="form.fieldName=='文件列表'" prop="sliderVal">
           <p style="font-size: 13px;margin-bottom: 5px">{{
               '文档 < 15.00MB，图片 < 10.00MB，音频 < 50.00MB，视频 < 100.00MB'
             }}</p>
           <el-slider
               class="slider-class"
               v-model="form.sliderVal"
+              :min="1"
               :max="10"
               show-input>
           </el-slider>
-        </div>
-
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="medium" @click="dialogFormVisible = false" style="margin-left: auto">取 消</el-button>
-        <el-button size="medium" type="primary" @click="dialogFormVisible = false">保 存</el-button>
+        <el-button size="medium" type="primary" @click="saveClick()">保 存</el-button>
       </div>
     </el-dialog>
 
@@ -146,6 +161,20 @@
 <script>
 import draggable from 'vuedraggable'
 
+const source = {
+  fieldName: '',
+  varName: '',
+  showName: '',
+  maxLang: '',
+  selectList: [
+    {id: 1, value: ''},
+  ],
+  fileType: '两者',
+  sliderVal: 5,
+  checkboxGroup: ['图片'],
+  otherCheck: false,
+  dynamicTags: [],
+}
 export default {
   name: 'startInput',
   props: [],
@@ -193,23 +222,10 @@ export default {
         },
 
       ],
+      varEdit: [],
       dialogFormVisible: false,
-      form: {
-        fieldName: '文本',
-        varName: '',
-        showName: '',
-        maxLang: '',
-        selectList: [
-          {id: 1, value: ''},
-        ],
-        fileType: '本地上传',
-        sliderVal: 5,
-        checkboxGroup: [],
-        otherCheck: false,
-        dynamicTags: [],
-      },
+      form: JSON.parse(JSON.stringify(source)),
       formLabelWidth: '120px',
-
       fieldList: [
         {
           icon: 'el-icon-edit-outline',
@@ -236,7 +252,6 @@ export default {
           text: '文件列表'
         },
       ],
-
       checkboxList: [
         {
           label: '文档',
@@ -275,12 +290,36 @@ export default {
           text: '两者'
         },
       ],
-
       nextId: 2,
-
       otherTagShow: false,
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      rules: {
+        fieldName: [
+          {required: true, message: '请选择字段类型', trigger: 'change'}
+        ],
+        varName: [
+          {required: true, message: '请输入变量名称', trigger: 'blur'},
+        ],
+        showName: [
+          {required: true, message: '请输入显示名称', trigger: 'blur'},
+        ],
+        selectList: [
+          {
+            validator: (rule, value, callback) => {
+              if (!Array.isArray(value) || value.length === 0) {
+                return callback(new Error('请添加至少一个选项'));
+              }
+              const empty = value.some(item => !item.value || item.value.trim() === '');
+              if (empty) {
+                return callback(new Error('选项内容不能为空'));
+              }
+              callback(); // 验证通过
+            },
+            trigger: 'blur',
+          }
+        ],
+      }
     }
   },
   watch: {},
@@ -291,11 +330,45 @@ export default {
 
   },
   methods: {
+    addClick() {
+      this.dialogFormVisible = true
+      this.form = JSON.parse(JSON.stringify(source))
+    },
+    editClick() {
+      this.dialogFormVisible = true
+    },
+    closeDialog() {
+      this.$refs.formRef.resetFields()
+    },
+    saveClick() {
+      this.$refs.formRef.validate((valid) => {
+        if (valid) {
+          // console.log('验证通过，提交表单');
+          let obj = {
+            symbol: '{x}',
+            ...this.form
+          }
+          this.varEdit.push(obj)
+
+          this.dialogFormVisible = false
+        } else {
+          // console.warn('表单校验失败');
+          return false;
+        }
+      });
+    },
     selectAdd() {
       this.form.selectList.push({id: this.nextId++, value: ''})
     },
-    remove(index) {
-      this.form.selectList.splice(index, 1)
+    remove(index, val) {
+      switch (val) {
+        case '编辑':
+          this.varEdit.splice(index, 1)
+          break
+        case '选项':
+          this.form.selectList.splice(index, 1)
+          break
+      }
     },
     checkboxClick(val) {
       if (val === '其他文件类型') {
@@ -374,6 +447,25 @@ export default {
 
     }
   }
+
+  ::v-deep {
+
+    .el-button--danger.is-plain, .el-button {
+      color: #667085;
+      background: #fff;
+      padding: 0;
+      box-shadow: none;
+      filter: none;
+
+      &:hover {
+        background: #fff;
+      }
+    }
+
+    .el-button--danger.is-plain:hover {
+      color: #d92d20;
+    }
+  }
 }
 
 .addNode-class {
@@ -441,6 +533,18 @@ export default {
 }
 
 ::v-deep {
+  .el-form-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    .el-form-item__label {
+      text-align: left;
+      font-size: 15px;
+      font-weight: bold;
+    }
+  }
+
   .el-dialog {
     margin: 0 auto !important;
     top: 50%;
@@ -479,13 +583,13 @@ export default {
   }
 
   .el-dialog__body {
-    padding: 0 20px;
+    padding: 0 20px 10px;
     max-height: calc(100vh - 170px);
     overflow-y: auto;
   }
 
   .el-dialog__footer {
-    padding: 20px;
+    padding: 10px 20px 20px;
   }
 
   // 单选框
