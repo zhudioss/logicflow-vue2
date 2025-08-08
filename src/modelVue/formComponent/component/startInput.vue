@@ -319,6 +319,9 @@ export default {
             trigger: 'blur',
           }
         ],
+        checkboxGroup:[
+          {required: true, message: '请选择支持的文件类型', trigger: 'change'},
+        ]
       }
     }
   },
