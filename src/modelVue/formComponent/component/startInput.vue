@@ -162,10 +162,10 @@
 import draggable from 'vuedraggable'
 
 const source = {
-  fieldName: '',
+  fieldName: '文本',
   varName: '',
   showName: '',
-  maxLang: '',
+  maxLang: 48,
   selectList: [
     {id: 1, value: ''},
   ],
@@ -319,7 +319,7 @@ export default {
             trigger: 'blur',
           }
         ],
-        checkboxGroup:[
+        checkboxGroup: [
           {required: true, message: '请选择支持的文件类型', trigger: 'change'},
         ]
       }
