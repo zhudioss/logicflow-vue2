@@ -81,20 +81,6 @@
 </template>
 
 <script>
-const source = {
-  fieldName: '文本',
-  varName: '',
-  showName: '',
-  maxLang: 48,
-  selectList: [
-    {id: 1, value: ''},
-  ],
-  fileType: '两者',
-  sliderVal: 5,
-  checkboxGroup: ['图片'],
-  otherCheck: false,
-  dynamicTags: [],
-}
 export default {
   name: 'llmCom',
   props: [],
@@ -112,7 +98,7 @@ export default {
       ],
       selectListShow: false,
 
-      dynamicTags: ['标签一', '标签二', '标签三'],
+      dynamicTags: [],
       inputVisible: false,
       inputValue: '',
 
@@ -164,145 +150,7 @@ export default {
         },
       ],
 
-      varList: [
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
-        {
-          symbol: '{x}',
-          name: 'sys.query',
-          type: 'String',
-        },
 
-      ],
-      varEdit: [],
-      dialogFormVisible: false,
-      form: JSON.parse(JSON.stringify(source)),
-      formLabelWidth: '120px',
-      fieldList: [
-        {
-          icon: 'el-icon-edit-outline',
-          text: '文本'
-        },
-        {
-          icon: 'el-icon-s-fold',
-          text: '段落'
-        },
-        {
-          icon: 'el-icon-check',
-          text: '下拉选项'
-        },
-        {
-          icon: 'el-icon-pie-chart',
-          text: '数字'
-        },
-        {
-          icon: 'el-icon-document',
-          text: '单文件'
-        },
-        {
-          icon: 'el-icon-document-copy',
-          text: '文件列表'
-        },
-      ],
-      checkboxList: [
-        {
-          label: '文档',
-          img: require('@/assets/文档.png'),
-          refer: 'TXT,MD,MDX,MARKDOWN,PDF,HTML,XLSX,XLS,DOC,DOCX,CSV,EML,MSG,PPTX,PPT,XML,EPUB'
-        },
-        {
-          label: '图片',
-          img: require('@/assets/图片.png'),
-          refer: 'JPG,JPEG,PNG,GIF,WEBP,SVG'
-        },
-        {
-          label: '音频',
-          img: require('@/assets/音频.png'),
-          refer: 'MP3,M4A,WAV,WEBM,AMR,MPGA'
-        },
-        {
-          label: '视频',
-          img: require('@/assets/视频.png'),
-          refer: 'MP4,MOV,MPEG,MPGA'
-        },
-        {
-          label: '其他文件类型',
-          img: require('@/assets/其他文件.png'),
-          refer: '指定其他文件类型'
-        },
-      ],
-      fileTypeList: [
-        {
-          text: '本地上传'
-        },
-        {
-          text: 'URL'
-        },
-        {
-          text: '两者'
-        },
-      ],
-      nextId: 2,
-      otherTagShow: false,
-      // inputVisible: false,
-      // inputValue: '',
-      rules: {
-        fieldName: [
-          {required: true, message: '请选择字段类型', trigger: 'change'}
-        ],
-        varName: [
-          {required: true, message: '请输入变量名称', trigger: 'blur'},
-        ],
-        showName: [
-          {required: true, message: '请输入显示名称', trigger: 'blur'},
-        ],
-        selectList: [
-          {
-            validator: (rule, value, callback) => {
-              if (!Array.isArray(value) || value.length === 0) {
-                return callback(new Error('请添加至少一个选项'));
-              }
-              const empty = value.some(item => !item.value || item.value.trim() === '');
-              if (empty) {
-                return callback(new Error('选项内容不能为空'));
-              }
-              callback(); // 验证通过
-            },
-            trigger: 'blur',
-          }
-        ],
-        checkboxGroup: [
-          {required: true, message: '请选择支持的文件类型', trigger: 'change'},
-        ]
-      }
     }
   },
   watch: {
@@ -312,7 +160,7 @@ export default {
       } else {
         this.$refs.selectIRef.style.transform = 'rotate(0deg)'
       }
-    }
+    },
   },
   created() {
 
@@ -342,7 +190,9 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
-        this.dynamicTags.push(inputValue);
+        if (this.dynamicTags.length < 4) {
+          this.dynamicTags.push(inputValue);
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
@@ -478,7 +328,7 @@ export default {
       font-weight: normal;
       align-items: center;
       font-size: 12px;
-      column-gap: 30px;
+      column-gap: 42px;
     }
   }
 }
@@ -486,9 +336,21 @@ export default {
 
 ::v-deep {
   .el-tag {
+    position: relative;
+    //width: 100%;
     margin-right: 5px;
     margin-bottom: 5px;
     border-radius: 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+
+    .el-icon-close {
+      //position: absolute;
+      //right: 10px;
+      //top: 50%;
+      //transform: translateY(-50%);
+    }
   }
 
   .button-new-tag {
