@@ -336,21 +336,9 @@ export default {
 
 ::v-deep {
   .el-tag {
-    position: relative;
-    //width: 100%;
     margin-right: 5px;
     margin-bottom: 5px;
     border-radius: 8px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
-
-    .el-icon-close {
-      //position: absolute;
-      //right: 10px;
-      //top: 50%;
-      //transform: translateY(-50%);
-    }
   }
 
   .button-new-tag {
