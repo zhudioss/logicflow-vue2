@@ -2,7 +2,7 @@
   <div>
     <div class="inputField">
       <p>输入字段</p>
-      <i class="el-icon-plus" @click="addClick"></i>
+      <i class="el-icon-plus iPlus" @click="addClick"></i>
     </div>
     <div class="inputField" style="display: block">
       <div class="set-class" v-if="varEdit.length<=0">
@@ -116,14 +116,14 @@
                 </el-tag>
                 <el-input
                     class="input-new-tag"
-                    v-if="inputVisible"
+                    v-show="inputVisible"
                     v-model="inputValue"
                     ref="saveTagInput"
                     @keyup.enter.native="handleInputConfirm"
                     @blur="handleInputConfirm"
                 >
                 </el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 文件扩展名，例如.doc
+                <el-button v-show="!inputVisible" class="button-new-tag" size="small" @click="showInput">+ 文件扩展名，例如.doc
                 </el-button>
               </div>
             </el-checkbox>
@@ -176,7 +176,7 @@ const source = {
   dynamicTags: [],
 }
 export default {
-  name: 'startInput',
+  name: 'startCom',
   props: [],
   components: {
     draggable
@@ -390,9 +390,9 @@ export default {
 
     showInput() {
       this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
+      this.$nextTick(() => {
+        this.$refs.saveTagInput[0].focus()
+      })
     },
 
     handleInputConfirm() {

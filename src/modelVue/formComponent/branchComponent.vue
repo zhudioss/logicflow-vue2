@@ -2,8 +2,8 @@
   <div class="warp-detail">
     <div>
       <!-- 组件 -->
-      <startInputV v-if="detailForm.label=='开始'"></startInputV>
-      <startInputV v-if="detailForm.label=='LLM'"></startInputV>
+      <startCom v-if="detailForm.label=='开始'"></startCom>
+      <llmCom v-if="detailForm.label=='LLM'"></llmCom>
 
       <div class="line-class"></div>
       <div class="inputField">
@@ -41,13 +41,16 @@
 </template>
 
 <script>
-import startInputV from '@/modelVue/formComponent/component/startInput.vue'
+import startCom from '@/modelVue/formComponent/component/startCom.vue'
+import llmCom from '@/modelVue/formComponent/component/llmCom.vue'
 
 export default {
   name: 'branchComponent',
   props: ['detailBranchList', 'detailForm'],
   components: {
-    startInputV,
+    startCom,
+    llmCom,
+
   },
   computed: {},
   data() {

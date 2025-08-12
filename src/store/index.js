@@ -36,7 +36,7 @@ export default new Vuex.Store({
             },
             {
                 name: '文档提取',
-                text: '用于将用户上传的文档解析为 LLM 便于理解的文本内容'
+                text: '用于将用户上传的文档解析为 LlmCom 便于理解的文本内容'
             },
             {
                 name: '直接回复',

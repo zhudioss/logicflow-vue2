@@ -69,6 +69,10 @@
   display: none;
 }
 
+.el-tooltip__popper {
+  max-width: 200px !important;
+}
+
 //.el-button--primary {
 //  background: #3f58fd;
 //  border: 0;

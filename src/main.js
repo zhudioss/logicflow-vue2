@@ -9,8 +9,10 @@ import "@/assets/css/public.scss";
 import 'animate.css';
 
 import ClickOutsideClose from '@/utils/click-outside-close'
+import resizeLeft from '@/utils/resizeLeft'
 
 Vue.directive('click-outside-close', ClickOutsideClose)
+Vue.directive('resize-left', resizeLeft);
 
 Vue.use(ElementUI)
 

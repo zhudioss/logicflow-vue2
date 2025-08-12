@@ -39,7 +39,7 @@
     <!--  弹窗-->
     <transition enter-active-class="animate__animated animate__fadeInRight animate__faster"
                 leave-active-class="animate__animated animate__fadeOut animate__faster">
-      <div class="drawer-class" v-if="drawer">
+      <div v-resize-left class="drawer-class" v-if="drawer" ref="drawer">
         <div class="drawer-header">
           <div class="title">
             <img :src="detailForm.icon" alt="">
@@ -61,7 +61,7 @@
             </div>
           </div>
         </div>
-        <div style="padding:0 10px">
+        <div style="padding:0 10px" class="describe">
           <el-input ref="describe_ref" v-model="describeInput" placeholder="添加描述..."></el-input>
         </div>
         <div class="line-class"></div>
@@ -105,6 +105,7 @@ import clickNodeAdd from './js/clickNodeAdd'
 import branchComponent from './formComponent/branchComponent.vue'
 
 import {mapState} from 'vuex'
+
 
 export default {
   name: 'App',
@@ -341,7 +342,7 @@ export default {
     handlerClose() {
       this.drawer = false
     },
-  }
+  },
 
 };
 </script>

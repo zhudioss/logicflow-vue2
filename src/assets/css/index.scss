@@ -80,9 +80,10 @@
   background: #fff;
   bottom: 10px;
   right: 10px;
-  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   font-size: 13px;
   box-sizing: border-box;
+  user-select: none;
 
   .drawer-header {
     display: flex;
@@ -128,6 +129,18 @@
     }
   }
 
+  .resizer {
+    width: 10px;
+    height: 100px;
+    background: #fff;
+    border: 2px solid #000;
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+  }
+
   .line-class {
     height: 1px;
     background: #ecedee;
@@ -135,19 +148,20 @@
   }
 
   ::v-deep {
-    .el-input__inner {
-      font-size: 13px;
-      border: none;
-      height: 30px;
-      border-radius: 8px;
-      //padding-left: 5px;
+    .describe {
+      .el-input__inner {
+        font-size: 13px;
+        border: none;
+        height: 30px;
+        border-radius: 8px;
+        //padding-left: 5px;
 
-      &:hover {
-        filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.1));
+        &:hover {
+          filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
       }
-
     }
-
   }
 
 }
