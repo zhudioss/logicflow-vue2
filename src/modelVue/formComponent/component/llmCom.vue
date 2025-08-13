@@ -27,7 +27,7 @@
                 v-model="input2">
             </el-input>
             <p style="color:#676f83">OpenAI-API-compatible</p>
-            <div style="height: calc(100% - 59px);overflow-y: auto">
+            <div style="flex: 1;overflow-y: auto">
               <div class="selectOpt-class" @click.stop="selectOptClick(item,'模型')"
                    v-for="(item,index) in  selectOptList"
                    :key="index">
@@ -101,12 +101,14 @@
     <div class="inputField" style="display: block;margin-bottom: 16px">
       <div class="set-class" style="position: relative">
         <div class="content-class" @click="contextClick">
-          <div class="title-class" :style="`color:${contextSetParams=='设置变量值'?'#98a2b2':'#101828'}`">{{ contextSetParams }}</div>
+          <div class="title-class" :style="`color:${contextSetParams=='设置变量值'?'#98a2b2':'#101828'}`">
+            {{ contextSetParams }}
+          </div>
           <img v-if="contextSetParams!='设置变量值'" src="@/assets/关闭.png" alt="" height="16"
                @click.stop="removeContext">
           <i class="el-icon-arrow-down" ref="contextSelectRef"></i>
         </div>
-        <div class="modelSelectClass" style="width: 100%;top:42px" v-if="contextSelectShow"
+        <div class="modelSelectClass" style="width: 100%;height: 314px;top:42px" v-if="contextSelectShow"
              v-click-outside-close="()=>{contextSelectShow=false}">
           <el-input
               placeholder="搜索变量"
@@ -115,7 +117,7 @@
               v-model="input2">
           </el-input>
           <p style="color:#676f83">开始</p>
-          <div style="height: calc(100% - 59px);overflow-y: auto">
+          <div style="flex: 1;overflow-y: auto">
             <div class="selectOpt-class" @click.stop="selectOptClick(item,'变量')"
                  v-for="(item,index) in  contextOptList"
                  :key="index">
@@ -257,11 +259,11 @@ export default {
           type: 'String',
           select: false
         },
-        {
-          name: 'sys.workflow_run_id',
-          type: 'String',
-          select: false
-        },
+        // {
+        //   name: 'sys.workflow_run_id',
+        //   type: 'String',
+        //   select: false
+        // },
       ],
       contextOptList_copy: [] // 深拷贝
 
@@ -499,8 +501,10 @@ export default {
 
   .modelSelectClass {
     width: calc(100% - 75px);
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
-    height: 247px;
+    height: 250px;
     background: #fff;
     padding: 13px;
     position: absolute;
