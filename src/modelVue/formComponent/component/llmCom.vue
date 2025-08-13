@@ -101,8 +101,8 @@
     <div class="inputField" style="display: block;margin-bottom: 16px">
       <div class="set-class" style="position: relative">
         <div class="content-class" @click="contextClick">
-          <div class="title-class">{{ contextSetParams }}</div>
-          <img v-if="contextSetParams!='{x} 设置变量值'" src="@/assets/关闭.png" alt="" height="16"
+          <div class="title-class" :style="`color:${contextSetParams=='设置变量值'?'#98a2b2':'#101828'}`">{{ contextSetParams }}</div>
+          <img v-if="contextSetParams!='设置变量值'" src="@/assets/关闭.png" alt="" height="16"
                @click.stop="removeContext">
           <i class="el-icon-arrow-down" ref="contextSelectRef"></i>
         </div>
@@ -219,7 +219,7 @@ export default {
         },
       ],
 
-      contextSetParams: '{x} 设置变量值',
+      contextSetParams: '设置变量值',
       contextSelectShow: false,
       contextOptList: [
         {
@@ -360,7 +360,7 @@ export default {
       this.contextOptList_copy = JSON.parse(JSON.stringify(this.contextOptList))
     },
     removeContext() {
-      this.contextSetParams = '{x} 设置变量值'
+      this.contextSetParams = '设置变量值'
       this.contextOptList.forEach(item => item.select = false)
     }
   },
