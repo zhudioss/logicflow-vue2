@@ -2,17 +2,17 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 5px;
-  /* 整个滚动条 */
-  ::-webkit-scrollbar {
-    width: 8px; /* 纵向滚动条宽度 */
-    height: 8px; /* 横向滚动条高度 */
-  }
-
-  /* 滚动条滑块（拖动的部分） */
-  ::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
-  }
+  ///* 整个滚动条 */
+  //::-webkit-scrollbar {
+  //  width: 8px; /* 纵向滚动条宽度 */
+  //  height: 8px; /* 横向滚动条高度 */
+  //}
+  //
+  ///* 滚动条滑块（拖动的部分） */
+  //::-webkit-scrollbar-thumb {
+  //  background: #c1c1c1;
+  //  border-radius: 4px;
+  //}
 
   .line-class, .content-line {
     height: 1px;

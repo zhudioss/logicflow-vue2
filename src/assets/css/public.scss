@@ -65,8 +65,24 @@
 
 }
 
+//::-webkit-scrollbar {
+//  display: none;
+//}
+
 ::-webkit-scrollbar {
-  display: none;
+  width: 6px; /* 纵向滚动条宽度 */
+  height: 6px; /* 横向滚动条高度 */
+}
+
+/* 滚动条滑块（拖动的部分） */
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+// el-dialog 遮罩层颜色
+.v-modal {
+
 }
 
 .el-tooltip__popper {

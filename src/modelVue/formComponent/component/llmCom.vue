@@ -3,7 +3,7 @@
     <div class="inputField">
       <p>模型</p>
     </div>
-    <div class="inputField" style="display: block;">
+    <div class="inputField" style="display: block;margin-bottom: 16px">
       <div class="set-class" @click="modelOptClick">
         <div class="content-class">
           <img src="@/assets/模型.png" alt="" height="20">
@@ -19,8 +19,23 @@
             <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
             <i class="el-icon-arrow-down" ref="selectIRef"></i>
           </div>
-          <div v-if="selectListShow" v-click-outside-close="()=>{selectListShow=false}">
-            1212121
+          <div class="modelSelectClass" v-if="selectListShow" v-click-outside-close="()=>{selectListShow=false}">
+            <el-input
+                placeholder="搜索模型"
+                prefix-icon="el-icon-search"
+                @input="e=>searchInput(e,'模型')"
+                v-model="input2">
+            </el-input>
+            <p style="color:#676f83">OpenAI-API-compatible</p>
+            <div style="height: calc(100% - 59px);overflow-y: auto">
+              <div class="selectOpt-class" @click.stop="selectOptClick(item,'模型')"
+                   v-for="(item,index) in  selectOptList"
+                   :key="index">
+                <img src="@/assets/模型.png" alt="" height="20">
+                <div class="title-class">{{ item.value }}</div>
+                <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
+              </div>
+            </div>
           </div>
           <div class="content-line" style="width: auto"></div>
           <div>参数</div>
@@ -77,6 +92,42 @@
         </div>
       </div>
     </div>
+    <div class="inputField" style="justify-content: start;column-gap: 6px">
+      <p>上下文</p>
+      <el-tooltip popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文" placement="top">
+        <img src="@/assets/问号.png" alt="" height="13">
+      </el-tooltip>
+    </div>
+    <div class="inputField" style="display: block;margin-bottom: 16px">
+      <div class="set-class" style="position: relative">
+        <div class="content-class" @click="contextClick">
+          <div class="title-class">{{ contextSetParams }}</div>
+          <img v-if="contextSetParams!='{x} 设置变量值'" src="@/assets/关闭.png" alt="" height="16"
+               @click.stop="removeContext">
+          <i class="el-icon-arrow-down" ref="contextSelectRef"></i>
+        </div>
+        <div class="modelSelectClass" style="width: 100%;top:42px" v-if="contextSelectShow"
+             v-click-outside-close="()=>{contextSelectShow=false}">
+          <el-input
+              placeholder="搜索变量"
+              prefix-icon="el-icon-search"
+              @input="e=>searchInput(e,'变量')"
+              v-model="input2">
+          </el-input>
+          <p style="color:#676f83">开始</p>
+          <div style="height: calc(100% - 59px);overflow-y: auto">
+            <div class="selectOpt-class" @click.stop="selectOptClick(item,'变量')"
+                 v-for="(item,index) in  contextOptList"
+                 :key="index">
+              <span style="color:#3f58fd;font-weight: bold">{x}</span>
+              <div class="title-class">{{ item.name }}</div>
+              <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
+              <span style="margin-left: auto">{{ item.type }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -88,26 +139,44 @@ export default {
   computed: {},
   data() {
     return {
-      modelTitle: 'deepseedsfdsfdsfdsfdsfsfsdk32b',
-      modelOptShow: true,
-      options: [
+      modelTitle: 'deepseek32b',
+      modelOptShow: false,
+      selectOptList: [
         {
           value: 'qwen72b',
-          label: 'qwen72b'
-        }
+          select: false,
+        },
+        {
+          value: 'qwen32b',
+          select: false,
+        },
+        {
+          value: 'deepseek32b',
+          select: false,
+        },
+        {
+          value: 'deepseek671b',
+          select: false,
+        },
+        {
+          value: 'qwen325b',
+          select: false,
+        },
       ],
-      selectListShow: false,
+      selectOptList_copy: [], // 深拷贝
 
+      selectListShow: false,
+      input2: '',
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
-
+      selectValue: '',
       paramsContentList: [
         {
           name: '气温',
           switchVal: false,
           content: '核采样阈值。用于决定结果随机性，取值越高随机性越强即相同的问题得到的不同答案的可能性越高',
-          sliderVal: 0,
+          sliderVal: 0.7,
           max: 2,
           min: 0,
           step: 0.1
@@ -116,7 +185,7 @@ export default {
           name: 'Top P',
           switchVal: false,
           content: '生活过程中核采样方法概率阈值。取值越大，生成的随机性越高；取值越小，生成的确定性越高。',
-          sliderVal: 0,
+          sliderVal: 1,
           max: 1,
           min: 0,
           step: 0.1
@@ -143,13 +212,58 @@ export default {
           name: '最大标记',
           switchVal: false,
           content: '',
-          sliderVal: 0,
+          sliderVal: 512,
           max: 409600,
           min: 1,
           step: 1
         },
       ],
 
+      contextSetParams: '{x} 设置变量值',
+      contextSelectShow: false,
+      contextOptList: [
+        {
+          name: 'sys.query',
+          type: 'String',
+          select: false
+        },
+        {
+          name: 'sys.dialogue_count',
+          type: 'Number',
+          select: false
+        },
+        {
+          name: 'sys.conversation_id',
+          type: 'String',
+          select: false
+        },
+        {
+          name: 'sys.user_id',
+          type: 'String',
+          select: false
+        },
+        {
+          name: 'sys.files',
+          type: 'String',
+          select: false
+        },
+        {
+          name: 'sys.app_id',
+          type: 'String',
+          select: false
+        },
+        {
+          name: 'sys.workflow_id',
+          type: 'String',
+          select: false
+        },
+        {
+          name: 'sys.workflow_run_id',
+          type: 'String',
+          select: false
+        },
+      ],
+      contextOptList_copy: [] // 深拷贝
 
     }
   },
@@ -159,6 +273,13 @@ export default {
         this.$refs.selectIRef.style.transform = 'rotate(-180deg)'
       } else {
         this.$refs.selectIRef.style.transform = 'rotate(0deg)'
+      }
+    },
+    contextSelectShow: function (newVal) {
+      if (newVal) {
+        this.$refs.contextSelectRef.style.transform = 'rotate(-180deg)'
+      } else {
+        this.$refs.contextSelectRef.style.transform = 'rotate(0deg)'
       }
     },
   },
@@ -174,6 +295,10 @@ export default {
     },
     optSelect() {
       this.selectListShow = true
+      this.selectOptList.forEach(item => {
+        item.value == this.modelTitle ? item.select = true : null
+      })
+      this.selectOptList_copy = JSON.parse(JSON.stringify(this.selectOptList))
     },
 
     handleClose(tag) {
@@ -196,13 +321,54 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
+    },
+
+    // 搜索模型
+    searchInput(val, name) {
+      const config = {
+        '模型': {list: 'selectOptList', copy: 'selectOptList_copy', key: 'value'},
+        '变量': {list: 'contextOptList', copy: 'contextOptList_copy', key: 'name'}
+      };
+
+      const target = config[name];
+
+      if (val) {
+        this[target.list] = this[target.copy].filter(item => item[target.key].includes(val));
+      } else {
+        this[target.list] = [...this[target.copy]];
+      }
+    },
+
+    // 点击模型选项
+    selectOptClick(val, name) {
+      const config = {
+        '模型': {list: 'selectOptList', key: 'value', show: 'selectListShow', title: 'modelTitle'},
+        '变量': {list: 'contextOptList', key: 'name', show: 'contextSelectShow', title: 'contextSetParams'}
+      }
+      const target = config[name];
+      this[target.list].forEach(item => item.select = false)
+      val.select = true
+      this[target.title] = val[target.key]
+      this[target.show] = false
+    },
+
+    contextClick() {
+      this.contextSelectShow = true
+      this.contextOptList.forEach(item => {
+        item.name == this.contextSetParams ? item.select = true : null
+      })
+      this.contextOptList_copy = JSON.parse(JSON.stringify(this.contextOptList))
+    },
+    removeContext() {
+      this.contextSetParams = '{x} 设置变量值'
+      this.contextOptList.forEach(item => item.select = false)
     }
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-.set-class {
+.set-class, .context-class {
   display: flex;
   align-items: center;
 
@@ -216,10 +382,11 @@ export default {
     font-size: 13px;
     cursor: pointer;
     padding: 0 10px;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 6px;
+    width: 100%;
 
     &:hover {
       background: #e9ebf0;
@@ -229,11 +396,6 @@ export default {
       transition: 0.5s;
       transform: rotate(0deg);
     }
-  }
-
-
-  img {
-    margin-right: 6px;
   }
 
   i {
@@ -273,6 +435,7 @@ export default {
           height: 32px;
           border: 1px solid #e4e4e4;
           padding: 0;
+          border-radius: 8px;
 
           &:hover {
             filter: none;
@@ -314,10 +477,12 @@ export default {
 
         .el-input-number__increase {
           width: 24px;
+          border-radius: 0 7px 7px 0;
         }
 
         .el-input-number__decrease {
           width: 24px;
+          border-radius: 7px 0 0 7px;
         }
       }
     }
@@ -331,8 +496,65 @@ export default {
       column-gap: 42px;
     }
   }
+
+  .modelSelectClass {
+    width: calc(100% - 75px);
+    box-sizing: border-box;
+    height: 247px;
+    background: #fff;
+    padding: 13px;
+    position: absolute;
+    top: 74px;
+    z-index: 99999;
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+
+    p {
+      margin: 10px 0 3px;
+      font-size: 12px;
+    }
+
+    .selectOpt-class {
+      border-radius: 8px;
+      height: 32px;
+      font-weight: normal;
+      color: #354052;
+      cursor: pointer;
+      padding: 0 5px;
+      display: flex;
+      align-items: center;
+      column-gap: 6px;
+
+      &:hover {
+        background: #f1f3f6;
+      }
+    }
+
+    ::v-deep {
+      .el-input__inner {
+        height: 32px;
+        background: #f1f3f6;
+        border: 0;
+        font-size: 13px;
+        border-radius: 8px;
+      }
+
+      .el-input__icon {
+        line-height: 32px;
+      }
+
+      .el-input__inner::placeholder {
+        font-size: 13px;
+        color: #98a2b3; /* 你想要的颜色 */
+      }
+    }
+  }
 }
 
+.context-class {
+
+}
 
 ::v-deep {
   .el-tag {
