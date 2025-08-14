@@ -51,11 +51,13 @@ export default function insertFormat(model, type, currentNode) {
         comingEdge.forEach(edge => lf.deleteEdge(edge.id));
         comingNode.forEach(item => {
             const startPoint = item.anchors[item.anchors.length - 1];
+            const endPoint = lastNodeModel.anchors[0];
+
             lf.addEdge({
                 sourceNodeId: item.id,
                 targetNodeId: lastNodeId,
                 startPoint: {x: startPoint.x, y: startPoint.y},
-                endPoint: {x: lastNodeModel.anchors[0].x, y: lastNodeModel.anchors[0].y},
+                endPoint: {x: endPoint.x, y: endPoint.y},
             });
         })
     }
