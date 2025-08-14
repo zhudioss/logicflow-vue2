@@ -3,7 +3,7 @@
     <div class="inputField">
       <p>模型</p>
     </div>
-    <div class="inputField" style="display: block;margin-bottom: 16px">
+    <div class="inputField" style="display: block;margin-bottom: 10px">
       <div class="set-class" @click="modelOptClick">
         <div class="content-class">
           <img src="@/assets/模型.png" alt="" height="20">
@@ -92,13 +92,13 @@
         </div>
       </div>
     </div>
-    <div class="inputField" style="justify-content: start;column-gap: 6px">
+    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>上下文</p>
       <el-tooltip popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
     </div>
-    <div class="inputField" style="display: block;margin-bottom: 16px">
+    <div class="inputField" style="display: block;">
       <div class="set-class" style="position: relative">
         <div class="content-class" @click="contextClick">
           <div class="title-class" :style="`color:${contextSetParams=='设置变量值'?'#98a2b2':'#101828'}`">
@@ -129,6 +129,74 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
+      <p>记忆</p>
+      <el-tooltip popper-class="custom-tooltip" class="item" content="聊天记忆设置" placement="top">
+        <img src="@/assets/问号.png" alt="" height="13">
+      </el-tooltip>
+      <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
+    </div>
+    <div v-if="memoryVal" class="inputField" style="margin-top: 5px;justify-content: start;column-gap: 6px;">
+      <el-switch v-model="memoryWindowVal"></el-switch>
+      <p style="font-weight: normal;color: #676f83;font-size: 12px">记忆窗口</p>
+      <el-slider
+          style="margin-left: auto;width: 235px"
+          v-model="memoryNum"
+          :min="1"
+          :max="100"
+          :step="1"
+          :disabled="!memoryWindowVal"
+          show-input>
+      </el-slider>
+    </div>
+
+    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
+      <p>视觉</p>
+      <el-tooltip popper-class="custom-tooltip" class="item"
+                  content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
+        <img src="@/assets/问号.png" alt="" height="13">
+      </el-tooltip>
+      <el-switch v-model="visionVal" style="margin-left: auto"></el-switch>
+    </div>
+    <div class="content-line"></div>
+    <div class="inputField" style="justify-content: start;column-gap: 6px;cursor: pointer"
+         @click="outputShow=!outputShow">
+      <i class="el-icon-arrow-down" ref="outputRef"></i>
+      <p>输出变量</p>
+    </div>
+    <div v-if="outputShow" class="inputField"
+         style="display: block;font-weight: normal;line-height: 23px;color:#676f83;font-size: 12px">
+      <p><span style="color: #2c3e50;font-weight:bold;font-size: 13px">text</span> String</p>
+      <p>生成内容</p>
+    </div>
+
+    <div class="content-line"></div>
+    <div class="inputField" style="justify-content: start;column-gap: 6px;">
+      <p>失败时重试</p>
+      <el-switch v-model="failVal" style="margin-left: auto"></el-switch>
+    </div>
+    <div v-if="failVal" class="inputField" style="margin-top: 5px;display: block;column-gap: 6px;">
+      <div style="display: flex;align-items: center;font-size: 12px" v-for="(item,index) in failList" :key="index">
+        <p style="font-weight: normal">{{ item.text }}</p>
+        <el-slider
+            style="margin-left: auto;width: 235px"
+            v-model="item.value"
+            :min="item.min"
+            :max="item.max"
+            :step="item.step"
+            show-input>
+        </el-slider>
+      </div>
+    </div>
+    <div class="content-line"></div>
+    <div class="inputField" style="justify-content: start;column-gap: 6px;">
+      <p>异常处理</p>
+      <el-tooltip popper-class="custom-tooltip" class="item"
+                  content="配置异常处理策略，当节点发生异常时触发" placement="top">
+        <img src="@/assets/问号.png" alt="" height="13">
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -259,13 +327,34 @@ export default {
           type: 'String',
           select: false
         },
-        // {
-        //   name: 'sys.workflow_run_id',
-        //   type: 'String',
-        //   select: false
-        // },
       ],
-      contextOptList_copy: [] // 深拷贝
+      contextOptList_copy: [], // 深拷贝
+
+      memoryVal: true,
+      memoryWindowVal: false,
+      memoryNum: 57,
+
+      outputShow: false,
+      visionVal: false,
+
+      failVal: false,
+      failList: [
+        {
+          text: '最大重试次数',
+          value: 3,
+          step: 1,
+          min: 1,
+          max: 10
+        },
+        {
+          text: '重试间隔（毫秒）',
+          value: 1000,
+          step: 1,
+          min: 100,
+          max: 5000
+        },
+      ]
+
 
     }
   },
@@ -284,6 +373,13 @@ export default {
         this.$refs.contextSelectRef.style.transform = 'rotate(0deg)'
       }
     },
+    outputShow: function (newVal) {
+      if (newVal) {
+        this.$refs.outputRef.style.transform = 'rotate(-180deg)'
+      } else {
+        this.$refs.outputRef.style.transform = 'rotate(0deg)'
+      }
+    }
   },
   created() {
 
@@ -370,7 +466,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.set-class, .context-class {
+.set-class {
   display: flex;
   align-items: center;
 
@@ -433,59 +529,7 @@ export default {
       font-size: 12px;
 
       ::v-deep {
-        .el-input__inner {
-          height: 32px;
-          border: 1px solid #e4e4e4;
-          padding: 0;
-          border-radius: 8px;
 
-          &:hover {
-            filter: none;
-          }
-        }
-
-        .el-input__icon {
-          line-height: 32px;
-        }
-
-        .el-switch__core {
-          width: 28px !important;
-          height: 16px;
-          border-radius: 5px;
-
-          &:after {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-          }
-        }
-
-        .el-switch.is-checked .el-switch__core::after {
-          margin-left: -13px;
-        }
-
-        .el-input-number {
-          width: 110px;
-        }
-
-        .el-slider__runway.show-input {
-          margin-right: 120px;
-        }
-
-        .el-slider__button {
-          width: 5px;
-          border-radius: 3px;
-        }
-
-        .el-input-number__increase {
-          width: 24px;
-          border-radius: 0 7px 7px 0;
-        }
-
-        .el-input-number__decrease {
-          width: 24px;
-          border-radius: 7px 0 0 7px;
-        }
       }
     }
 
@@ -556,9 +600,6 @@ export default {
   }
 }
 
-.context-class {
-
-}
 
 ::v-deep {
   .el-tag {
@@ -595,6 +636,65 @@ export default {
       border: 1px dashed #DCDFE6 !important;
     }
   }
+
+  .el-switch__core {
+    width: 28px !important;
+    height: 16px;
+    border-radius: 5px;
+
+    &:after {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+  }
+
+  .el-switch.is-checked .el-switch__core::after {
+    margin-left: -13px;
+  }
+
+  .el-slider__runway.show-input {
+    margin-right: 120px;
+  }
+
+  .el-slider__button {
+    width: 5px;
+    border-radius: 3px;
+  }
+
+  .el-input__inner {
+    height: 32px;
+    border: 1px solid #e4e4e4;
+    padding: 0;
+    border-radius: 8px;
+
+    &:hover {
+      filter: none;
+    }
+  }
+
+  .el-input__icon {
+    line-height: 32px;
+  }
+
+  .el-input-number {
+    width: 110px;
+  }
+
+  .el-input-number__increase {
+    width: 24px !important;
+    border-radius: 0 7px 7px 0;
+  }
+
+  .el-input-number__decrease {
+    width: 24px !important;
+    border-radius: 7px 0 0 7px;
+  }
+
+  .el-icon-arrow-down {
+    transition: 0.5s;
+  }
+
 
 }
 </style>

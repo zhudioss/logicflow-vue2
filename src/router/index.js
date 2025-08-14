@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import modelVue from '@/modelVue/index.vue'
-import easyVue from '@/modelVue/index.vue'
 
 Vue.use(VueRouter)
 
@@ -11,11 +10,6 @@ const routes = [
         name: 'home',
         component: modelVue
     },
-    {
-        path: '/easyVue',
-        name: 'easyVue',
-        component: easyVue
-    }
 ]
 
 const router = new VueRouter({
