@@ -37,6 +37,27 @@ export default function insertFormat(model, type, currentNode) {
         nodes.forEach(nodeId => {
             lf.getNodeModelById(nodeId).move(450, 0);
         });
+
+        // 最后节点id和节点信息
+        const lastNodeId = nodes[nodes.length - 1];
+        const lastNodeModel = lf.getNodeModelById(lastNodeId);
+
+        // 最后节点为终点的所有线
+        const comingEdge = lf.getNodeIncomingEdge(lastNodeId)
+        // 最后节点为终点的所有上级节点
+        const comingNode = lf.getNodeIncomingNode(lastNodeId)
+
+        // 删除添加线
+        comingEdge.forEach(edge => lf.deleteEdge(edge.id));
+        comingNode.forEach(item => {
+            const startPoint = item.anchors[item.anchors.length - 1];
+            lf.addEdge({
+                sourceNodeId: item.id,
+                targetNodeId: lastNodeId,
+                startPoint: {x: startPoint.x, y: startPoint.y},
+                endPoint: {x: lastNodeModel.anchors[0].x, y: lastNodeModel.anchors[0].y},
+            });
+        })
     }
 
     // 添加插入节点
