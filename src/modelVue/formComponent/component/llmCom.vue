@@ -24,7 +24,7 @@
                 placeholder="搜索模型"
                 prefix-icon="el-icon-search"
                 @input="e=>searchInput(e,'模型')"
-                v-model="input2">
+                v-model="searchModel">
             </el-input>
             <p style="color:#676f83">OpenAI-API-compatible</p>
             <div style="flex: 1;overflow-y: auto">
@@ -42,7 +42,7 @@
           <div class="paramsContent" v-for="(item,index) in paramsContentList" :key="index">
             <el-switch v-model="item.switchVal" style="margin-right: 10px"></el-switch>
             <div style="margin-right: 2px">{{ item.name }}</div>
-            <el-tooltip popper-class="custom-tooltip" class="item" :content="item.content" placement="top">
+            <el-tooltip effect="light" popper-class="custom-tooltip" class="item" :content="item.content" placement="top">
               <img src="@/assets/问号.png" alt="" height="13">
             </el-tooltip>
             <el-slider
@@ -58,7 +58,7 @@
             <div>
               <p>
                 停止序列
-                <el-tooltip style="transform: translateY(3px)"
+                <el-tooltip effect="light" style="transform: translateY(3px)"
                             content="API 将停止生成更多的 token 。返回的文本将不包含停止序列" placement="top">
                   <img src="@/assets/问号.png" alt="" height="13">
                 </el-tooltip>
@@ -94,7 +94,7 @@
     </div>
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>上下文</p>
-      <el-tooltip popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文" placement="top">
+      <el-tooltip effect="light" popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
     </div>
@@ -114,7 +114,7 @@
               placeholder="搜索变量"
               prefix-icon="el-icon-search"
               @input="e=>searchInput(e,'变量')"
-              v-model="input2">
+              v-model="searchContext">
           </el-input>
           <p style="color:#676f83">开始</p>
           <div style="flex: 1;overflow-y: auto">
@@ -133,7 +133,7 @@
 
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>记忆</p>
-      <el-tooltip popper-class="custom-tooltip" class="item" content="聊天记忆设置" placement="top">
+      <el-tooltip effect="light" popper-class="custom-tooltip" class="item" content="聊天记忆设置" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
@@ -154,7 +154,7 @@
 
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>视觉</p>
-      <el-tooltip popper-class="custom-tooltip" class="item"
+      <el-tooltip effect="light" popper-class="custom-tooltip" class="item"
                   content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -193,10 +193,32 @@
     <div class="content-line"></div>
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>异常处理</p>
-      <el-tooltip popper-class="custom-tooltip" class="item"
+      <el-tooltip effect="light" popper-class="custom-tooltip" class="item"
                   content="配置异常处理策略，当节点发生异常时触发" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
+      <el-select popper-class="my-select-dropdown" v-model="abnormalVal" placeholder="请选择" style="margin-left: auto">
+        <el-option
+            v-for="item in abnormalOpt"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+    <div class="inputField abnormalDetail" style="display: block;font-weight: normal;font-size: 12px;color: #676f83">
+      <div v-if="abnormalVal=='默认值'">
+        <p style="margin-bottom: 5px">当发生异常时，指定默认输出内容。</p>
+        <p><span style="color: #2c3e50;font-weight:bold;font-size: 13px">text</span> String</p>
+        <el-input
+            placeholder="请输入"
+            v-model="abnormalInput">
+        </el-input>
+      </div>
+      <div v-if="abnormalVal=='异常分支'">
+        <p style="font-size: 13px;color: #2c3e50;margin-bottom: 5px">在画布自定义失败分支逻辑。</p>
+        <p>当节点发生异常时，将自动执行失败分支。失败分支允许您灵活地提供错误消息、报告、修复或跳过操作。</p>
+      </div>
     </div>
   </div>
 </template>
@@ -236,7 +258,8 @@ export default {
       selectOptList_copy: [], // 深拷贝
 
       selectListShow: false,
-      input2: '',
+      searchModel: '',  // 模型搜索
+
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
@@ -281,7 +304,7 @@ export default {
         {
           name: '最大标记',
           switchVal: false,
-          content: '',
+          content: '模型回答的 tokens 的最大长度',
           sliderVal: 512,
           max: 409600,
           min: 1,
@@ -291,6 +314,7 @@ export default {
 
       contextSetParams: '设置变量值',
       contextSelectShow: false,
+      searchContext: '',  // 变量搜索
       contextOptList: [
         {
           name: 'sys.query',
@@ -353,8 +377,24 @@ export default {
           min: 100,
           max: 5000
         },
-      ]
+      ],
 
+      abnormalInput: '',
+      abnormalVal: '无',
+      abnormalOpt: [
+        {
+          label: '无',
+          value: '无'
+        },
+        {
+          label: '默认值',
+          value: '默认值'
+        },
+        {
+          label: '异常分支',
+          value: '异常分支'
+        }
+      ]
 
     }
   },
@@ -527,10 +567,6 @@ export default {
       font-weight: normal;
       align-items: center;
       font-size: 12px;
-
-      ::v-deep {
-
-      }
     }
 
     .params-foot {
@@ -600,6 +636,27 @@ export default {
   }
 }
 
+.abnormalDetail {
+  ::v-deep {
+    .el-input__inner {
+      height: 32px;
+      background: #f1f3f6;
+      border: 0;
+      font-size: 13px;
+      border-radius: 8px;
+      padding-left: 10px;
+    }
+
+    .el-input__icon {
+      line-height: 32px;
+    }
+
+    .el-input__inner::placeholder {
+      font-size: 13px;
+      color: #98a2b3; /* 你想要的颜色 */
+    }
+  }
+}
 
 ::v-deep {
   .el-tag {
@@ -695,6 +752,11 @@ export default {
     transition: 0.5s;
   }
 
+  .el-input--suffix .el-input__inner {
+    width: 96px;
+    padding-left: 16px;
+    font-size: 12px;
+  }
 
 }
 </style>
