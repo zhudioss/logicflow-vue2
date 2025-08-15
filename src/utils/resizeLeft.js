@@ -32,13 +32,15 @@ export default {
         function onMouseMove(e) {
             if (!dragging) return;
 
-            // 计算宽度：向左拖动宽度增加，向右拖动宽度减少
+            // 计算宽度
             let deltaX = startX - e.clientX;
             let newWidth = startWidth + deltaX;
-            const maxWidth = window.innerWidth * 0.5; // 最大宽度为页面宽度的50%
 
-            if (newWidth < 400) {
-                newWidth = 400;
+            const minWidth = window.innerWidth * 0.3; // 最小宽度 = 33%
+            const maxWidth = window.innerWidth * 0.5;  // 最大宽度 = 50%
+
+            if (newWidth < minWidth) {
+                newWidth = minWidth;
             } else if (newWidth > maxWidth) {
                 newWidth = maxWidth;
             }

@@ -186,37 +186,37 @@ export default {
     return {
       varList: [
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
         {
-          symbol: '{x}',
+          symbol: '{𝓧}',
           name: 'sys.query',
           type: 'String',
         },
@@ -348,7 +348,7 @@ export default {
         if (valid) {
           // console.log('验证通过，提交表单');
           let obj = {
-            symbol: '{x}',
+            symbol: '{𝓧}',
             ...this.form
           }
           this.varEdit.push(obj)

@@ -42,7 +42,7 @@
           <div class="paramsContent" v-for="(item,index) in paramsContentList" :key="index">
             <el-switch v-model="item.switchVal" style="margin-right: 10px"></el-switch>
             <div style="margin-right: 2px">{{ item.name }}</div>
-            <el-tooltip effect="light" popper-class="custom-tooltip" class="item" :content="item.content"
+            <el-tooltip effect="light" :content="item.content"
                         placement="top">
               <img src="@/assets/问号.png" alt="" height="13">
             </el-tooltip>
@@ -95,7 +95,7 @@
     </div>
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>上下文</p>
-      <el-tooltip effect="light" popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文"
+      <el-tooltip effect="light" content="您可以导入知识库作为上下文"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -132,7 +132,7 @@
             <div class="selectOpt-class" @click.stop="selectOptClick(item,'变量')"
                  v-for="(item,index) in  contextOptList"
                  :key="index">
-              <span style="color:#3f58fd;font-weight: bold">{x}</span>
+              <span style="color:#3f58fd;font-weight: bold">{𝓧}</span>
               <div class="title-class">{{ item.name }}</div>
               <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
               <span style="margin-left: auto">{{ item.type }}</span>
@@ -141,10 +141,14 @@
         </div>
       </div>
     </div>
+    <div class="inputField">
+      <promptPublic style="margin-top: 10px"/>
+    </div>
+
 
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>记忆</p>
-      <el-tooltip effect="light" popper-class="custom-tooltip" class="item" content="聊天记忆设置" placement="top">
+      <el-tooltip effect="light" content="聊天记忆设置" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
@@ -165,7 +169,7 @@
 
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>视觉</p>
-      <el-tooltip effect="light" popper-class="custom-tooltip" class="item"
+      <el-tooltip effect="light"
                   content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -204,7 +208,7 @@
     <div class="content-line"></div>
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>异常处理</p>
-      <el-tooltip effect="light" popper-class="custom-tooltip" class="item"
+      <el-tooltip effect="light"
                   content="配置异常处理策略，当节点发生异常时触发" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -235,10 +239,14 @@
 </template>
 
 <script>
+import promptPublic from "@/modelVue/formComponent/component/promptPublic.vue";
+
 export default {
   name: 'llmCom',
   props: [],
-  components: {},
+  components: {
+    promptPublic
+  },
   computed: {},
   data() {
     return {
