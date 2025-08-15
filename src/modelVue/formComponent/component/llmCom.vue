@@ -224,7 +224,7 @@
     <div class="inputField abnormalDetail" style="display: block;font-weight: normal;font-size: 12px;color: #676f83">
       <div v-if="abnormalVal=='默认值'">
         <p style="margin-bottom: 5px">当发生异常时，指定默认输出内容。</p>
-        <p><span style="color: #2c3e50;font-weight:bold;font-size: 13px">text</span> String</p>
+        <p style="margin-bottom: 5px;margin-left: 5px"><span style="color: #2c3e50;font-weight:bold;font-size: 13px;">text</span> String</p>
         <el-input
             placeholder="请输入"
             v-model="abnormalInput">
