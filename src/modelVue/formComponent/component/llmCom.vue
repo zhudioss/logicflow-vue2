@@ -42,7 +42,8 @@
           <div class="paramsContent" v-for="(item,index) in paramsContentList" :key="index">
             <el-switch v-model="item.switchVal" style="margin-right: 10px"></el-switch>
             <div style="margin-right: 2px">{{ item.name }}</div>
-            <el-tooltip effect="light" popper-class="custom-tooltip" class="item" :content="item.content" placement="top">
+            <el-tooltip effect="light" popper-class="custom-tooltip" class="item" :content="item.content"
+                        placement="top">
               <img src="@/assets/问号.png" alt="" height="13">
             </el-tooltip>
             <el-slider
@@ -71,7 +72,7 @@
                   v-for="tag in dynamicTags"
                   closable
                   :disable-transitions="false"
-                  @close="handleClose(tag)">
+                  @close="handleClose(tag,'停止')">
                 {{ tag }}
               </el-tag>
               <el-input
@@ -94,18 +95,28 @@
     </div>
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>上下文</p>
-      <el-tooltip effect="light" popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文" placement="top">
+      <el-tooltip effect="light" popper-class="custom-tooltip" class="item" content="您可以导入知识库作为上下文"
+                  placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
     </div>
     <div class="inputField" style="display: block;">
       <div class="set-class" style="position: relative">
-        <div class="content-class" @click="contextClick">
-          <div class="title-class" :style="`color:${contextSetParams=='设置变量值'?'#98a2b2':'#101828'}`">
+        <div class="content-class contextClass" @click="contextClick">
+          <div class="title-class" v-show="contextTags.length<=0" style="color:#98a2b2">
             {{ contextSetParams }}
           </div>
-          <img v-if="contextSetParams!='设置变量值'" src="@/assets/关闭.png" alt="" height="16"
-               @click.stop="removeContext">
+          <el-tag
+              v-show="contextTags.length>0"
+              v-for="tag in contextTags"
+              :key="tag.name"
+              closable
+              :disable-transitions="true"
+              size="small"
+              @close="handleClose(tag,'上下文'),(contextOptList.forEach(item => item.select = false),contextSetParams='设置变量值')"
+          >
+            {{ tag.name }}
+          </el-tag>
           <i class="el-icon-arrow-down" ref="contextSelectRef"></i>
         </div>
         <div class="modelSelectClass" style="width: 100%;height: 314px;top:42px" v-if="contextSelectShow"
@@ -314,6 +325,7 @@ export default {
 
       contextSetParams: '设置变量值',
       contextSelectShow: false,
+      contextTags: [],
       searchContext: '',  // 变量搜索
       contextOptList: [
         {
@@ -419,6 +431,15 @@ export default {
       } else {
         this.$refs.outputRef.style.transform = 'rotate(0deg)'
       }
+    },
+    contextSetParams: function (newVal) {
+      if (newVal !== '设置变量值') {
+        if (this.contextTags.length) {
+          this.contextTags[0].name = newVal;
+        } else {
+          this.contextTags.push({name: newVal});
+        }
+      }
     }
   },
   created() {
@@ -439,8 +460,13 @@ export default {
       this.selectOptList_copy = JSON.parse(JSON.stringify(this.selectOptList))
     },
 
-    handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    handleClose(tag, name) {
+      const config = {
+        '上下文': {list: 'contextTags'},
+        '停止': {list: 'dynamicTags'}
+      }
+      const target = config[name]
+      this[target.list].splice(this[target.list].indexOf(tag), 1);
     },
 
     showInput() {
@@ -497,10 +523,6 @@ export default {
       })
       this.contextOptList_copy = JSON.parse(JSON.stringify(this.contextOptList))
     },
-    removeContext() {
-      this.contextSetParams = '设置变量值'
-      this.contextOptList.forEach(item => item.select = false)
-    }
   },
 }
 </script>
@@ -658,6 +680,22 @@ export default {
   }
 }
 
+.contextClass {
+  &:hover {
+    background: #f2f4f7 !important;
+  }
+
+  ::v-deep {
+    .el-tag {
+      margin: 0;
+      //border-radius: 5px;
+      //height: 20px;
+      //padding: 0;
+      //font-size: 12px;
+    }
+  }
+}
+
 ::v-deep {
   .el-tag {
     margin-right: 5px;
@@ -689,6 +727,7 @@ export default {
     .el-input__inner {
       height: 32px;
       border-radius: 8px;
+      padding: 0 10px;
       //transform: translateY(1px);
       border: 1px dashed #DCDFE6 !important;
     }
