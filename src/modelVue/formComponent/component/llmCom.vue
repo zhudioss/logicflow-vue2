@@ -644,6 +644,7 @@ export default {
         border: 0;
         font-size: 13px;
         border-radius: 8px;
+        padding-left: 30px;
       }
 
       .el-input__icon {
