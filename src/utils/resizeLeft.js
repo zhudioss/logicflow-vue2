@@ -36,7 +36,8 @@ export default {
             let deltaX = startX - e.clientX;
             let newWidth = startWidth + deltaX;
 
-            const minWidth = window.innerWidth * 0.3; // 最小宽度 = 33%
+            // const minWidth = window.innerWidth * 0.3; // 最小宽度 = 33%
+            const minWidth = 400; // 最小宽度 = 33%
             const maxWidth = window.innerWidth * 0.5;  // 最大宽度 = 50%
 
             if (newWidth < minWidth) {
