@@ -23,8 +23,9 @@
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
     <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange">
-
+      <span v-if="showTip" class="copy-tip" contenteditable="false">已复制</span>
     </div>
+
     <!-- 自定义悬浮菜单 -->
 
     <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
@@ -62,6 +63,7 @@ export default {
       amplifyTag: false,
       showHoverMenu: false,
       xInsertTag: false,
+      showTip: false,
       hoverMenuStyle: {},
       contextOptList: [
         {
@@ -113,7 +115,21 @@ export default {
   methods: {
     // 复制
     copyClick() {
+      const editableDiv = this.$refs.editableDiv
+      if (!editableDiv) return
 
+      // 获取纯文本
+      const text = editableDiv.innerText || editableDiv.textContent
+
+      // 写入剪贴板
+      navigator.clipboard.writeText(text).then(() => {
+        this.showTip = true
+        setTimeout(() => {
+          this.showTip = false
+        }, 500)
+      }).catch(err => {
+        this.showTip = false
+      })
     },
 
     xInsert() {
@@ -155,7 +171,7 @@ export default {
             };
             setTimeout(() => {
               this.showHoverMenu = true;
-            }, 100)
+            }, 1500)
 
           }
         })
@@ -257,6 +273,7 @@ export default {
   padding: 10px;
   display: flex;
   flex-direction: column;
+  border: 2px solid #f2f4f7;
 
   .topClass {
     width: 100%;
@@ -296,9 +313,19 @@ export default {
   outline: none;
   position: relative;
   line-height: 26px;
+  position: relative;
 
-  .custom-el-tag {
-    background: red;
+  .copy-tip {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    color: #fff;
+    background: #000000a1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 12px;
   }
 
   &:empty::before {
@@ -417,7 +444,8 @@ export default {
 }
 
 .active {
-  border: 1px solid #409eff;
+  background: #f9fafb;
+  border: 2px solid #409eff;
 }
 
 
