@@ -1,5 +1,5 @@
 <template>
-  <div class="promptPublic" ref="promptRef">
+  <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
     <div class="topClass">
       <p style="font-weight: bold">SYSTEM</p>
       <el-tooltip effect="light" content="为对话提供高层指导"
@@ -14,37 +14,29 @@
           <el-switch v-model="switchVal"></el-switch>
         </div>
       </el-tooltip>
+
       <el-tooltip effect="light" content="快速插入" placement="top">
-        <div class="xClass">{𝓧}</div>
+        <div class="xClass" @click="xInsert">{𝓧}</div>
       </el-tooltip>
       <img class="xClass" src="@/assets/删除.png" alt="" height="20">
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
-    <div class="wangClass" @click="focusEditor" ref="wangClassRef">
-      <Editor
-          :style="{width,height}"
-          v-model="html"
-          :defaultConfig="editorConfig"
-          :mode="mode"
-          @onCreated="onCreated"
-          @onChange="onChange"
-          @onFocus="onFocus"
-      />
+    <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange">
 
     </div>
     <!-- 自定义悬浮菜单 -->
 
     <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
          :style="hoverMenuStyle"
-         v-click-outside-close.stop="()=>{showHoverMenu=false}">
-      <div class="context-class" @click="selectOptClick('上下文')">
+         v-click-outside-close.stop="()=>{showHoverMenu=false,xInsertTag = false}">
+      <div class="context-class" @click="insertTagHTML({name:'上下文'})">
         <img src="@/assets/上下文.png" alt="" height="17">
         <p>上下文</p>
       </div>
       <p style="color:#676f83">开始</p>
       <div style="flex: 1;overflow-y: auto">
-        <div class="selectOpt-class" @click.stop="selectOptClick(item)"
+        <div class="selectOpt-class" @click.stop="insertTagHTML(item)"
              v-for="(item,index) in  contextOptList"
              :key="index">
           <span style="color:#3f58fd;font-weight: bold">{𝓧}</span>
@@ -59,32 +51,17 @@
 </template>
 
 <script>
-import {Editor} from '@wangeditor/editor-for-vue'
-
 export default {
   name: 'promptPublic',
   props: ['promptData'],
-  components: {
-    Editor,
-  },
+  components: {},
   computed: {},
   data() {
     return {
       switchVal: false,
       amplifyTag: false,
-      textarea: '',
-      editor: null,
-      html: '',
-      mode: 'default',
-      editorConfig: {
-        autoFocus: false,
-        menus: ['head', 'bold', 'italic', 'underline', 'list', 'quote'],
-        showMenuTool: false,  // 禁用选区工具栏
-        placeholder: '在这里写你的提示词，输入 \'{\' 插入变量、输入 \'/\' 插入提示内容块'
-      },
-      width: '',
-      height: '',
-      showHoverMenu: true,
+      showHoverMenu: false,
+      xInsertTag: false,
       hoverMenuStyle: {},
       contextOptList: [
         {
@@ -125,17 +102,13 @@ export default {
       ],
     }
   },
-  watch: {
-    // html(newVal) {
-    //   console.log('编辑器内容变化：', newVal)
-    // }
-  },
+  watch: {},
   created() {
 
   },
   mounted() {
-    this.autoGetSize()
-
+// 监听页面全局的 selectionchange
+    document.addEventListener('selectionchange', this.onChange)
   },
   methods: {
     // 复制
@@ -143,6 +116,11 @@ export default {
 
     },
 
+    xInsert() {
+      this.xInsertTag = true
+      this.$refs.editableDiv.focus()
+      this.onChange()
+    },
     // 放大
     amplifyClick() {
       if (this.amplifyTag) {
@@ -153,61 +131,35 @@ export default {
       this.amplifyTag = !this.amplifyTag;
     },
 
-    // 自动获取宽高
-    autoGetSize() {
-      const el = this.$refs.wangClassRef
-      this.resizeObserver = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          const {width, height} = entry.contentRect
-          console.log("宽度：", width, "高度：", height)
-          // 你可以在这里更新数据
-          this.width = `${width}px`
-          this.height = `${height}px`
-        }
-      })
-      this.resizeObserver.observe(el)
-    },
-
-    onCreated(editor) {
-      this.editor = Object.seal(editor)
-    },
-    // 点击任意位置聚焦 wang
-    focusEditor() {
-      if (this.editor) {
-        this.editor.focus()
-      }
-    },
-    onFocus() {
-      console.log(12121221)
-    },
-    onChange(editor) {
+    onChange() {
       this.showHoverMenu = false
       const sel = window.getSelection();
-      this.$nextTick(() => {
+      if (sel.focusNode) {
+        this.$nextTick(() => {
+          const anchorOffset = sel.anchorOffset
+          const text = sel.focusNode.textContent
 
-        const anchorOffset = sel.anchorOffset
-        const text = sel.focusNode.textContent
+          if (text[anchorOffset - 1] === '/' || text[anchorOffset - 1] === '{' || this.xInsertTag) {
+            if (sel.rangeCount === 0) return;
 
-        if (text[anchorOffset - 1] === '/' || text[anchorOffset - 1] === '{') {
-          if (sel.rangeCount === 0) return;
+            const rect = this.getCursorRect(sel);
+            if (!rect) return;
 
-          const rect = this.getCursorRect(sel);
-          if (!rect) return;
+            const pageWidth = document.documentElement.clientWidth || window.innerWidth;
+            const top = rect.top + rect.height;
+            const left = rect.left;
 
-          const pageWidth = document.documentElement.clientWidth || window.innerWidth;
-          const top = rect.top + rect.height;
-          const left = rect.left;
+            this.hoverMenuStyle = {
+              top: top + 'px',
+              left: pageWidth - left > 300 ? `${left}px` : `${left - 300}px`,
+            };
+            setTimeout(() => {
+              this.showHoverMenu = true;
+            }, 100)
 
-          this.hoverMenuStyle = {
-            top: top + 'px',
-            left: pageWidth - left > 300 ? `${left}px` : `${left - 300}px`,
-          };
-          setTimeout(() => {
-            this.showHoverMenu = true;
-          }, 100)
-
-        }
-      })
+          }
+        })
+      }
     },
 
     getCursorRect(selection) {
@@ -230,24 +182,72 @@ export default {
       return rect;
     },
 
-    // 点击模型选项
-    selectOptClick(val) {
+    // 选择上下文
+    insertTagHTML(val) {
+      const editableDiv = this.$refs.editableDiv
+      if (!editableDiv) return
+
+      const sel = window.getSelection()
+      if (!sel || sel.rangeCount === 0) return
+      const range = sel.getRangeAt(0)
+
+
+      // 创建可交互的标签 HTML
+      const wrapper = document.createElement('div')
+      wrapper.className = 'custom-tag'
+      wrapper.setAttribute('contenteditable', 'false')
+      wrapper.innerHTML = `${val.name} <span class="tag-close">x</span>`
+      wrapper.style.userSelect = 'none'
+      wrapper.style.display = 'inline-block'
+      wrapper.style.margin = '0 2px'
+
+      wrapper.querySelector('.tag-close').addEventListener('click', (e) => {
+        e.stopPropagation()
+        wrapper.remove()
+      })
+
+      range.insertNode(wrapper)
+
+      // 光标移到标签后面
+      const newRange = document.createRange()
+      newRange.setStartAfter(wrapper)
+      newRange.collapse(true)
+      sel.removeAllRanges()
+      sel.addRange(newRange)
+
+      this.content = editableDiv.innerHTML
+
+      // 删除光标左侧的 '/' 或 '{'
+      const startContainer = range.startContainer
+      const startOffset = range.startOffset
+      console.log('startContainer.textContent', startContainer.textContent)
+      console.log('startOffset', startOffset)
+      if (startContainer.nodeType === 3 && startOffset > 0) {
+        const text = startContainer.textContent
+        const char = text[startOffset - 1]
+        if (char === '/' || char === '{') {
+          startContainer.textContent = text.slice(0, startOffset - 1)
+        }
+      }
       this.showHoverMenu = false
-      console.log(val,'=-=-=-=')
     },
 
 
+    addClass() {
+      const el = this.$refs.promptRef;
+      el.classList.add('active');
+    },
+    removeClass() {
+      const el = this.$refs.promptRef;
+      el.classList.remove('active');
+    }
+
   },
   beforeDestroy() {
-    if (this.editor) this.editor.destroy()
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect()
-    }
   },
 }
 </script>
 
-<style src="@wangeditor/editor/dist/css/style.css"></style>
 <style lang="scss" scoped>
 .promptPublic {
   width: 100%;
@@ -286,44 +286,60 @@ export default {
   }
 }
 
-.wangClass {
+.editableDivClass {
   flex: 1;
   font-weight: normal;
-  overflow: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap; /* 保持换行 */
+  word-break: break-word; /* 新标准 */
+  overflow-wrap: break-word; /* 兼容老浏览器 */
+  outline: none;
+  position: relative;
+  line-height: 26px;
 
-  ::v-deep {
-    .w-e-text-container [data-slate-editor] {
-      background: #f2f4f7;
-      padding: 0px;
-    }
-
-    .w-e-text-container [data-slate-editor] p {
-      margin: 0;
-    }
-
-    w-e-textarea-1 {
-      font-size: 12px;
-    }
-
-    .w-e-text-placeholder {
-      top: 0;
-      left: 0;
-      width: 100%;
-      font-weight: normal;
-      color: #98a2b2;
-      font-size: 12px;
-      font-style: normal;
-    }
-
-    .w-e-text-container .w-e-scroll {
-      background: #f2f4f7;
-    }
-
-    .w-e-hover-bar {
-      display: none;
-    }
+  .custom-el-tag {
+    background: red;
   }
 
+  &:empty::before {
+    content: "这里写你的提示词，输入 ' { ' 插入变量、输入 ' / ' 插入提示内容块";
+    color: #aaa;
+    pointer-events: none; /* 不阻止点击 */
+  }
+
+  ::v-deep {
+    .custom-tag {
+      padding: 0px 6px;
+      height: 20px;
+      line-height: 20px;
+      background-color: #ecf5ff;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #409eff;
+      border: 1px solid #d9ecff;
+    }
+
+    .custom-tag .tag-close {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      margin-left: 3px;
+      color: #409eff;
+      text-align: center;
+      line-height: 11px;
+      //background: #409eff;
+      //color: #ffffff;
+    }
+
+    .custom-tag .tag-close:hover {
+      background: #409eff;
+      color: #ffffff;
+    }
+  }
 }
 
 .hover-menu {
@@ -394,6 +410,16 @@ export default {
     border-radius: 8px;
     font-size: 13px;
   }
+
+  .el-tag {
+    margin: 0 !important;
+  }
 }
+
+.active {
+  border: 1px solid #409eff;
+}
+
+
 </style>
 

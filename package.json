@@ -11,8 +11,6 @@
     "@logicflow/core": "^2.0.12",
     "@logicflow/extension": "^2.0.16",
     "@logicflow/vue-node-registry": "^1.0.14",
-    "@wangeditor/editor": "^5.1.23",
-    "@wangeditor/editor-for-vue": "^1.0.2",
     "animate.css": "^4.1.1",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.14",
