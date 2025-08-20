@@ -156,47 +156,47 @@ export default {
         {
           img: require('@/assets/代码助手.png'),
           text: 'Python 代码助手',
-          value:'一个帮你写和纠错程序的机器人'
+          value: '一个帮你写和纠错程序的机器人'
         },
         {
           img: require('@/assets/翻译.png'),
           text: '翻译机器人',
-          value:'一个可以翻译多种语言的翻译器'
+          value: '一个可以翻译多种语言的翻译器'
         },
         {
           img: require('@/assets/会议.png'),
           text: '总结会议纪要',
-          value:'将会议内容提炼总结，包括讨论主题、关键要点和待办事项'
+          value: '将会议内容提炼总结，包括讨论主题、关键要点和待办事项'
         },
         {
           img: require('@/assets/文章.png'),
           text: '润色文章',
-          value:'用地道的编辑技巧改进我的文章'
+          value: '用地道的编辑技巧改进我的文章'
         },
         {
           img: require('@/assets/职业分析师.png'),
           text: '职业分析师',
-          value:'从长篇报告中提取洞察、识别风险并提炼关键信息'
+          value: '从长篇报告中提取洞察、识别风险并提炼关键信息'
         },
         {
           img: require('@/assets/excel.png'),
           text: 'Excel 公式专家',
-          value:'一个可以让小白用户理解、使用和创建 Excel 公式的对话机器人'
+          value: '一个可以让小白用户理解、使用和创建 Excel 公式的对话机器人'
         },
         {
           img: require('@/assets/规划.png'),
           text: '旅行规划助手',
-          value:'旅行规划助手是一个智能工具，旨在帮助用户轻松规划他们的旅行'
+          value: '旅行规划助手是一个智能工具，旨在帮助用户轻松规划他们的旅行'
         },
         {
           img: require('@/assets/SQL.png'),
           text: 'SQL 生成',
-          value:'把自然语言转换成 SQL 查询语句'
+          value: '把自然语言转换成 SQL 查询语句'
         },
         {
           img: require('@/assets/git.png'),
           text: 'Git 大师',
-          value:'从用户提供的版本管理需求生成合适的 Git 命令'
+          value: '从用户提供的版本管理需求生成合适的 Git 命令'
         },
       ],
       textarea: '',
@@ -226,18 +226,30 @@ export default {
       const editableDiv = this.$refs.editableDiv
       if (!editableDiv) return
 
-      // 获取纯文本
-      const text = editableDiv.innerText || editableDiv.textContent
+      // 获取 HTML 和 纯文本
+      const html = editableDiv.innerHTML
+      const text = editableDiv.innerText
 
-      // 写入剪贴板
-      navigator.clipboard.writeText(text).then(() => {
-        this.showTip = true
-        setTimeout(() => {
+      if (navigator.clipboard && window.ClipboardItem) {
+        // ✅ 同时写入 HTML 和 纯文本
+        const clipboardItem = new ClipboardItem({
+          "text/html": new Blob([html], {type: "text/html"}),
+          "text/plain": new Blob([text], {type: "text/plain"})
+        })
+
+        navigator.clipboard.write([clipboardItem]).then(() => {
+          this.showTip = true
+          setTimeout(() => {
+            this.showTip = false
+          }, 500)
+        }).catch(err => {
+          console.error("复制失败：", err)
           this.showTip = false
-        }, 500)
-      }).catch(err => {
-        this.showTip = false
-      })
+        })
+      } else {
+        // ❌ 不支持 ClipboardItem 的旧浏览器 fallback → 只能复制纯文本
+        navigator.clipboard.writeText(text)
+      }
     },
 
     xInsert() {
