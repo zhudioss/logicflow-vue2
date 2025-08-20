@@ -23,9 +23,9 @@
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
     <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange">
-      <span v-if="showTip" class="copy-tip" contenteditable="false">已复制</span>
-    </div>
 
+    </div>
+    <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
     <!-- 自定义悬浮菜单 -->
 
     <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
@@ -171,7 +171,7 @@ export default {
             };
             setTimeout(() => {
               this.showHoverMenu = true;
-            }, 1500)
+            }, 100)
 
           }
         })
@@ -274,6 +274,7 @@ export default {
   display: flex;
   flex-direction: column;
   border: 2px solid #f2f4f7;
+  position: relative;
 
   .topClass {
     width: 100%;
@@ -301,7 +302,22 @@ export default {
       }
     }
   }
+
+  .copy-tip {
+    width: calc(100% - 20px);
+    height: calc(100% - 47px);
+    position: absolute;
+    color: #fff;
+    background: #000000a1;
+    top: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 12px;
+  }
 }
+
 
 .editableDivClass {
   flex: 1;
@@ -313,20 +329,6 @@ export default {
   outline: none;
   position: relative;
   line-height: 26px;
-  position: relative;
-
-  .copy-tip {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    color: #fff;
-    background: #000000a1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    font-size: 12px;
-  }
 
   &:empty::before {
     content: "这里写你的提示词，输入 ' { ' 插入变量、输入 ' / ' 插入提示内容块";

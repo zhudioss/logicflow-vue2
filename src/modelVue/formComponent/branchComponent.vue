@@ -4,6 +4,7 @@
       <!-- 组件 -->
       <startCom v-if="detailForm.label=='开始'"></startCom>
       <llmCom v-if="detailForm.label=='LLM'"></llmCom>
+      <endCom v-if="detailForm.label=='直接回复'"></endCom>
 
       <div class="line-class"></div>
       <div class="inputField">
@@ -43,6 +44,7 @@
 <script>
 import startCom from '@/modelVue/formComponent/component/startCom.vue'
 import llmCom from '@/modelVue/formComponent/component/llmCom.vue'
+import endCom from '@/modelVue/formComponent/component/endCom.vue'
 
 export default {
   name: 'branchComponent',
@@ -50,6 +52,7 @@ export default {
   components: {
     startCom,
     llmCom,
+    endCom
 
   },
   computed: {},
