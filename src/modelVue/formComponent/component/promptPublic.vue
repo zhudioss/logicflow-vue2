@@ -247,7 +247,7 @@ export default {
           this.showTip = false
         })
       } else {
-        // ❌ 不支持 ClipboardItem 的旧浏览器 fallback → 只能复制纯文本
+        // 不支持 ClipboardItem 的旧浏览器 fallback → 只能复制纯文本
         navigator.clipboard.writeText(text)
       }
     },
