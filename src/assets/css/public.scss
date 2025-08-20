@@ -104,13 +104,96 @@
   margin-top: 5px;
 }
 
-.el-tooltip__popper.is-light{
+.el-tooltip__popper.is-light {
   max-width: 200px;
   border: 0;
   box-shadow: 0px 0px 8px 8px rgba(87, 87, 87, 0.1);
   overflow: hidden;
   color: #676f83;
 }
+
+.el-dialog {
+  margin: 0 auto !important;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 10px;
+  width: 36%;
+
+  .title {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #354052
+  }
+}
+
+.dialog-footer {
+  text-align: right;
+
+  .el-button {
+    font-weight: normal;
+    border-radius: 8px;
+  }
+}
+
+.el-dialog__title {
+  font-weight: bold;
+}
+
+.el-dialog__header {
+  padding: 20px 20px 0
+}
+
+.el-dialog__headerbtn {
+  display: none;
+}
+
+.el-dialog__body {
+  padding: 0 20px 10px;
+  max-height: calc(100vh - 170px);
+  overflow-y: auto;
+}
+
+.el-dialog__footer {
+  padding: 10px 20px 20px;
+}
+
+.el-notification__group {
+  display: flex;
+  align-items: center;
+
+}
+
+.el-notification__title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #101828;
+  transform: scale(1.05);
+}
+
+.el-notification__icon {
+  height: 30px;
+  width: 16px;
+  font-size: 19px;
+  line-height: 30px;
+}
+
+.el-notification__closeBtn {
+  top: 50%;
+  transform: translateY(-50%);
+  color: #676f83;
+}
+
+.el-notification {
+  padding: 10px;
+  background: linear-gradient(90deg, #ffffff, #fff3e0); // 告警
+  //background: linear-gradient(90deg, #ffffff, #e6f7ee); // 成功
+  //background: linear-gradient(90deg, #ffffff, #ffecec);  // 失败
+  //background: linear-gradient(90deg, #ffffff, #e6f4ff); // info
+  border: 0;
+}
+
 
 //.el-button--primary {
 //  background: #3f58fd;

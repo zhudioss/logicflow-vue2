@@ -6,7 +6,7 @@
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
-      <img class="generator" src="@/assets/四角星.png" alt="" height="16">
+      <img @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
       <el-divider direction="vertical"></el-divider>
       <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
         <div>
@@ -48,10 +48,58 @@
       </div>
     </div>
 
+    <el-dialog :append-to-body="true" title="提示词生成器" :visible.sync="dialogTableVisible" @close="dialogClose">
+      <div class="dialog-content dialogLeft">
+        <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
+        <div class="content-class">
+          <img src="@/assets/模型.png" alt="" height="20">
+          <div class="title-class" :title="promptData.modelTitle">{{ promptData.modelTitle }}</div>
+        </div>
+        <el-divider content-position="left">试一试</el-divider>
+        <div class="tryClass">
+          <div v-for="(item,index) in tryList" :key="index" @click="tryClick(item)">
+            <img :src="item.img" alt="" height="20">
+            <p>{{ item.text }}</p>
+          </div>
+        </div>
+        <p style="font-weight: bold;margin-bottom: 10px">指令</p>
+        <el-input
+            type="textarea"
+            :rows="5"
+            placeholder="写下清晰、具体的说明"
+            resize="none"
+            v-model="textarea">
+        </el-input>
+        <el-button size="medium" type="primary" style="margin-left: auto;" @click="generateClick">
+          <img src="@/assets/四角星-白.png" alt="" height="11" style="margin-right: 2px">
+          生成
+        </el-button>
+      </div>
+      <el-divider direction="vertical"></el-divider>
+      <div class="dialog-content dialogRight" v-loading="loading" element-loading-text="为您编排应用程序中..."
+           element-loading-background="#fff" element-loading-spinner="el-icon-loading">
+        <div class="prompt" v-if="!autoContextShow">
+          <img src="@/assets/四角星-灰.png" alt="" height="50">
+          <p>在左侧描述您的用例，</p>
+          <p>编排浏览将在此处显示。</p>
+        </div>
+        <div class="autoContextClass" v-if="autoContextShow">
+          <div class="centerClass">
+            <pre>{{ autoContextValue }}</pre>
+          </div>
+          <div class="footerClass">
+            <el-button size="medium" @click="dialogTableVisible = false" style="margin-left: auto">取消</el-button>
+            <el-button size="medium" type="primary" @click="dialogTableVisible=false">应用</el-button>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import {autoContextValue} from './promptPublic-contexnt'
+
 export default {
   name: 'promptPublic',
   props: ['promptData'],
@@ -102,6 +150,61 @@ export default {
           select: false
         },
       ],
+
+      dialogTableVisible: false,
+      tryList: [
+        {
+          img: require('@/assets/代码助手.png'),
+          text: 'Python 代码助手',
+          value:'一个帮你写和纠错程序的机器人'
+        },
+        {
+          img: require('@/assets/翻译.png'),
+          text: '翻译机器人',
+          value:'一个可以翻译多种语言的翻译器'
+        },
+        {
+          img: require('@/assets/会议.png'),
+          text: '总结会议纪要',
+          value:'将会议内容提炼总结，包括讨论主题、关键要点和待办事项'
+        },
+        {
+          img: require('@/assets/文章.png'),
+          text: '润色文章',
+          value:'用地道的编辑技巧改进我的文章'
+        },
+        {
+          img: require('@/assets/职业分析师.png'),
+          text: '职业分析师',
+          value:'从长篇报告中提取洞察、识别风险并提炼关键信息'
+        },
+        {
+          img: require('@/assets/excel.png'),
+          text: 'Excel 公式专家',
+          value:'一个可以让小白用户理解、使用和创建 Excel 公式的对话机器人'
+        },
+        {
+          img: require('@/assets/规划.png'),
+          text: '旅行规划助手',
+          value:'旅行规划助手是一个智能工具，旨在帮助用户轻松规划他们的旅行'
+        },
+        {
+          img: require('@/assets/SQL.png'),
+          text: 'SQL 生成',
+          value:'把自然语言转换成 SQL 查询语句'
+        },
+        {
+          img: require('@/assets/git.png'),
+          text: 'Git 大师',
+          value:'从用户提供的版本管理需求生成合适的 Git 命令'
+        },
+      ],
+      textarea: '',
+
+      autoContextShow: false,
+      autoContextValue,
+      loading: false
+      // autoContextValue: '',
     }
   },
   watch: {},
@@ -113,6 +216,11 @@ export default {
     document.addEventListener('selectionchange', this.onChange)
   },
   methods: {
+    // 四角星
+    starClick() {
+      this.dialogTableVisible = true
+    },
+
     // 复制
     copyClick() {
       const editableDiv = this.$refs.editableDiv
@@ -256,6 +364,30 @@ export default {
     removeClass() {
       const el = this.$refs.promptRef;
       el.classList.remove('active');
+    },
+
+    tryClick(val) {
+      this.textarea = val.value
+    },
+
+    generateClick() {
+      if (!this.textarea) {
+        this.$notify({
+          title: '指令 为必填项',
+          type: 'warning',
+        });
+        return
+      }
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.autoContextShow = true
+      }, 2000)
+    },
+
+    dialogClose() {
+      this.loading = false
+      this.autoContextShow = false
     }
 
   },
@@ -317,7 +449,6 @@ export default {
     font-size: 12px;
   }
 }
-
 
 .editableDivClass {
   flex: 1;
@@ -426,6 +557,112 @@ export default {
   }
 }
 
+.active {
+  background: #f9fafb;
+  border: 2px solid #409eff;
+}
+
+.dialog-content {
+  width: 50%;
+  font-size: 13px !important;
+  color: #676f83 !important;
+
+  ::v-deep {
+    .el-button {
+      margin-top: 20px;
+      font-weight: normal;
+      border-radius: 8px;
+      display: block;
+    }
+  }
+}
+
+.dialogLeft {
+  padding-top: 10px;
+  padding-right: 13px;
+
+  .content-class {
+    margin: 26px 0 30px;
+    font-weight: normal;
+    color: #101828;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+  }
+
+  .tryClass {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    color: #354052;
+    padding: 5px 0px 10px;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    div {
+      display: flex;
+      align-items: center;
+      column-gap: 6px;
+      cursor: pointer;
+      padding: 5px 5px;
+      border-radius: 8px;
+
+      &:hover {
+        background: #f2f4f7;
+      }
+    }
+  }
+}
+
+.dialogRight {
+  position: relative;
+  padding-left: 11px;
+
+  .prompt {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    img {
+      margin-bottom: 5px;
+    }
+
+    p {
+      line-height: 20px;
+      text-align: center;
+    }
+
+  }
+
+  .autoContextClass {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .centerClass {
+      height: calc(100% - 80px);
+      border-radius: 8px;
+      border: 2px solid #409eff;
+      padding: 10px;
+      display: flex;
+
+      pre {
+        flex: 1;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+    }
+
+    .footerClass {
+      display: flex;
+    }
+  }
+
+}
+
 
 ::v-deep {
   .topClass {
@@ -434,22 +671,50 @@ export default {
     }
   }
 
+  .el-dialog {
+    width: 75%;
+  }
+
+  .el-dialog__body {
+    display: flex;
+    padding-bottom: 20px;
+
+    .el-divider--vertical {
+      height: auto;
+    }
+  }
+
+  .el-dialog__title {
+    color: #409eff;
+  }
+
+  .el-dialog__headerbtn {
+    display: block;
+  }
+
+  .el-divider--horizontal {
+    margin: 36px 0 15px;
+  }
+
+  .el-divider__text.is-left {
+    left: -21px;
+    color: #676f83;
+  }
+
   .el-textarea__inner {
-    height: 100% !important;
-    border-radius: 8px;
-    font-size: 13px;
+    background: #f1f3f6;
+    font-size: 13px !important;
   }
 
-  .el-tag {
-    margin: 0 !important;
+  .el-loading-spinner .el-loading-text {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .el-icon-loading:before {
+    font-size: 30px;
   }
 }
-
-.active {
-  background: #f9fafb;
-  border: 2px solid #409eff;
-}
-
 
 </style>
 

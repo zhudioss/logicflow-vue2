@@ -150,8 +150,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button size="medium" @click="dialogFormVisible = false" style="margin-left: auto">取 消</el-button>
-        <el-button size="medium" type="primary" @click="saveClick()">保 存</el-button>
+        <el-button size="medium" @click="dialogFormVisible = false" style="margin-left: auto">取消</el-button>
+        <el-button size="medium" type="primary" @click="saveClick()">保存</el-button>
       </div>
     </el-dialog>
 
@@ -546,53 +546,6 @@ export default {
       font-size: 15px;
       font-weight: bold;
     }
-  }
-
-  .el-dialog {
-    margin: 0 auto !important;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 10px;
-    width: 36%;
-
-    .title {
-      margin-top: 12px;
-      margin-bottom: 8px;
-      font-weight: 600;
-      font-size: 15px;
-      color: #354052
-    }
-  }
-
-  .dialog-footer {
-    text-align: right;
-
-    .el-button {
-      font-weight: normal;
-      border-radius: 8px;
-    }
-  }
-
-  .el-dialog__title {
-    font-weight: bold;
-  }
-
-  .el-dialog__header {
-    padding: 20px 20px 0
-  }
-
-  .el-dialog__headerbtn {
-    display: none;
-  }
-
-  .el-dialog__body {
-    padding: 0 20px 10px;
-    max-height: calc(100vh - 170px);
-    overflow-y: auto;
-  }
-
-  .el-dialog__footer {
-    padding: 10px 20px 20px;
   }
 
   // 单选框
