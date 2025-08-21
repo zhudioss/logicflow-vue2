@@ -141,8 +141,17 @@
         </div>
       </div>
     </div>
+    <div class="inputField" style="display: block">
+      <promptPublic
+          v-for="(item,index) in infoList"
+          :key="index"
+          style="margin-top: 10px"
+          :promptData="{modelTitle}"
+          @removeInfo="removeInfo(item,index)"
+      />
+    </div>
     <div class="inputField">
-      <promptPublic style="margin-top: 10px" :promptData="{modelTitle}"/>
+      <div class="content-class addInfoClass" @click="addInfoClick">+ 添加消息</div>
     </div>
 
 
@@ -415,6 +424,10 @@ export default {
           label: '异常分支',
           value: '异常分支'
         }
+      ],
+      infoList: [
+        {},
+        {}
       ]
 
     }
@@ -532,6 +545,15 @@ export default {
       })
       this.contextOptList_copy = JSON.parse(JSON.stringify(this.contextOptList))
     },
+
+    // 添加消息
+    addInfoClick() {
+      this.infoList.push({})
+    },
+    // 删除
+    removeInfo(val, index) {
+      this.infoList.splice(index, 1)
+    }
   },
 }
 </script>
@@ -540,32 +562,6 @@ export default {
 .set-class {
   display: flex;
   align-items: center;
-
-  .content-class {
-    margin-top: 5px;
-    background: #f2f4f7;
-    border-radius: 8px;
-    height: 32px;
-    font-weight: normal;
-    color: #101828;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    column-gap: 6px;
-    width: 100%;
-
-    &:hover {
-      background: #e9ebf0;
-    }
-
-    i {
-      transition: 0.5s;
-      transform: rotate(0deg);
-    }
-  }
 
   i {
     margin-left: auto;
@@ -668,6 +664,32 @@ export default {
   }
 }
 
+.content-class {
+  margin-top: 5px;
+  background: #f2f4f7;
+  border-radius: 8px;
+  height: 32px;
+  font-weight: normal;
+  color: #101828;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 6px;
+  width: 100%;
+
+  &:hover {
+    background: #e9ebf0;
+  }
+
+  i {
+    transition: 0.5s;
+    transform: rotate(0deg);
+  }
+}
+
 .abnormalDetail {
   ::v-deep {
     .el-input__inner {
@@ -704,6 +726,11 @@ export default {
       //font-size: 12px;
     }
   }
+}
+
+.addInfoClass {
+  justify-content: center;
+  margin-top: 10px;
 }
 
 ::v-deep {

@@ -18,7 +18,7 @@
       <el-tooltip effect="light" content="快速插入" placement="top">
         <div class="xClass" @click="xInsert">{𝓧}</div>
       </el-tooltip>
-      <img class="xClass" src="@/assets/删除.png" alt="" height="20">
+      <img class="xClass" src="@/assets/删除.png" alt="" height="20" @click="removeInfo">
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
@@ -234,6 +234,11 @@ export default {
       this.dialogTableVisible = true
     },
 
+    // 删除
+    removeInfo() {
+      this.$emit('removeInfo')
+    },
+
     // 复制
     copyClick() {
       const editableDiv = this.$refs.editableDiv
@@ -422,7 +427,6 @@ export default {
 
 <style lang="scss" scoped>
 .promptPublic {
-  width: 100%;
   height: 100px;
   background: #f2f4f7;
   border-radius: 8px;
