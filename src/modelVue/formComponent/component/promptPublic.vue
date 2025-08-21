@@ -22,9 +22,7 @@
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
-    <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange">
-
-    </div>
+    <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
     <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
     <!-- 自定义悬浮菜单 -->
 
@@ -212,8 +210,23 @@ export default {
 
   },
   mounted() {
-// 监听页面全局的 selectionchange
-    document.addEventListener('selectionchange', this.onChange)
+
+    const editable = document.querySelector('.editableDivClass')
+    // 监听页面全局的 selectionchange
+    editable.addEventListener('selectionchange', this.onChange)
+
+    editable.addEventListener('input', () => {
+      if (editable.innerHTML === '<br>') {
+        editable.innerHTML = ''
+      }
+    })
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('tag-close')) {
+        e.stopPropagation()
+        e.target.closest('.custom-tag')?.remove()
+      }
+    })
   },
   methods: {
     // 四角星
@@ -337,10 +350,11 @@ export default {
       wrapper.style.display = 'inline-block'
       wrapper.style.margin = '0 2px'
 
-      wrapper.querySelector('.tag-close').addEventListener('click', (e) => {
-        e.stopPropagation()
-        wrapper.remove()
-      })
+      // 因为复制功能这里换成全局监听了
+      // wrapper.querySelector('.tag-close').addEventListener('click', (e) => {
+      //   e.stopPropagation()
+      //   wrapper.remove()
+      // })
 
       range.insertNode(wrapper)
 
@@ -356,8 +370,6 @@ export default {
       // 删除光标左侧的 '/' 或 '{'
       const startContainer = range.startContainer
       const startOffset = range.startOffset
-      console.log('startContainer.textContent', startContainer.textContent)
-      console.log('startOffset', startOffset)
       if (startContainer.nodeType === 3 && startOffset > 0) {
         const text = startContainer.textContent
         const char = text[startOffset - 1]
