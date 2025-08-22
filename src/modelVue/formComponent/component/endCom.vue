@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="inputField">
-      <promptPublic/>
+    <div class="inputField" style="display: block">
+      <promptPublic
+          :promptData="{modelTitle}"
+      ></promptPublic>
     </div>
   </div>
 </template>
