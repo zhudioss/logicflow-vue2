@@ -1,24 +1,24 @@
 <template>
   <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
     <div class="topClass">
-      <p style="font-weight: bold">SYSTEM</p>
-      <el-tooltip :open-delay="500" effect="light" content="为对话提供高层指导"
+      <p style="font-weight: bold">{{ topTitle }}</p>
+      <el-tooltip v-show="topTitle!=='回复'" :open-delay="500" effect="light" :content="contentValue"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
-      <img @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
-      <el-divider direction="vertical"></el-divider>
+      <img v-show="starShow" @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
+      <el-divider v-if="starShow" direction="vertical"></el-divider>
       <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
-        <div>
+        <div v-show="jinShow">
           <span>Jinja</span>
           <el-switch v-model="switchVal" @change="jinjaClick"></el-switch>
         </div>
       </el-tooltip>
 
       <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">
-        <div class="xClass" @click="xInsert">{𝓧}</div>
+        <div class="xClass" :style="`margin-left:${starShow?0:'auto'} `" @click="xInsert">{𝓧}</div>
       </el-tooltip>
-      <img class="xClass" src="@/assets/删除.png" alt="" height="20" @click="removeInfo">
+      <img class="xClass" src="@/assets/删除.png" v-show="removeShow" height="20" @click="removeInfo">
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
@@ -51,7 +51,7 @@
         <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
         <div class="content-class">
           <img src="@/assets/模型.png" alt="" height="20">
-          <div class="title-class" :title="promptData.modelTitle">{{ promptData.modelTitle }}</div>
+          <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
         </div>
         <el-divider content-position="left">试一试</el-divider>
         <div class="tryClass">
@@ -100,7 +100,28 @@ import {autoContextValue} from './promptPublic-contexnt'
 
 export default {
   name: 'promptPublic',
-  props: ['promptData'],
+  props: {
+    modelTitle: {
+      type: String,
+      default: ''
+    },
+    jinShow: {
+      type: Boolean,
+      default: true
+    },
+    starShow: {
+      type: Boolean,
+      default: true
+    },
+    removeShow: {
+      type: Boolean,
+      default: true
+    },
+    topTitle: {
+      type: String,
+      default: 'SYSTEM'
+    }
+  },
   components: {},
   computed: {},
   data() {
@@ -201,8 +222,9 @@ export default {
 
       autoContextShow: false,
       autoContextValue,
-      loading: false
-      // autoContextValue: '',
+      loading: false,
+
+      contentValue: '为对话提供高层指导',
     }
   },
   watch: {},
@@ -227,8 +249,18 @@ export default {
         e.target.closest('.custom-tag')?.remove()
       }
     })
+
+    this.getTooltip()
   },
   methods: {
+    getTooltip() {
+      switch (this.topTitle) {
+        case 'SYSTEM':
+          this.contentValue = '为对话提供高层指导'
+          break
+      }
+    },
+
     // 四角星
     starClick() {
       this.dialogTableVisible = true

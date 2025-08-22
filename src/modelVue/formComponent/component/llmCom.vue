@@ -116,8 +116,9 @@
           ref="promptRef"
           v-for="(item,index) in infoList"
           :key="index"
+
           style="margin-top: 10px"
-          :promptData="{modelTitle}"
+          :modelTitle="modelTitle"
           @removeInfo="removeInfo(item,index)"
           @jinjaClick="jinjaClick"
       />
@@ -544,6 +545,7 @@ export default {
     },
     // 消息 - 删除
     removeInfo(val, index) {
+      if (this.infoList.length < 2) return
       this.infoList.splice(index, 1)
     },
 
