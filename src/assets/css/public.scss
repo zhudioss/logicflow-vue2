@@ -194,6 +194,17 @@
   border: 0;
 }
 
+.el-button {
+  filter: none !important;
+}
+
+.el-input__inner {
+  background: #f9fafb;
+}
+
+.el-input__inner::placeholder {
+  color: #98a2b3;
+}
 
 //.el-button--primary {
 //  background: #3f58fd;

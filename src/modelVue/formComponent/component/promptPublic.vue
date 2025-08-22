@@ -2,7 +2,7 @@
   <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
     <div class="topClass">
       <p style="font-weight: bold">SYSTEM</p>
-      <el-tooltip effect="light" content="为对话提供高层指导"
+      <el-tooltip :open-delay="500" effect="light" content="为对话提供高层指导"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -11,11 +11,11 @@
       <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
         <div>
           <span>Jinja</span>
-          <el-switch v-model="switchVal"></el-switch>
+          <el-switch v-model="switchVal" @change="jinjaClick"></el-switch>
         </div>
       </el-tooltip>
 
-      <el-tooltip effect="light" content="快速插入" placement="top">
+      <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">
         <div class="xClass" @click="xInsert">{𝓧}</div>
       </el-tooltip>
       <img class="xClass" src="@/assets/删除.png" alt="" height="20" @click="removeInfo">
@@ -232,6 +232,11 @@ export default {
     // 四角星
     starClick() {
       this.dialogTableVisible = true
+    },
+
+    // Jinja
+    jinjaClick() {
+      this.$emit('jinjaClick')
     },
 
     // 删除

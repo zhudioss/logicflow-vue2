@@ -3,6 +3,7 @@
     <div class="inputField">
       <p>模型</p>
     </div>
+    <!--模型-->
     <div class="inputField" style="display: block;margin-bottom: 10px">
       <div class="set-class" @click="modelOptClick">
         <div class="content-class">
@@ -42,7 +43,7 @@
           <div class="paramsContent" v-for="(item,index) in paramsContentList" :key="index">
             <el-switch v-model="item.switchVal" style="margin-right: 10px"></el-switch>
             <div style="margin-right: 2px">{{ item.name }}</div>
-            <el-tooltip effect="light" :content="item.content"
+            <el-tooltip :open-delay="500" effect="light" :content="item.content"
                         placement="top">
               <img src="@/assets/问号.png" alt="" height="13">
             </el-tooltip>
@@ -59,7 +60,7 @@
             <div>
               <p>
                 停止序列
-                <el-tooltip effect="light" style="transform: translateY(3px)"
+                <el-tooltip :open-delay="500" effect="light" style="transform: translateY(3px)"
                             content="API 将停止生成更多的 token 。返回的文本将不包含停止序列" placement="top">
                   <img src="@/assets/问号.png" alt="" height="13">
                 </el-tooltip>
@@ -72,7 +73,7 @@
                   v-for="tag in dynamicTags"
                   closable
                   :disable-transitions="false"
-                  @close="handleClose(tag,'停止')">
+                  @close="handleClose(tag)">
                 {{ tag }}
               </el-tag>
               <el-input
@@ -93,71 +94,62 @@
         </div>
       </div>
     </div>
+
+    <!--上下文-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>上下文</p>
-      <el-tooltip effect="light" content="您可以导入知识库作为上下文"
+      <el-tooltip :open-delay="500" effect="light" content="您可以导入知识库作为上下文"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
     </div>
-    <div class="inputField" style="display: block;">
-      <div class="set-class" style="position: relative">
-        <div class="content-class contextClass" @click="contextClick">
-          <div class="title-class" v-show="contextTags.length<=0" style="color:#98a2b2">
-            {{ contextSetParams }}
-          </div>
-          <el-tag
-              v-show="contextTags.length>0"
-              v-for="tag in contextTags"
-              :key="tag.name"
-              closable
-              :disable-transitions="true"
-              size="small"
-              @close="handleClose(tag,'上下文'),(contextOptList.forEach(item => item.select = false),contextSetParams='设置变量值')"
-          >
-            {{ tag.name }}
-          </el-tag>
-          <i class="el-icon-arrow-down" ref="contextSelectRef"></i>
-        </div>
-        <div class="modelSelectClass" style="width: 100%;height: 314px;top:42px" v-if="contextSelectShow"
-             v-click-outside-close="()=>{contextSelectShow=false}">
-          <el-input
-              placeholder="搜索变量"
-              prefix-icon="el-icon-search"
-              @input="e=>searchInput(e,'变量')"
-              v-model="searchContext">
-          </el-input>
-          <p style="color:#676f83">开始</p>
-          <div style="flex: 1;overflow-y: auto">
-            <div class="selectOpt-class" @click.stop="selectOptClick(item,'变量')"
-                 v-for="(item,index) in  contextOptList"
-                 :key="index">
-              <span style="color:#3f58fd;font-weight: bold">{𝓧}</span>
-              <div class="title-class">{{ item.name }}</div>
-              <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
-              <span style="margin-left: auto">{{ item.type }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="inputField" style="display: block;margin-top: 5px">
+      <selectV
+          :data="contextOptList"
+          :name="'name'"
+          :select="'select'"
+      ></selectV>
     </div>
+    <!--提示词的输入框-->
     <div class="inputField" style="display: block">
       <promptPublic
+          ref="promptRef"
           v-for="(item,index) in infoList"
           :key="index"
           style="margin-top: 10px"
           :promptData="{modelTitle}"
           @removeInfo="removeInfo(item,index)"
+          @jinjaClick="jinjaClick"
       />
     </div>
     <div class="inputField">
       <div class="content-class addInfoClass" @click="addInfoClick">+ 添加消息</div>
     </div>
 
+    <!--输入变量-->
+    <div v-show="addVarShow" class="inputField" style="margin-top: 10px">
+      <p>输入变量</p>
+      <i class="el-icon-plus iPlus" @click="addVarClick"></i>
+    </div>
+    <div v-show="addVarShow" class="inputField addVarClass" style="margin-top: 5px;gap: 5px"
+         v-for="(item,index) in addVarList"
+         :key="item.id">
+      <el-input v-model="item.name" placeholder="变量名" style="width: 130px;font-size: 13px"></el-input>
+      <selectV
+          style="flex: 1"
+          :data="contextOptList"
+          :name="'name'"
+          :select="'select'"
+      ></selectV>
+      <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index)"/>
 
+    </div>
+    <div class="content-line"></div>
+
+    <!--记忆-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>记忆</p>
-      <el-tooltip effect="light" content="聊天记忆设置" placement="top">
+      <el-tooltip :open-delay="500" effect="light" content="聊天记忆设置" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
@@ -176,15 +168,18 @@
       </el-slider>
     </div>
 
+    <!--视觉-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>视觉</p>
-      <el-tooltip effect="light"
+      <el-tooltip :open-delay="500" effect="light"
                   content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-switch v-model="visionVal" style="margin-left: auto"></el-switch>
     </div>
     <div class="content-line"></div>
+
+    <!--输出变量-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;cursor: pointer"
          @click="outputShow=!outputShow">
       <i class="el-icon-arrow-down" ref="outputRef"></i>
@@ -196,6 +191,7 @@
       <p>生成内容</p>
     </div>
 
+    <!--失败时重试-->
     <div class="content-line"></div>
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>失败时重试</p>
@@ -215,9 +211,11 @@
       </div>
     </div>
     <div class="content-line"></div>
+
+    <!--异常处理-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>异常处理</p>
-      <el-tooltip effect="light"
+      <el-tooltip :open-delay="500" effect="light"
                   content="配置异常处理策略，当节点发生异常时触发" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -250,12 +248,14 @@
 
 <script>
 import promptPublic from "@/modelVue/formComponent/component/promptPublic.vue";
+import selectV from "@/modelVue/formComponent/component/selectV.vue";
 
 export default {
   name: 'llmCom',
   props: [],
   components: {
-    promptPublic
+    selectV,
+    promptPublic,
   },
   computed: {},
   data() {
@@ -292,7 +292,6 @@ export default {
       dynamicTags: [],
       inputVisible: false,
       inputValue: '',
-      selectValue: '',
       paramsContentList: [
         {
           name: '气温',
@@ -341,10 +340,7 @@ export default {
         },
       ],
 
-      contextSetParams: '设置变量值',
-      contextSelectShow: false,
-      contextTags: [],
-      searchContext: '',  // 变量搜索
+      // 下拉选择需要的数据
       contextOptList: [
         {
           name: 'sys.query',
@@ -352,7 +348,7 @@ export default {
           select: false
         },
         {
-          name: 'sys.dialogue_count',
+          name: 'sys.dialogue_countfdfdsafdsfafdsafsdafdsaklffdsafdsaqqqeqwqfdsfdsadafdsa',
           type: 'Number',
           select: false
         },
@@ -382,7 +378,6 @@ export default {
           select: false
         },
       ],
-      contextOptList_copy: [], // 深拷贝
 
       memoryVal: true,
       memoryWindowVal: false,
@@ -428,6 +423,15 @@ export default {
       infoList: [
         {},
         {}
+      ],
+
+      addVarShow: false,
+      addVarList: [
+        {
+          id: Math.random(),
+          name: '',
+          value: ''
+        }
       ]
 
     }
@@ -440,13 +444,6 @@ export default {
         this.$refs.selectIRef.style.transform = 'rotate(0deg)'
       }
     },
-    contextSelectShow: function (newVal) {
-      if (newVal) {
-        this.$refs.contextSelectRef.style.transform = 'rotate(-180deg)'
-      } else {
-        this.$refs.contextSelectRef.style.transform = 'rotate(0deg)'
-      }
-    },
     outputShow: function (newVal) {
       if (newVal) {
         this.$refs.outputRef.style.transform = 'rotate(-180deg)'
@@ -454,15 +451,6 @@ export default {
         this.$refs.outputRef.style.transform = 'rotate(0deg)'
       }
     },
-    contextSetParams: function (newVal) {
-      if (newVal !== '设置变量值') {
-        if (this.contextTags.length) {
-          this.contextTags[0].name = newVal;
-        } else {
-          this.contextTags.push({name: newVal});
-        }
-      }
-    }
   },
   created() {
 
@@ -482,13 +470,8 @@ export default {
       this.selectOptList_copy = JSON.parse(JSON.stringify(this.selectOptList))
     },
 
-    handleClose(tag, name) {
-      const config = {
-        '上下文': {list: 'contextTags'},
-        '停止': {list: 'dynamicTags'}
-      }
-      const target = config[name]
-      this[target.list].splice(this[target.list].indexOf(tag), 1);
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
     },
 
     showInput() {
@@ -513,7 +496,6 @@ export default {
     searchInput(val, name) {
       const config = {
         '模型': {list: 'selectOptList', copy: 'selectOptList_copy', key: 'value'},
-        '变量': {list: 'contextOptList', copy: 'contextOptList_copy', key: 'name'}
       };
 
       const target = config[name];
@@ -529,7 +511,6 @@ export default {
     selectOptClick(val, name) {
       const config = {
         '模型': {list: 'selectOptList', key: 'value', show: 'selectListShow', title: 'modelTitle'},
-        '变量': {list: 'contextOptList', key: 'name', show: 'contextSelectShow', title: 'contextSetParams'}
       }
       const target = config[name];
       this[target.list].forEach(item => item.select = false)
@@ -538,22 +519,34 @@ export default {
       this[target.show] = false
     },
 
-    contextClick() {
-      this.contextSelectShow = true
-      this.contextOptList.forEach(item => {
-        item.name == this.contextSetParams ? item.select = true : null
-      })
-      this.contextOptList_copy = JSON.parse(JSON.stringify(this.contextOptList))
+
+    // jinja判断是否显示输入变量
+    jinjaClick() {
+      this.addVarShow = this.$refs.promptRef.some(item => item.switchVal == true)
+    },
+    // 输入变量 - 添加
+    addVarClick() {
+      let obj = {
+        id: Math.random(),
+        name: '',
+        value: ''
+      }
+      this.addVarList.push(obj)
+    },
+    // 输入变量 - 删除
+    addVarListRemove(val, index) {
+      this.addVarList.splice(index, 1)
     },
 
     // 添加消息
     addInfoClick() {
       this.infoList.push({})
     },
-    // 删除
+    // 消息 - 删除
     removeInfo(val, index) {
       this.infoList.splice(index, 1)
-    }
+    },
+
   },
 }
 </script>
@@ -645,8 +638,7 @@ export default {
     ::v-deep {
       .el-input__inner {
         height: 32px;
-        background: #f1f3f6;
-        border: 0;
+        background: #f9fafb;
         font-size: 13px;
         border-radius: 8px;
         padding-left: 30px;
@@ -654,11 +646,6 @@ export default {
 
       .el-input__icon {
         line-height: 32px;
-      }
-
-      .el-input__inner::placeholder {
-        font-size: 13px;
-        color: #98a2b3; /* 你想要的颜色 */
       }
     }
   }
@@ -694,8 +681,8 @@ export default {
   ::v-deep {
     .el-input__inner {
       height: 32px;
-      background: #f1f3f6;
-      border: 0;
+      background: #f9fafb;
+      //border: 0;
       font-size: 13px;
       border-radius: 8px;
       padding-left: 10px;
@@ -704,15 +691,12 @@ export default {
     .el-input__icon {
       line-height: 32px;
     }
-
-    .el-input__inner::placeholder {
-      font-size: 13px;
-      color: #98a2b3; /* 你想要的颜色 */
-    }
   }
 }
 
 .contextClass {
+  margin-top: 0;
+
   &:hover {
     background: #f2f4f7 !important;
   }
@@ -720,10 +704,6 @@ export default {
   ::v-deep {
     .el-tag {
       margin: 0;
-      //border-radius: 5px;
-      //height: 20px;
-      //padding: 0;
-      //font-size: 12px;
     }
   }
 }
@@ -731,6 +711,29 @@ export default {
 .addInfoClass {
   justify-content: center;
   margin-top: 10px;
+}
+
+.addVarClass {
+  ::v-deep {
+    .el-input__inner {
+      background: #f9fafb;
+    }
+  }
+
+  .setVarClass {
+    flex: 1;
+    height: 30px;
+    background: #f9fafb;
+    cursor: pointer;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    padding-left: 10px;
+    color: #98a2b2;
+    border: 1px solid #e4e4e4;
+  }
 }
 
 ::v-deep {
@@ -798,7 +801,6 @@ export default {
   .el-input__inner {
     height: 32px;
     border: 1px solid #e4e4e4;
-    padding: 0;
     border-radius: 8px;
 
     &:hover {
@@ -834,5 +836,33 @@ export default {
     font-size: 12px;
   }
 
+  .el-button--danger {
+    border: 0;
+    background: #f2f4f7 !important;
+    padding: 7px;
+    height: 32px;
+    width: 32px !important;
+    border-radius: 8px;
+    box-shadow: none;
+
+
+    i {
+      font-weight: bold;
+      font-size: 15px;
+    }
+  }
+
+  .el-button--danger.is-plain {
+    color: #667085;
+
+    &:hover {
+      background: #fee4e2 !important;
+      color: #d92d20;
+    }
+  }
+
+  .el-input__inner::placeholder {
+    font-size: 13px;
+  }
 }
 </style>

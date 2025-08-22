@@ -500,7 +500,7 @@ export default {
 
     .el-input__inner {
       flex: 1;
-      border: 0 !important;
+      background: #f9fafb;
     }
 
     .el-button--danger {
@@ -590,6 +590,7 @@ export default {
   }
 
   .el-input__inner {
+    background: #f9fafb;
     border-radius: 8px !important;
   }
 
