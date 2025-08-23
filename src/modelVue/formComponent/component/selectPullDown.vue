@@ -36,7 +36,15 @@ export default {
       options: JSON.parse(JSON.stringify(this.data)),
     }
   },
-  watch: {},
+  watch: {
+    data: {
+      handler(newVal) {
+        this.options = JSON.parse(JSON.stringify(newVal))
+      },
+      immediate: true, // 一进来就执行一次
+      deep: true       // 监听对象/数组内部变化
+    }
+  },
   created() {
 
   },

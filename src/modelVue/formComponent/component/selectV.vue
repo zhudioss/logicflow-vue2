@@ -13,7 +13,10 @@
           size="small"
           @close="handleClose(tag)"
       >
-        <span class="tag-class" :style="{width}">{{ tag.name }}</span>
+        <el-tooltip :open-delay="500" effect="light" :content="tag.name"
+                    placement="top">
+          <span class="tag-class" :style="({width})">{{ tag.name }}</span>
+        </el-tooltip>
       </el-tag>
       <i class="el-icon-arrow-down" ref="contextSelectRef"></i>
     </div>
@@ -24,7 +27,7 @@
         :title="name"
         :select="select"
         @setData="(e)=>{setData(e,'上下文')}"
-        @backRotate="$refs.contextSelectRef.style.transform = 'rotate(0deg)'"
+        @backRotate="($refs.contextSelectRef.style.transform = 'rotate(0deg)')"
     ></selectPullDown>
   </div>
 </template>
@@ -34,7 +37,7 @@ import selectPullDown from "@/modelVue/formComponent/component/selectPullDown.vu
 
 export default {
   name: 'selectV',
-  props: ['data', 'name', 'select'],
+  props: ['data', 'name', 'select', ''],
   components: {
     selectPullDown,
   },
@@ -76,8 +79,16 @@ export default {
   },
   methods: {
     selectOptShowClick() {
+      if (this.contextTags.length > 0) {
+        this.contextOptList.forEach(item => {
+          if (item.name === this.contextTags[0].name) {
+            item.select = true
+          }
+        })
+      }
       this.$refs.pullDownRef.contextSelectShow = true
       this.$refs.contextSelectRef.style.transform = 'rotate(-180deg)'
+
     },
     handleClose(tag) {
       this.contextTags.splice(this.contextTags.indexOf(tag), 1);
@@ -89,6 +100,7 @@ export default {
       this.contextOptList.forEach(item => item.select = false);
       this.contextOptList[e.index].select = true
       this.contextSetParams = e.tag
+      this.$emit('syncValue', e)
     },
   }
 }

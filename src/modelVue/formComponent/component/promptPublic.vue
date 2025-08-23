@@ -22,18 +22,19 @@
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
-    <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
+    <div v-show="!switchVal" contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
+    <div v-show="switchVal" contenteditable="true" class="editableDivClass" ref="jinjaDiv" @input="onChangeJin"></div>
     <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
     <!-- 自定义悬浮菜单 -->
 
     <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
          :style="hoverMenuStyle"
          v-click-outside-close.stop="()=>{showHoverMenu=false,xInsertTag = false}">
-      <div class="context-class" @click="insertTagHTML({name:'上下文'})">
+      <div class="context-class" @click="insertTagHTML({name:'上下文'})" v-show="!switchVal">
         <img src="@/assets/上下文.png" alt="" height="17">
         <p>上下文</p>
       </div>
-      <p style="color:#676f83">开始</p>
+      <p style="color:#676f83" v-show="!switchVal">开始</p>
       <div style="flex: 1;overflow-y: auto">
         <div class="selectOpt-class" @click.stop="insertTagHTML(item)"
              v-for="(item,index) in  contextOptList"
@@ -225,6 +226,19 @@ export default {
       loading: false,
 
       contentValue: '为对话提供高层指导',
+
+      domList: [
+        {
+          ref: 'editableDiv',
+          fun: this.onChangeJin,
+        },
+        {
+          ref: 'jinjaDiv',
+          fun: this.onChange
+        }
+      ],
+      editShow: true,
+      jinjaShow: false
     }
   },
   watch: {},
@@ -233,14 +247,14 @@ export default {
   },
   mounted() {
 
-    const editable = document.querySelector('.editableDivClass')
-    // 监听页面全局的 selectionchange
-    editable.addEventListener('selectionchange', this.onChange)
-
-    editable.addEventListener('input', () => {
-      if (editable.innerHTML === '<br>') {
-        editable.innerHTML = ''
-      }
+    // 清空输入框空格问题
+    this.domList.forEach(item => {
+      const dom = this.$refs[item.ref]
+      dom.addEventListener('input', () => {
+        if (dom.innerHTML === '<br>') {
+          dom.innerHTML = ''
+        }
+      })
     })
 
     document.addEventListener('click', (e) => {
@@ -278,12 +292,12 @@ export default {
 
     // 复制
     copyClick() {
-      const editableDiv = this.$refs.editableDiv
-      if (!editableDiv) return
+      const dom = this.switchVal ? this.$refs.jinjaDiv : this.$refs.editableDiv
+      if (!dom) return
 
       // 获取 HTML 和 纯文本
-      const html = editableDiv.innerHTML
-      const text = editableDiv.innerText
+      const html = dom.innerHTML
+      const text = dom.innerText
 
       if (navigator.clipboard && window.ClipboardItem) {
         // ✅ 同时写入 HTML 和 纯文本
@@ -309,8 +323,14 @@ export default {
 
     xInsert() {
       this.xInsertTag = true
-      this.$refs.editableDiv.focus()
-      this.onChange()
+      if (this.switchVal) {
+        this.$refs.jinjaDiv.focus()
+        this.onChangeJin()
+      } else {
+        this.$refs.editableDiv.focus()
+        this.onChange()
+      }
+
     },
     // 放大
     amplifyClick() {
@@ -323,6 +343,37 @@ export default {
     },
 
     onChange() {
+      this.showHoverMenu = false
+      const sel = window.getSelection();
+      if (sel.focusNode) {
+        this.$nextTick(() => {
+          const anchorOffset = sel.anchorOffset
+          const text = sel.focusNode.textContent
+
+          if (text[anchorOffset - 1] === '/' || text[anchorOffset - 1] === '{' || this.xInsertTag) {
+            if (sel.rangeCount === 0) return;
+
+            const rect = this.getCursorRect(sel);
+            if (!rect) return;
+
+            const pageWidth = document.documentElement.clientWidth || window.innerWidth;
+            const top = rect.top + rect.height;
+            const left = rect.left;
+
+            this.hoverMenuStyle = {
+              top: top + 'px',
+              left: pageWidth - left > 300 ? `${left}px` : `${left - 300}px`,
+            };
+            setTimeout(() => {
+              this.showHoverMenu = true;
+            }, 100)
+
+          }
+        })
+      }
+    },
+
+    onChangeJin() {
       this.showHoverMenu = false
       const sel = window.getSelection();
       if (sel.focusNode) {
@@ -375,8 +426,8 @@ export default {
 
     // 选择上下文
     insertTagHTML(val) {
-      const editableDiv = this.$refs.editableDiv
-      if (!editableDiv) return
+      const dom = this.switchVal ? this.$refs.jinjaDiv : this.$refs.editableDiv
+      if (!dom) return
 
       const sel = window.getSelection()
       if (!sel || sel.rangeCount === 0) return
@@ -385,9 +436,15 @@ export default {
 
       // 创建可交互的标签 HTML
       const wrapper = document.createElement('div')
-      wrapper.className = 'custom-tag'
-      wrapper.setAttribute('contenteditable', 'false')
-      wrapper.innerHTML = `${val.name} <span class="tag-close">x</span>`
+
+
+      if (this.switchVal) {
+        wrapper.innerHTML = `{ { ${val.name} } }`
+      } else {
+        wrapper.className = 'custom-tag'
+        wrapper.setAttribute('contenteditable', 'false')
+        wrapper.innerHTML = `${val.name} <span class="tag-close">x</span>`
+      }
       wrapper.style.userSelect = 'none'
       wrapper.style.display = 'inline-block'
       wrapper.style.margin = '0 2px'
@@ -407,7 +464,7 @@ export default {
       sel.removeAllRanges()
       sel.addRange(newRange)
 
-      this.content = editableDiv.innerHTML
+      this.content = dom.innerHTML
 
       // 删除光标左侧的 '/' 或 '{'
       const startContainer = range.startContainer
@@ -418,6 +475,9 @@ export default {
         if (char === '/' || char === '{') {
           startContainer.textContent = text.slice(0, startOffset - 1)
         }
+      }
+      if (this.switchVal) {
+        this.$emit('jinjaSelect', val)
       }
       this.showHoverMenu = false
     },
@@ -528,7 +588,7 @@ export default {
 
   &:empty::before {
     content: "这里写你的提示词，输入 ' { ' 插入变量、输入 ' / ' 插入提示内容块";
-    color: #aaa;
+    color: #98a2b2;
     pointer-events: none; /* 不阻止点击 */
   }
 

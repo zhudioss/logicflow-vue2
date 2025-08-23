@@ -115,12 +115,12 @@
       <promptPublic
           ref="promptRef"
           v-for="(item,index) in infoList"
-          :key="index"
-
+          :key="item.id"
           style="margin-top: 10px"
           :modelTitle="modelTitle"
           @removeInfo="removeInfo(item,index)"
           @jinjaClick="jinjaClick"
+          @jinjaSelect="jinjaSelect"
       />
     </div>
     <div class="inputField">
@@ -137,10 +137,12 @@
          :key="item.id">
       <el-input v-model="item.name" placeholder="变量名" style="width: 130px;font-size: 13px"></el-input>
       <selectV
+          ref="saveTagInput"
           style="flex: 1"
           :data="contextOptList"
           :name="'name'"
           :select="'select'"
+          @syncValue="(e)=>{syncValue(e,index)}"
       ></selectV>
       <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index)"/>
 
@@ -422,18 +424,16 @@ export default {
         }
       ],
       infoList: [
-        {},
-        {}
+        {
+          id: Math.random()
+        },
+        {
+          id: Math.random()
+        }
       ],
 
       addVarShow: false,
-      addVarList: [
-        {
-          id: Math.random(),
-          name: '',
-          value: ''
-        }
-      ]
+      addVarList: []
 
     }
   },
@@ -525,6 +525,26 @@ export default {
     jinjaClick() {
       this.addVarShow = this.$refs.promptRef.some(item => item.switchVal == true)
     },
+    // jinja选中后添加输入变量内容
+    jinjaSelect(e) {
+      let obj = {
+        id: Math.random(),
+        name: e.name,
+        value: ''
+      }
+      this.addVarList.push(obj)
+      this.$nextTick(() => {
+        let refs = this.$refs.saveTagInput
+        refs[refs.length - 1].contextTags = [{name: e.name}]
+      })
+    },
+    // 输入变量选中后同步变量名
+    syncValue(e, index) {
+      console.log(e, '-=-=-=-=-=')
+      console.log(this.addVarList[index])
+      this.addVarList[index].name = e.tag
+    },
+
     // 输入变量 - 添加
     addVarClick() {
       let obj = {
@@ -541,7 +561,7 @@ export default {
 
     // 添加消息
     addInfoClick() {
-      this.infoList.push({})
+      this.infoList.push({id: Math.random()})
     },
     // 消息 - 删除
     removeInfo(val, index) {
