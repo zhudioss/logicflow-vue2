@@ -1,7 +1,21 @@
 <template>
   <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
     <div class="topClass">
-      <p style="font-weight: bold">{{ topTitle }}</p>
+      <div class="titleSelectClass" v-if="titleSelect" @click="titleAlertShow=true">
+        <el-tooltip :open-delay="1000" effect="light" :content="titleSelectVal"
+                    placement="top">
+          <p class="title">{{ titleSelectVal }}</p>
+        </el-tooltip>
+        <img src="@/assets/上下.png" alt="" height="13">
+        <div class="titleAlert" v-show="titleAlertShow">
+          <p v-for="(item,index) in titleAlertList" :key="index" @click.stop="titleAlertClick(item)">
+            {{ item }}</p>
+        </div>
+      </div>
+      <el-tooltip v-else :open-delay="500" effect="light" :content="topTitle"
+                  placement="top">
+        <p style="font-weight: bold" class="title">{{ topTitle }}</p>
+      </el-tooltip>
       <el-tooltip v-show="topTitle!=='回复'" :open-delay="500" effect="light" :content="contentValue"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
@@ -121,6 +135,10 @@ export default {
     topTitle: {
       type: String,
       default: 'SYSTEM'
+    },
+    titleSelect: {
+      type: Boolean,
+      default: false
     }
   },
   components: {},
@@ -225,6 +243,12 @@ export default {
       autoContextValue,
       loading: false,
 
+      titleSelectVal: 'USER',
+      titleAlertShow: false,
+      titleAlertList: [
+        'USER',
+        'ASSISTANT'
+      ],
       contentValue: '为对话提供高层指导',
 
       domList: [
@@ -274,7 +298,10 @@ export default {
           break
       }
     },
-
+    titleAlertClick(val) {
+      this.titleSelectVal = val
+      this.titleAlertShow = false
+    },
     // 四角星
     starClick() {
       this.dialogTableVisible = true
@@ -515,6 +542,7 @@ export default {
       this.loading = false
       this.autoContextShow = false
     }
+
 
   },
   beforeDestroy() {
@@ -788,6 +816,49 @@ export default {
 
 }
 
+.titleSelectClass {
+  position: relative;
+  cursor: pointer;
+  padding: 2px 1px 2px 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+
+  .titleAlert {
+    position: absolute;
+    bottom: -69px;
+    z-index: 9999;
+    background: #fff;
+    font-weight: normal;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+
+    p {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    p:hover {
+      border-radius: 8px;
+      background: #f2f4f7;
+    }
+
+  }
+
+  &:hover {
+    background: #e6e8ea;
+  }
+}
+
+.title {
+  max-width: 51px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
 ::v-deep {
   .topClass {

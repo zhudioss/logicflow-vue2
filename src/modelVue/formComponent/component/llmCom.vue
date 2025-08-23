@@ -118,6 +118,7 @@
           :key="item.id"
           style="margin-top: 10px"
           :modelTitle="modelTitle"
+          :titleSelect="item.titleSelect"
           @removeInfo="removeInfo(item,index)"
           @jinjaClick="jinjaClick"
           @jinjaSelect="jinjaSelect"
@@ -425,10 +426,12 @@ export default {
       ],
       infoList: [
         {
-          id: Math.random()
+          id: Math.random(),
+          titleSelect: false,
         },
         {
-          id: Math.random()
+          id: Math.random(),
+          titleSelect: true,
         }
       ],
 
@@ -561,7 +564,11 @@ export default {
 
     // 添加消息
     addInfoClick() {
-      this.infoList.push({id: Math.random()})
+      let obj = {
+        id: Math.random(),
+        titleSelect: true,
+      }
+      this.infoList.push(obj)
     },
     // 消息 - 删除
     removeInfo(val, index) {
