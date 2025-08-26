@@ -2,9 +2,12 @@
   <div class="warp-detail">
     <div>
       <!-- 组件 -->
-      <startCom v-if="detailForm.label=='开始'"></startCom>
-      <llmCom v-if="detailForm.label=='LLM'"></llmCom>
-      <endCom v-if="detailForm.label=='直接回复'"></endCom>
+      <component
+          v-for="(item,index) in componentsList"
+          :key="index"
+          :is="item"
+          v-show="detailForm.uniqueCom==item"
+      ></component>
 
       <div class="line-class"></div>
       <div class="inputField">
@@ -44,6 +47,7 @@
 <script>
 import startCom from '@/modelVue/formComponent/component/startCom.vue'
 import llmCom from '@/modelVue/formComponent/component/llmCom.vue'
+import knowledgeRet from '@/modelVue/formComponent/component/knowledgeRet.vue'
 import endCom from '@/modelVue/formComponent/component/endCom.vue'
 
 export default {
@@ -52,13 +56,21 @@ export default {
   components: {
     startCom,
     llmCom,
-    endCom
+    endCom,
+    knowledgeRet
 
   },
   computed: {},
   data() {
     return {
-      input: ''
+      input: '',
+      componentsList: [
+        'startCom',
+        'llmCom',
+        'knowledgeRet',
+        'endCom'
+
+      ]
     }
   },
   watch: {},

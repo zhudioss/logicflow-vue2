@@ -1,5 +1,5 @@
 <template>
-  <div class="set-class" style="position: relative;" ref="setClassRef">
+  <div class="selectVClass" style="position: relative;" ref="setClassRef">
     <div class="content-class contextClass" @click="selectOptShowClick">
       <div class="title-class" v-show="contextTags.length<=0" style="color:#98a2b2">
         {{ contextSetParams }}
@@ -107,7 +107,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.set-class {
+.selectVClass {
   display: flex;
   align-items: center;
 

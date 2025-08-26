@@ -22,6 +22,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: 'startCom',
         icon: require('@/assets/开始.png'),
     },
     // {
@@ -42,6 +43,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: 'llmCom',
         icon: require('@/assets/llm.png'),
     },
     // {
@@ -62,6 +64,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: 'knowledgeRet',
         icon: require('@/assets/知识检索.png'),
     },
     {
@@ -72,6 +75,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: '',
         icon: require('@/assets/代码执行.png'),
     },
     // {
@@ -92,6 +96,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: '',
         icon: require('@/assets/http请求.png'),
     },
     {
@@ -102,6 +107,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: '',
         icon: require('@/assets/条件分支.png'),
     },
     // {
@@ -132,6 +138,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: '',
         icon: require('@/assets/变量聚合.png'),
     },
     {
@@ -142,6 +149,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: '',
         icon: require('@/assets/文档提取.png'),
     },
     {
@@ -152,6 +160,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
+        uniqueCom: 'endCom',
         icon: require('@/assets/直接回复.png'),
     },
 ]

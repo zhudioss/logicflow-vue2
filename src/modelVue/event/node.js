@@ -31,6 +31,8 @@ export default function nodeEvent() {
 
     // 点击node
     this.lf.on('node:click', ({data}) => {
+        const _this = this
+
         this.rightMenuShow = false
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
@@ -41,9 +43,11 @@ export default function nodeEvent() {
                 const {
                     label,
                     icon,
+                    uniqueCom
                 } = this.componentsList.find(item => item.type === data.type)
-                this.detailForm.label = label
-                this.detailForm.icon = icon
+                _this.detailForm.label = label
+                _this.detailForm.icon = icon
+                _this.detailForm.uniqueCom = uniqueCom
                 const childAll = this.lf.getNodeOutgoingNode(data.id) // 所有子节点
                 this.detailBranchList = childAll.map(child => {
                     return ({

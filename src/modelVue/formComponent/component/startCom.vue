@@ -30,7 +30,9 @@
       </div>
 
     </div>
+
     <div class="content-line"></div>
+
     <div class="inputField" style="display: block">
       <div class="varList-class" v-for="(item,index) in varList" :key="index">
         <div class="left">
@@ -500,7 +502,8 @@ export default {
 
     .el-input__inner {
       flex: 1;
-      background: #f9fafb;
+      background: #fff;
+      border: 0;
     }
 
     .el-button--danger {

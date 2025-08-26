@@ -1,9 +1,9 @@
 <template>
   <div>
+    <!--模型-->
     <div class="inputField">
       <p>模型</p>
     </div>
-    <!--模型-->
     <div class="inputField" style="display: block;margin-bottom: 10px">
       <div class="set-class" @click="modelOptClick">
         <div class="content-class">
@@ -38,7 +38,9 @@
               </div>
             </div>
           </div>
+
           <div class="content-line" style="width: auto"></div>
+
           <div>参数</div>
           <div class="paramsContent" v-for="(item,index) in paramsContentList" :key="index">
             <el-switch v-model="item.switchVal" style="margin-right: 10px"></el-switch>
@@ -110,6 +112,7 @@
           :select="'select'"
       ></selectV>
     </div>
+
     <!--提示词的输入框-->
     <div class="inputField" style="display: block">
       <promptPublic
@@ -146,8 +149,8 @@
           @syncValue="(e)=>{syncValue(e,index)}"
       ></selectV>
       <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index)"/>
-
     </div>
+
     <div class="content-line"></div>
 
     <!--记忆-->
@@ -181,6 +184,7 @@
       </el-tooltip>
       <el-switch v-model="visionVal" style="margin-left: auto"></el-switch>
     </div>
+
     <div class="content-line"></div>
 
     <!--输出变量-->
@@ -197,6 +201,7 @@
 
     <!--失败时重试-->
     <div class="content-line"></div>
+
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>失败时重试</p>
       <el-switch v-model="failVal" style="margin-left: auto"></el-switch>
@@ -214,6 +219,7 @@
         </el-slider>
       </div>
     </div>
+
     <div class="content-line"></div>
 
     <!--异常处理-->
@@ -860,10 +866,18 @@ export default {
   }
 
   .el-input--suffix .el-input__inner {
-    width: 96px;
-    padding-left: 16px;
+    width: 82px;
+    padding-left: 9px;
+    padding-right: 24px;
     font-size: 12px;
+    height: 28px;
   }
+
+  .el-select .el-input .el-select__caret {
+    width: 20px;
+    line-height: 28px;
+  }
+
 
   .el-button--danger {
     border: 0;
