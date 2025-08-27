@@ -41,6 +41,7 @@
           ref="promptRef"
           v-for="(item,index) in infoList"
           :key="item.id"
+          :removeShow="infoList.length<=1?false:true"
           style="margin-top: 10px"
           :modelTitle="modelTitle"
           :titleSelect="item.titleSelect"
