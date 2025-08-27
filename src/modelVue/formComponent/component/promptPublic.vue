@@ -64,7 +64,7 @@
     <el-dialog :append-to-body="true" title="提示词生成器" :visible.sync="dialogTableVisible" @close="dialogClose">
       <div class="dialog-content dialogLeft">
         <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
-        <div class="content-class">
+        <div class="dialogLeft-content">
           <img src="@/assets/模型.png" alt="" height="20">
           <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
         </div>
@@ -739,7 +739,7 @@ export default {
   padding-top: 10px;
   padding-right: 13px;
 
-  .content-class {
+  .dialogLeft-content {
     margin: 26px 0 30px;
     font-weight: normal;
     color: #101828;

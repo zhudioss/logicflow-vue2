@@ -15,7 +15,8 @@
     <!--知识库-->
     <div class="inputField knowledgeBase" style="margin-top: 10px">
       <p>知识库</p>
-      <el-button type="primary" plain icon="el-icon-s-operation" size="mini" :disabled="varEdit.length<=0"
+      <el-button class="miniButton" type="primary" plain icon="el-icon-s-operation" size="mini"
+                 :disabled="varEdit.length<=0"
                  @click="recallClick">召回设置
       </el-button>
       <i class="el-icon-plus iPlus" @click="addClick"></i>
@@ -129,7 +130,9 @@
       >
         <div class="left">
           <img src="@/assets/文件夹.png" alt="" height="20">
-          <div>{{ item.name }}</div>
+          <el-tooltip :open-delay="1000" effect="light" :content="item.name" placement="top">
+            <div>{{ item.name }}</div>
+          </el-tooltip>
         </div>
         <div class="knowTag" v-show="!item.deleteShow">{{ item.tagName ? item.tagName : '高质量·混合检索' }}</div>
         <el-button
@@ -165,17 +168,24 @@
     </div>
     <div class="inputField abnormalDetail" style="display: block;font-weight: normal;font-size: 12px;color: #676f83">
       <div v-if="abnormalVal=='自动'">
-        <p style="margin-bottom: 5px">当发生异常时，指定默认输出内容。</p>
-        <p style="margin-bottom: 5px;margin-left: 5px"><span style="color: #2c3e50;font-weight:bold;font-size: 13px;">text</span>
-          String</p>
-        <el-input
-            placeholder="请输入"
-            v-model="abnormalInput">
-        </el-input>
+        <p style="margin-bottom: 5px">根据 Query Variable 自动生成元数据过滤条件</p>
+        <div class="content-class" @click="modelOptClick">
+          <img src="@/assets/模型.png" alt="" height="20">
+          <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
+          <i class="el-icon-s-operation"></i>
+        </div>
+        <modelAlert
+            v-if="modelOptShow"
+            v-click-outside-close="()=>{modelOptShow=false}"
+            :modelTitle="modelTitle"
+            @changeModelTitle="(e)=>modelTitle=e.value"
+        ></modelAlert>
       </div>
       <div v-if="abnormalVal=='手动'">
-        <p style="font-size: 13px;color: #2c3e50;margin-bottom: 5px">在画布自定义失败分支逻辑。</p>
-        <p>当节点发生异常时，将自动执行失败分支。失败分支允许您灵活地提供错误消息、报告、修复或跳过操作。</p>
+        <p style="margin-bottom: 5px">手动添加元数据过滤条件</p>
+        <el-button class="miniButton" type="primary" plain icon="el-icon-plus" size="mini">
+          添加条件
+        </el-button>
       </div>
     </div>
 
@@ -207,11 +217,13 @@
 <script>
 import selectV from "@/modelVue/formComponent/component/selectV.vue";
 import modelSelectCom from '@/modelVue/formComponent/component/modelSelectCom.vue'
+import modelAlert from "@/modelVue/formComponent/component/modelAlert.vue";
 
 export default {
   name: 'knowledgeRet',
   props: [],
   components: {
+    modelAlert,
     selectV,
     modelSelectCom
   },
@@ -235,7 +247,8 @@ export default {
           content: '重新排序模型将根据选文档列表与用户问题语义匹配度进行重新排序，从而改进语义排序结果'
         }
       ],
-      varEdit: [],
+
+      varEdit: [],  // 知识库
       knowledgeList: [
         {
           name: '0825',
@@ -262,7 +275,8 @@ export default {
           tagName: '',
           activeClass: ''
         }
-      ],
+      ],  // 选择应用知识库
+
       dialogFormVisible: false,
 
       // 下拉选择需要的数据
@@ -306,8 +320,9 @@ export default {
 
       outputShow: false,
 
-      abnormalInput: '',
-      abnormalVal: '禁用',
+      modelOptShow: false,
+      modelTitle: 'qwen72',
+      abnormalVal: '自动',
       abnormalOpt: [
         {
           label: '禁用',
@@ -417,7 +432,11 @@ export default {
 
     closeDialog() {
       this.knowledgeList.forEach(item => item.activeClass = '')
-    }
+    },
+
+    modelOptClick() {
+      this.modelOptShow = true
+    },
 
   },
 }
@@ -516,17 +535,6 @@ export default {
     padding: 6px !important;
     border-radius: 6px !important;
   }
-
-  ::v-deep {
-
-
-    .el-button {
-      padding: 6px 8px;
-      border-radius: 6px;
-      margin-left: auto;
-    }
-  }
-
 }
 
 .set-class {
@@ -589,6 +597,12 @@ export default {
 }
 
 ::v-deep {
+  .miniButton {
+    padding: 6px 8px;
+    border-radius: 6px;
+    margin-left: auto;
+  }
+
   .el-tag {
     margin-right: 5px;
     margin-bottom: 5px;
@@ -596,7 +610,7 @@ export default {
   }
 
   .el-dialog {
-    width: 50%;
+    width: 40%;
   }
 
   .button-new-tag {

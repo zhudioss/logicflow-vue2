@@ -108,21 +108,6 @@ export default {
 
 <style lang="scss" scoped>
 .selectVClass {
-  display: flex;
-  align-items: center;
-
-  i {
-    margin-left: auto;
-  }
-
-  .title-class {
-    max-width: 50%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    font-weight: 400;
-  }
-
   .modelOpt-class {
     position: absolute;
     width: 400px;
@@ -203,32 +188,6 @@ export default {
         line-height: 32px;
       }
     }
-  }
-}
-
-.content-class {
-  margin-top: 5px;
-  background: #f2f4f7;
-  border-radius: 8px;
-  height: 32px;
-  font-weight: normal;
-  color: #101828;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  column-gap: 6px;
-  width: 100%;
-
-  &:hover {
-    background: #e9ebf0;
-  }
-
-  i {
-    transition: 0.5s;
-    transform: rotate(0deg);
   }
 }
 
