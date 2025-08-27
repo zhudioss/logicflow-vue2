@@ -16,7 +16,7 @@
                   placement="top">
         <p style="font-weight: bold" class="title">{{ topTitle }}</p>
       </el-tooltip>
-      <el-tooltip v-show="topTitle!=='回复'" :open-delay="500" effect="light" :content="contentValue"
+      <el-tooltip v-show="topTitle!=='回复'" effect="light" :content="contentValue"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -586,6 +586,11 @@ export default {
         background: #e9ebf0;
       }
     }
+    ::v-deep{
+      .el-divider{
+        background: #DCDFE6;
+      }
+    }
   }
 
   .copy-tip {
@@ -893,7 +898,7 @@ export default {
   }
 
   .el-divider__text.is-left {
-    left: -21px;
+    left: -20px;
     color: #676f83;
   }
 

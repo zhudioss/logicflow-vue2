@@ -206,6 +206,126 @@
   color: #98a2b3;
 }
 
+.alertClass {
+  width: calc(100% - 20px);
+  //overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 13px;
+  position: absolute;
+  left: 10px;
+  top: 31px;
+  z-index: 99999;
+  border-radius: 8px;
+  border: 1px solid #e4e4e4;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+
+  .el-divider__text.is-left {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2c3e50;
+    padding-left: 0px;
+    left: 0;
+  }
+
+
+  .el-divider--horizontal {
+    margin: 20px 0 16px;
+  }
+
+  // 单选框
+  .el-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .el-radio-button {
+    width: calc((100% - 10px) / 2) !important;
+    height: 32px;
+  }
+
+  .el-radio-button__inner {
+    font-weight: normal;
+    border: none;
+    border: 1px solid #e3e3e3 !important;
+    border-radius: 8px !important;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    background: #fcfcfd;
+    font-size: 13px;
+
+    &:hover {
+      color: #409eff;
+      border: 1px solid #409eff !important;
+    }
+  }
+
+  .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    background-color: #ecf5ff;
+    box-shadow: none;
+    color: #409eff;
+    border: 1px solid #409eff !important;
+  }
+
+
+  .title {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+    margin-top: 10px;
+  }
+
+}
+
+.el-divider__text.is-left {
+  left: -20px;
+  color: #676f83;
+  padding-right: 10px;
+}
+
+.el-divider {
+  background: #ecedee;
+}
+
+.outputVar {
+  display: block !important;
+  font-weight: normal !important;
+  line-height: 20px;
+  color: #676f83;
+  font-size: 12px;
+  padding-left: 36px !important;
+
+
+  strong {
+    color: #2c3e50;
+    font-size: 13px;
+    margin-right: 5px;
+  }
+
+  .recallBlur {
+    display: flex;
+    padding-left: 10px;
+    column-gap: 10px;
+    //height: 225px;
+
+    .line {
+      background: #ecedee;
+      width: 1px;
+      //height: auto;
+    }
+  }
+
+}
+
+
 //.el-button--primary {
 //  background: #3f58fd;
 //  border: 0;

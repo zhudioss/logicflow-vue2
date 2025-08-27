@@ -15,9 +15,88 @@
     <!--知识库-->
     <div class="inputField knowledgeBase" style="margin-top: 10px">
       <p>知识库</p>
-      <el-button type="info" plain icon="el-icon-s-operation" size="mini" :disabled="varEdit.length<=0">召回设置
+      <el-button type="primary" plain icon="el-icon-s-operation" size="mini" :disabled="varEdit.length<=0"
+                 @click="recallClick">召回设置
       </el-button>
       <i class="el-icon-plus iPlus" @click="addClick"></i>
+
+      <!--弹窗-->
+      <div class="alertClass" v-click-outside-close="()=>alertShow=false" v-if="alertShow">
+        <div style="color: #101828;font-size: 14px">召回设置</div>
+        <div style="font-size: 12px;font-weight:normal;color: #676f83">
+          默认情况下使用多路召回。从多个知识库中检索知识，然后重新排序。
+        </div>
+
+        <!--Rerank 设置-->
+        <el-divider content-position="left">Rerank 设置</el-divider>
+        <el-radio-group v-model="rerankValue">
+          <el-radio-button :label="item.label" v-for="(item,index) in rerankRadioList" :key="index">
+            {{ item.label }}
+            <el-tooltip effect="light"
+                        :content="item.content" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </el-radio-button>
+        </el-radio-group>
+        <div style="position: relative" v-if="rerankValue=='Rerank模型'">
+          <div class="title" style="margin-top: 16px">
+            Rerank 模型
+            <el-tooltip effect="light" :content="rerankRadioList[1].content" placement="top">
+              <img src="@/assets/问号.png" alt="" height="13">
+            </el-tooltip>
+          </div>
+          <modelSelectCom :propsModelTitle="propsModelTitle"></modelSelectCom>
+        </div>
+        <div class="weightClass" v-if="rerankValue=='权重设置'">
+          <el-slider
+              v-model="weightSlider"
+              :min="0"
+              :max="1"
+              :step="0.1"></el-slider>
+          <div class="bottomText">
+            <p>语义 {{ weightSlider }}</p>
+            <p>{{ 1 - weightSlider === 0 ? 0 : Number(1 - weightSlider).toFixed(1) }} 关键词</p>
+          </div>
+        </div>
+
+        <!--Top K-->
+        <div class="title" style="margin-top: 16px">
+          Top K
+          <el-tooltip effect="light"
+                      content="用户筛选与用户问题相似度最高的文本片段。系统同时回根据选用模型上下文窗口大小动态调整分段数量"
+                      placement="top">
+            <img src="@/assets/问号.png" alt="" height="13">
+          </el-tooltip>
+        </div>
+        <el-slider
+            style="margin-left: 10px;"
+            v-model="topKValue"
+            :min="1"
+            :max="10"
+            :step="1"
+            show-input>
+        </el-slider>
+
+        <!--Score 阈值-->
+        <div class="title">
+          <el-switch v-model="scoreValue"></el-switch>
+          Score 阈值
+          <el-tooltip effect="light"
+                      content="用于设置文本片段筛选的相似度阈值"
+                      placement="top">
+            <img src="@/assets/问号.png" alt="" height="13">
+          </el-tooltip>
+        </div>
+        <el-slider
+            style="margin-left: 10px;"
+            v-model="scoreSlider"
+            :min="0"
+            :max="1"
+            :step="0.1"
+            :disabled="!scoreValue"
+            show-input>
+        </el-slider>
+      </div>
     </div>
     <div class="inputField" style="display: block">
       <div class="set-class" v-show="varEdit.length<=0">
@@ -70,7 +149,7 @@
     <!--元数据过滤-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 10px">
       <p>元数据过滤</p>
-      <el-tooltip :open-delay="500" effect="light"
+      <el-tooltip effect="light"
                   content="元数据过滤是使用元数据属性（例如标签、类别或者访问权限）来细化和控制系统内相关的检索过程"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
@@ -108,39 +187,55 @@
       <i class="el-icon-arrow-down" ref="outputRef"></i>
       <p>输出变量</p>
     </div>
-    <div v-if="outputShow" class="inputField"
-         style="display: block;font-weight: normal;line-height: 23px;color:#676f83;font-size: 12px">
-      <p><span style="color: #2c3e50;font-weight:bold;font-size: 13px">text</span> String</p>
-      <p>生成内容</p>
+    <div v-if="outputShow" class="inputField outputVar">
+      <p><strong>text</strong> Array[Object]</p>
+      <p style="margin-bottom: 5px">召回的分段</p>
+      <div class="recallBlur">
+        <div class="line"></div>
+        <div>
+          <div v-for="(item,index) in recallBlurList" :key="index">
+            <p><strong>{{ item.title }}</strong> {{ item.type }}</p>
+            <p style="margin-bottom: 5px">{{ item.content }}</p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import selectV from "@/modelVue/formComponent/component/selectV.vue";
-import knowledgeRet from "@/modelVue/formComponent/component/knowledgeRet.vue";
+import modelSelectCom from '@/modelVue/formComponent/component/modelSelectCom.vue'
 
 export default {
   name: 'knowledgeRet',
   props: [],
   components: {
     selectV,
+    modelSelectCom
   },
-  computed: {
-    knowledgeRet() {
-      return knowledgeRet
-    }
-  },
+  computed: {},
   data() {
     return {
-      varEdit: [
-        // {
-        //   name: '技术标准数字化知识加工',
-        //   tagName: '高质量·混合检索',
-        //   deleteShow: false
-        // },
-
+      alertShow: false,
+      rerankValue: 'Rerank模型',
+      propsModelTitle: 'rerank',
+      scoreValue: false,
+      scoreSlider: 0.8,
+      weightSlider: 0.5,
+      topKValue: 6,
+      rerankRadioList: [
+        {
+          label: '权重设置',
+          content: '通过调整分配的权重，重新排序策略确定是优先进行语义匹配还是关键字匹配'
+        },
+        {
+          label: 'Rerank模型',
+          content: '重新排序模型将根据选文档列表与用户问题语义匹配度进行重新排序，从而改进语义排序结果'
+        }
       ],
+      varEdit: [],
       knowledgeList: [
         {
           name: '0825',
@@ -227,6 +322,33 @@ export default {
           value: '手动'
         }
       ],
+      recallBlurList: [
+        {
+          title: 'content',
+          type: 'String',
+          content: '分段内容'
+        },
+        {
+          title: 'title',
+          type: 'String',
+          content: '分段标题'
+        },
+        {
+          title: 'url',
+          type: 'String',
+          content: '分段链接'
+        },
+        {
+          title: 'icon',
+          type: 'String',
+          content: '分段图标'
+        },
+        {
+          title: 'metadata',
+          type: 'Object',
+          content: '其他元数据'
+        },
+      ]
     }
   },
   watch: {
@@ -245,6 +367,9 @@ export default {
 
   },
   methods: {
+    recallClick() {
+      this.alertShow = true
+    },
     knowListHover(val, index, text) {
       if (text === '滑入') {
         this.varEdit.forEach(item => item.deleteShow = false)
@@ -385,6 +510,7 @@ export default {
 .knowledgeBase {
   column-gap: 6px;
   margin-left: auto;
+  position: relative;
 
   .iPlus {
     padding: 6px !important;
@@ -401,12 +527,6 @@ export default {
     }
   }
 
-  //& div:nth-of-type(1) {
-  //  display: flex;
-  //  color: #10182840;
-  //  align-items: center;
-  //  font-weight: normal;
-  //}
 }
 
 .set-class {
@@ -440,6 +560,33 @@ export default {
   }
 }
 
+.weightClass {
+  border: 1px solid #eaecf0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-top: 10px;
+
+  .bottomText {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & p:nth-of-type(1) {
+      color: #409eff;
+    }
+
+    & p:nth-of-type(2) {
+      color: #15b79e;
+    }
+  }
+
+  ::v-deep {
+    .el-slider__runway {
+      margin: 12px 0;
+      background: #15b79e;
+    }
+  }
+}
 
 ::v-deep {
   .el-tag {

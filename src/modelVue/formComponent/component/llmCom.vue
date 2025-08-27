@@ -45,7 +45,7 @@
           <div class="paramsContent" v-for="(item,index) in paramsContentList" :key="index">
             <el-switch v-model="item.switchVal" style="margin-right: 10px"></el-switch>
             <div style="margin-right: 2px">{{ item.name }}</div>
-            <el-tooltip :open-delay="500" effect="light" :content="item.content"
+            <el-tooltip effect="light" :content="item.content"
                         placement="top">
               <img src="@/assets/问号.png" alt="" height="13">
             </el-tooltip>
@@ -62,7 +62,7 @@
             <div>
               <p>
                 停止序列
-                <el-tooltip :open-delay="500" effect="light" style="transform: translateY(3px)"
+                <el-tooltip effect="light" style="transform: translateY(3px)"
                             content="API 将停止生成更多的 token 。返回的文本将不包含停止序列" placement="top">
                   <img src="@/assets/问号.png" alt="" height="13">
                 </el-tooltip>
@@ -100,7 +100,7 @@
     <!--上下文-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>上下文</p>
-      <el-tooltip :open-delay="500" effect="light" content="您可以导入知识库作为上下文"
+      <el-tooltip effect="light" content="您可以导入知识库作为上下文"
                   placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -156,7 +156,7 @@
     <!--记忆-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>记忆</p>
-      <el-tooltip :open-delay="500" effect="light" content="聊天记忆设置" placement="top">
+      <el-tooltip effect="light" content="聊天记忆设置" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
@@ -178,7 +178,7 @@
     <!--视觉-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
       <p>视觉</p>
-      <el-tooltip :open-delay="500" effect="light"
+      <el-tooltip effect="light"
                   content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>
@@ -193,9 +193,8 @@
       <i class="el-icon-arrow-down" ref="outputRef"></i>
       <p>输出变量</p>
     </div>
-    <div v-if="outputShow" class="inputField"
-         style="display: block;font-weight: normal;line-height: 23px;color:#676f83;font-size: 12px">
-      <p><span style="color: #2c3e50;font-weight:bold;font-size: 13px">text</span> String</p>
+    <div v-if="outputShow" class="inputField outputVar">
+      <p><strong>text</strong> String</p>
       <p>生成内容</p>
     </div>
 
@@ -225,7 +224,7 @@
     <!--异常处理-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>异常处理</p>
-      <el-tooltip :open-delay="500" effect="light"
+      <el-tooltip effect="light"
                   content="配置异常处理策略，当节点发生异常时触发" placement="top">
         <img src="@/assets/问号.png" alt="" height="13">
       </el-tooltip>

@@ -68,7 +68,7 @@
         <branchComponent
             :detailBranchList="detailBranchList"
             :detailForm="detailForm"
-            style="flex: 1;overflow-y: auto"/>
+            style="flex: 1;overflow-y: auto;"/>
       </div>
     </transition>
   </div>
