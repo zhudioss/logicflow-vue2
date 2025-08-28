@@ -50,7 +50,7 @@
           @jinjaSelect="jinjaSelect"
       />
     </div>
-    <div class="inputField">
+    <div class="inputField" style="display: block">
       <div class="content-class addInfoClass" @click="addInfoClick">+ 添加消息</div>
     </div>
 
