@@ -358,12 +358,77 @@
   }
 }
 
+.addInfoClass {
+  justify-content: center;
+  margin-top: 10px;
+}
 
-//.el-button--primary {
-//  background: #3f58fd;
-//  border: 0;
-//
-//  &:hover {
-//    background: #3f58fdb2;
-//  }
-//}
+
+// 没有底色的删除按钮
+.noBackRemove {
+  border: 0;
+  background: #fff !important;
+  padding: 7px;
+  border-radius: 8px;
+
+
+  i {
+    font-weight: bold;
+    font-size: 15px;
+  }
+}
+
+.noBackRemove.is-plain {
+  color: #667085;
+
+  &:hover {
+    background: #fee4e2 !important;
+    color: #d92d20;
+  }
+}
+
+// 有底色的删除按钮
+.backRemove {
+  border: 0;
+  background: #f2f4f7 !important;
+  padding: 7px;
+  height: 32px;
+  width: 32px !important;
+  border-radius: 8px;
+  box-shadow: none;
+
+  i {
+    font-weight: bold;
+    font-size: 15px;
+  }
+}
+
+.backRemove.is-plain {
+  color: #667085;
+
+  &:hover {
+    background: #fee4e2 !important;
+    color: #d92d20;
+  }
+}
+
+.el-icon-arrow-down {
+  transition: 0.5s;
+}
+
+// el-switch 开关样式
+.el-switch__core {
+  width: 28px !important;
+  height: 16px;
+  border-radius: 5px;
+
+  &:after {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+}
+.el-switch.is-checked .el-switch__core::after {
+  margin-left: -13px;
+}
+

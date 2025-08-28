@@ -138,7 +138,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
-        uniqueCom: '',
+        uniqueCom: 'aggCom',
         icon: require('@/assets/变量聚合.png'),
     },
     {

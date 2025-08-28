@@ -1,6 +1,6 @@
 <template>
   <div ref="referenceRef">
-    <!--上下文-->
+    <!--查询变量-->
     <div class="inputField" style="justify-content: start;column-gap: 6px">
       <p>查询变量</p>
     </div>
@@ -105,8 +105,8 @@
       </div>
       <div class="varList-class" v-for="(item,index) in varEdit"
            :key="index"
-           @mouseover="knowListHover(item,index,'滑入')"
-           @mouseout="knowListHover(item,index,'离开')"
+           @mouseover="knowListHover(item,'滑入')"
+           @mouseout="knowListHover(item,'离开')"
       >
         <div class="left">
           <img src="@/assets/文件夹.png" alt="" height="20">
@@ -385,10 +385,10 @@ export default {
     recallClick() {
       this.alertShow = true
     },
-    knowListHover(val, index, text) {
+    knowListHover(val, text) {
       if (text === '滑入') {
         this.varEdit.forEach(item => item.deleteShow = false)
-        this.varEdit[index].deleteShow = true
+        val.deleteShow = true
       } else {
         this.varEdit.forEach(item => item.deleteShow = false)
       }
@@ -472,10 +472,6 @@ export default {
       white-space: nowrap;
       //color: #3f58fd;
       margin-right: 5px;
-    }
-
-    div:nth-of-type(2) {
-
     }
   }
 

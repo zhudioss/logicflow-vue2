@@ -402,11 +402,6 @@ export default {
   }
 }
 
-.addInfoClass {
-  justify-content: center;
-  margin-top: 10px;
-}
-
 .addVarClass {
   ::v-deep {
     .el-input__inner {

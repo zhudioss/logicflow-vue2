@@ -78,6 +78,7 @@
                     class="input-box"
                 />
                 <el-button
+                    class="noBackRemove"
                     type="danger"
                     plain
                     icon="el-icon-delete"
@@ -504,28 +505,6 @@ export default {
       flex: 1;
       background: #fff;
       border: 0;
-    }
-
-    .el-button--danger {
-      border: 0;
-      background: #fff;
-      padding: 7px;
-      border-radius: 8px;
-
-
-      i {
-        font-weight: bold;
-        font-size: 15px;
-      }
-    }
-
-    .el-button--danger.is-plain {
-      color: #667085;
-
-      &:hover {
-        background: #fee4e2;
-        color: #d92d20;
-      }
     }
   }
 }
