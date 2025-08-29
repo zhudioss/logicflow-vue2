@@ -5,7 +5,7 @@
          @mouseenter="groupListHover(itt,'滑入')"
          @mouseleave="groupListHover(itt,'离开')">
       <div class="inputField" style="justify-content: start">
-        <p>变量赋值</p>
+        <p>{{ aggGroupSwitch ? `Group${ind + 1}` : '变量赋值'}}</p>
         <div style="position: relative">
           <el-button
               type="danger"
