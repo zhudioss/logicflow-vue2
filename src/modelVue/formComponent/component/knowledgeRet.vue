@@ -1,5 +1,5 @@
 <template>
-  <div ref="referenceRef">
+  <div>
     <!--查询变量-->
     <div class="inputField" style="justify-content: start;column-gap: 6px">
       <p>查询变量</p>

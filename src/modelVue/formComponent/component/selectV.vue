@@ -202,6 +202,7 @@ export default {
     .el-tag {
       width: 100%;
       margin: 0;
+      border-radius: 8px;
 
       .tag-class {
         display: inline-block;

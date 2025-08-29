@@ -149,7 +149,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
-        uniqueCom: '',
+        uniqueCom: 'domExCom',
         icon: require('@/assets/文档提取.png'),
     },
     {

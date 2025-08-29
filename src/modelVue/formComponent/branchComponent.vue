@@ -50,6 +50,7 @@ import llmCom from '@/modelVue/formComponent/component/llmCom.vue'
 import knowledgeRet from '@/modelVue/formComponent/component/knowledgeRet.vue'
 import endCom from '@/modelVue/formComponent/component/endCom.vue'
 import aggCom from '@/modelVue/formComponent/component/aggCom.vue'
+import domExCom from '@/modelVue/formComponent/component/domExCom.vue'
 
 export default {
   name: 'branchComponent',
@@ -59,7 +60,8 @@ export default {
     llmCom,
     endCom,
     knowledgeRet,
-    aggCom
+    aggCom,
+    domExCom
 
   },
   computed: {},
@@ -71,7 +73,8 @@ export default {
         'llmCom',
         'knowledgeRet',
         'endCom',
-        'aggCom'
+        'aggCom',
+        'domExCom'
       ]
     }
   },
