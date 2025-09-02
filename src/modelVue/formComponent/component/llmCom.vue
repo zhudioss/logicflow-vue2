@@ -41,10 +41,11 @@
           ref="promptRef"
           v-for="(item,index) in infoList"
           :key="item.id"
-          :removeShow="infoList.length<=1?false:true"
+          :removeShow="item.removeShow"
           style="margin-top: 10px"
           :modelTitle="modelTitle"
           :titleSelect="item.titleSelect"
+          :topTitle="item.topTitle"
           @removeInfo="removeInfo(item,index)"
           @jinjaClick="jinjaClick"
           @jinjaSelect="jinjaSelect"
@@ -281,10 +282,12 @@ export default {
         {
           id: Math.random(),
           titleSelect: false,
+          removeShow: false
         },
         {
           id: Math.random(),
           titleSelect: true,
+          topTitle: 'USER'
         }
       ],
 
@@ -354,9 +357,18 @@ export default {
 
     // 添加消息
     addInfoClick() {
+      let topTitle;
+      const lastItem = this.infoList[this.infoList.length - 1]
+      if (lastItem && lastItem.topTitle === 'ASSISTANT') {
+        topTitle = 'USER'
+      } else {
+        topTitle = 'ASSISTANT'
+      }
+
       let obj = {
         id: Math.random(),
         titleSelect: true,
+        topTitle: topTitle
       }
       this.infoList.push(obj)
     },

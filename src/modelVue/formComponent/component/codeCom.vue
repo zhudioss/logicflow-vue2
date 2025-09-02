@@ -25,18 +25,7 @@
 
     <!--提示词的输入框-->
     <div class="inputField" style="display: block">
-      <promptPublic
-          ref="promptRef"
-          v-for="(item,index) in infoList"
-          :key="item.id"
-          :removeShow="infoList.length<=1?false:true"
-          style="margin-top: 10px"
-          :modelTitle="modelTitle"
-          :titleSelect="item.titleSelect"
-          @removeInfo="removeInfo(item,index)"
-          @jinjaClick="jinjaClick"
-          @jinjaSelect="jinjaSelect"
-      />
+      <codeInputBox :topTitle="'PYTHON3'"></codeInputBox>
     </div>
 
     <div class="content-line"></div>
@@ -120,15 +109,15 @@
 </template>
 
 <script>
-import promptPublic from "@/modelVue/formComponent/component/promptPublic.vue";
 import selectV from "@/modelVue/formComponent/component/selectV.vue";
+import codeInputBox from "@/modelVue/formComponent/component/codeInputBox.vue";
 
 export default {
   name: 'codeCom',
   props: [],
   components: {
     selectV,
-    promptPublic,
+    codeInputBox
   },
   computed: {},
   data() {

@@ -1,46 +1,26 @@
 <template>
   <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
     <div class="topClass">
-      <div class="titleSelectClass" v-if="titleSelect" @click="titleAlertShow=true">
+      <div class="titleSelectClass" @click="titleAlertShow=true">
         <el-tooltip :open-delay="1000" effect="light" :content="titleSelectVal"
                     placement="top">
           <p class="title">{{ titleSelectVal }}</p>
         </el-tooltip>
         <img src="@/assets/上下.png" alt="" height="13">
-        <div class="titleAlert" v-if="titleAlertShow" v-click-outside-close="()=>{titleAlertShow=false}">
+        <div v-if="titleAlertShow" class="titleAlert" v-click-outside-close="()=>{titleAlertShow=false}">
           <p v-for="(item,index) in titleAlertList" :key="index" @click.stop="titleAlertClick(item)">
             {{ item }}</p>
         </div>
       </div>
-      <el-tooltip v-else :open-delay="500" effect="light" :content="topTitle"
-                  placement="top">
-        <p style="font-weight: bold" class="title">{{ topTitle }}</p>
-      </el-tooltip>
-      <el-tooltip v-show="topTitle!=='回复'" effect="light" :content="contentValue"
-                  placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
       <img v-show="starShow" @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
-      <el-divider v-if="starShow" direction="vertical"></el-divider>
-      <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
-        <div v-show="jinShow">
-          <span>Jinja</span>
-          <el-switch v-model="switchVal" @change="jinjaClick"></el-switch>
-        </div>
-      </el-tooltip>
-
-      <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">
-        <div class="xClass" :style="`margin-left:${starShow?0:'auto'} `" @click="xInsert">{𝓧}</div>
-      </el-tooltip>
-      <img class="xClass" src="@/assets/删除.png" v-show="removeShow" height="20" @click="removeInfo">
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
     <div v-show="!switchVal" contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
     <div v-show="switchVal" contenteditable="true" class="editableDivClass" ref="jinjaDiv" @input="onChangeJin"></div>
     <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
-    <!-- 自定义悬浮菜单 -->
 
+    <!-- 自定义悬浮菜单 -->
     <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
          :style="hoverMenuStyle"
          v-click-outside-close.stop="()=>{showHoverMenu=false,xInsertTag = false}">
@@ -243,11 +223,11 @@ export default {
       autoContextValue,
       loading: false,
 
-      titleSelectVal: this.topTitle ? this.topTitle : 'USER',
+      titleSelectVal: this.topTitle ? this.topTitle : 'PYTHON3',
       titleAlertShow: false,
       titleAlertList: [
-        'USER',
-        'ASSISTANT'
+        'PYTHON3',
+        'JAVASCRIPT',
       ],
       contentValue: '为对话提供高层指导',
 
@@ -296,10 +276,10 @@ export default {
         case 'SYSTEM':
           this.contentValue = '为对话提供高层指导'
           break
-        case 'USER':
+        case 'PYTHON3':
           this.contentValue = '向模型提供指令、查询或任何基于文本的输入'
           break
-        case 'ASSISTANT':
+        case 'JAVASCRIPT':
           this.contentValue = '基于用户消息的模型回复'
           break
       }
@@ -369,9 +349,9 @@ export default {
     // 放大
     amplifyClick() {
       if (this.amplifyTag) {
-        this.$refs.promptRef.style.height = '100px'
+        this.$refs.promptRef.style.height = '200px'
       } else {
-        this.$refs.promptRef.style.height = '300px'
+        this.$refs.promptRef.style.height = '400px'
       }
       this.amplifyTag = !this.amplifyTag;
     },
@@ -559,7 +539,7 @@ export default {
 
 <style lang="scss" scoped>
 .promptPublic {
-  height: 100px;
+  height: 200px;
   background: #f2f4f7;
   border-radius: 8px;
   padding: 10px;
@@ -867,7 +847,7 @@ export default {
 }
 
 .title {
-  max-width: 51px;
+  max-width: 120px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
