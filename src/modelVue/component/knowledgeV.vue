@@ -1,13 +1,13 @@
 <template>
-  <div class="warpCard start-class">
+  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
       <img src="@/assets/知识检索.png" alt="">
       知识检索
     </div>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name: 'knowledgeV',
   props: ['properties', 'model'],
@@ -35,6 +35,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .warpCard {
   width: 240px;

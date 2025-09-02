@@ -1,5 +1,5 @@
 <template>
-  <div class="warpCard start-class">
+  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
       <img src="@/assets/列表操作.png" alt="">
       列表操作
@@ -35,82 +35,13 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .warpCard {
-  width: 240px;
-  height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow-y: auto;
 }
-
-ul {
-  margin-top: 5px;
-
-  li {
-    display: flex;
-
-    div {
-      font-size: 12px;
-      color: #515151;
-    }
-
-    div:nth-of-type(1) {
-      width: 35%;
-      padding-right: 5px;
-    }
-
-    div:nth-of-type(2) {
-      flex: 1;
-    }
-
-    ::v-deep {
-      .el-select-dropdown {
-        width: 100%;
-        top: auto !important;
-        bottom: 100% !important;
-      }
-
-      .el-popper[x-placement^=bottom] .popper__arrow {
-        display: none !important;
-      }
-
-      .el-popper[x-placement^=top] .popper__arrow {
-        display: none !important;
-      }
-    }
-
-  }
-}
-
-::v-deep {
-  .el-input__inner {
-    height: 32px;
-    margin-top: 5px;
-    font-size: 12px;
-    padding-left: 15px;
-  }
-
-  .el-select {
-    width: 100%;
-    margin-top: 0;
-  }
-
-  .el-input__suffix {
-    height: 111%;
-  }
-
-  .el-select-dropdown {
-    width: 100%;
-
-  }
-
-  .el-select-dropdown__item {
-    span {
-      font-size: 12px !important;
-    }
-  }
-}
-
 </style>
+

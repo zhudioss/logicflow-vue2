@@ -37,7 +37,7 @@ import selectPullDown from "@/modelVue/formComponent/component/selectPullDown.vu
 
 export default {
   name: 'selectV',
-  props: ['data', 'name', 'select', 'placeholderDIY'],
+  props: ['data', 'name', 'select', 'placeholderDIY', 'defaultTags'],
   components: {
     selectPullDown,
   },
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       contextSetParams: this.placeholderDIY ? this.placeholderDIY : '设置变量值',
-      contextTags: [],
+      contextTags: this.defaultTags ? this.defaultTags : [],
       searchContext: '',  // 变量搜索
       contextOptList: JSON.parse(JSON.stringify(this.data)),
       width: '',

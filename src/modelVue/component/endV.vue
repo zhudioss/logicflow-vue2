@@ -1,5 +1,5 @@
 <template>
-  <div class="warpCard start-class">
+  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
       <img src="@/assets/直接回复.png" alt="">
       直接回复
@@ -8,7 +8,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'endV',
   props: ['properties', 'model'],
@@ -36,6 +35,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .warpCard {
   width: 240px;
@@ -107,11 +107,6 @@ ul {
 
   }
 
-  .el-select-dropdown__item {
-    span {
-      font-size: 12px !important;
-    }
-  }
 }
 
 </style>

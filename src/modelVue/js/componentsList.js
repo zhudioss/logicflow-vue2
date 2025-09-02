@@ -75,7 +75,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
-        uniqueCom: '',
+        uniqueCom: 'codeCom',
         icon: require('@/assets/代码执行.png'),
     },
     // {

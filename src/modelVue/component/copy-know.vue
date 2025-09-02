@@ -150,6 +150,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .warpCard {
   width: 300px;
@@ -217,12 +218,6 @@ ul {
   .el-select-dropdown {
     width: 100%;
 
-  }
-
-  .el-select-dropdown__item {
-    span {
-      font-size: 12px !important;
-    }
   }
 }
 </style>
