@@ -16,30 +16,10 @@
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
-    <div v-show="!switchVal" contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
-    <div v-show="switchVal" contenteditable="true" class="editableDivClass" ref="jinjaDiv" @input="onChangeJin"></div>
-    <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
 
-    <!-- 自定义悬浮菜单 -->
-    <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
-         :style="hoverMenuStyle"
-         v-click-outside-close.stop="()=>{showHoverMenu=false,xInsertTag = false}">
-      <div class="context-class" @click="insertTagHTML({name:'上下文'})" v-show="!switchVal">
-        <img src="@/assets/上下文.png" alt="" height="17">
-        <p>上下文</p>
-      </div>
-      <p style="color:#676f83" v-show="!switchVal">开始</p>
-      <div style="flex: 1;overflow-y: auto">
-        <div class="selectOpt-class" @click.stop="insertTagHTML(item)"
-             v-for="(item,index) in  contextOptList"
-             :key="index">
-          <span style="color:#3f58fd;font-weight: bold">{𝓧}</span>
-          <div class="title-class">{{ item.name }}</div>
-          <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
-          <span style="margin-left: auto">{{ item.type }}</span>
-        </div>
-      </div>
-    </div>
+    <codemirror ref="cm" :options="cmOptions"></codemirror>
+
+    <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
 
     <el-dialog :append-to-body="true" title="提示词生成器" :visible.sync="dialogTableVisible" @close="dialogClose">
       <div class="dialog-content dialogLeft">
@@ -125,6 +105,12 @@ export default {
   computed: {},
   data() {
     return {
+      cmOptions: {
+        mode: 'python',
+        theme: 'dracula',
+        lineNumbers: true,
+
+      },
       switchVal: false,
       amplifyTag: false,
       showHoverMenu: false,
@@ -250,24 +236,6 @@ export default {
 
   },
   mounted() {
-
-    // 清空输入框空格问题
-    this.domList.forEach(item => {
-      const dom = this.$refs[item.ref]
-      dom.addEventListener('input', () => {
-        if (dom.innerHTML === '<br>') {
-          dom.innerHTML = ''
-        }
-      })
-    })
-
-    document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('tag-close')) {
-        e.stopPropagation()
-        e.target.closest('.custom-tag')?.remove()
-      }
-    })
-
     this.getTooltip(this.topTitle)
   },
   methods: {
@@ -349,8 +317,10 @@ export default {
     // 放大
     amplifyClick() {
       if (this.amplifyTag) {
+        this.$refs.cm.$el.querySelector('.CodeMirror').style.height='175px'
         this.$refs.promptRef.style.height = '200px'
       } else {
+        this.$refs.cm.$el.querySelector('.CodeMirror').style.height='375px'
         this.$refs.promptRef.style.height = '400px'
       }
       this.amplifyTag = !this.amplifyTag;
@@ -593,58 +563,6 @@ export default {
     justify-content: center;
     border-radius: 5px;
     font-size: 12px;
-  }
-}
-
-.editableDivClass {
-  flex: 1;
-  font-weight: normal;
-  overflow-y: auto;
-  white-space: pre-wrap; /* 保持换行 */
-  word-break: break-word; /* 新标准 */
-  overflow-wrap: break-word; /* 兼容老浏览器 */
-  outline: none;
-  position: relative;
-  line-height: 26px;
-
-  &:empty::before {
-    content: "这里写你的提示词，输入 ' { ' 插入变量、输入 ' / ' 插入提示内容块";
-    color: #98a2b2;
-    pointer-events: none; /* 不阻止点击 */
-  }
-
-  ::v-deep {
-    .custom-tag {
-      padding: 0px 6px;
-      height: 20px;
-      line-height: 20px;
-      background-color: #ecf5ff;
-      border-radius: 8px;
-      font-size: 12px;
-      color: #409eff;
-      border: 1px solid #d9ecff;
-    }
-
-    .custom-tag .tag-close {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      margin-left: 3px;
-      color: #409eff;
-      text-align: center;
-      line-height: 11px;
-      //background: #409eff;
-      //color: #ffffff;
-    }
-
-    .custom-tag .tag-close:hover {
-      background: #409eff;
-      color: #ffffff;
-    }
   }
 }
 
@@ -903,6 +821,13 @@ export default {
   .el-icon-loading:before {
     font-size: 30px;
   }
+
+  .CodeMirror {
+    box-sizing: border-box;
+    flex: 1;
+    height: 175px;
+  }
+
 }
 
 </style>
