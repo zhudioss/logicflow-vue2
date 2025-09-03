@@ -110,7 +110,6 @@ export default {
         mode: 'python',
         theme: 'dracula',
         lineNumbers: true,
-
       },
       switchVal: false,
       amplifyTag: false,
