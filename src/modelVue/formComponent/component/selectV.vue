@@ -67,15 +67,15 @@ export default {
 
   },
   mounted() {
-    const target = this.$refs.setClassRef;
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        // console.log('宽度变化了:', entry.contentRect.width)
-        // console.log('高度变化了:', entry.contentRect.height)
-        this.width = `${entry.contentRect.width - 80}px`
-      }
-    })
-    resizeObserver.observe(target)
+    // const target = this.$refs.setClassRef;
+    // const resizeObserver = new ResizeObserver(entries => {
+    //   for (let entry of entries) {
+    //     // console.log('宽度变化了:', entry.contentRect.width)
+    //     // console.log('高度变化了:', entry.contentRect.height)
+    //     this.width = `${entry.contentRect.width - 80}px`
+    //   }
+    // })
+    // resizeObserver.observe(target)
   },
   methods: {
     selectOptShowClick() {
