@@ -596,6 +596,7 @@ export default {
     height: 175px;
     padding-top: 3px;
     padding-right: 5px;
+    border-radius: 8px;
   }
 
 }
