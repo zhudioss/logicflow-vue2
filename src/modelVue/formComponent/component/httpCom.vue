@@ -1,112 +1,24 @@
 <template>
   <div>
-    <!--模型-->
-    <div class="inputField">
-      <p>模型</p>
-    </div>
-    <div class="inputField" style="display: block;margin-bottom: 10px">
-      <div class="content-class" @click="modelOptClick">
-        <img src="@/assets/模型.png" alt="" height="20">
-        <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
-        <i class="el-icon-s-operation"></i>
-      </div>
-      <modelAlert
-          v-click-outside-close="()=>{modelOptShow=false}"
-          v-if="modelOptShow"
-          :modelTitle="modelTitle"
-          @changeModelTitle="(e)=>modelTitle=e.value"
-      ></modelAlert>
-
-    </div>
-
-    <!--上下文-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>上下文</p>
-      <el-tooltip effect="light" content="您可以导入知识库作为上下文"
-                  placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-    </div>
-    <div class="inputField" style="display: block;margin-top: 5px">
-      <selectV
-          :data="contextOptList"
-          :name="'name'"
-          :select="'select'"
-      ></selectV>
-    </div>
-
     <!--提示词的输入框-->
     <div class="inputField" style="display: block">
-      <promptPublic
-          ref="promptRef"
-          v-for="(item,index) in infoList"
-          :key="item.id"
-          :removeShow="item.removeShow"
-          style="margin-top: 10px"
-          :modelTitle="modelTitle"
-          :titleSelect="item.titleSelect"
-          :topTitle="item.topTitle"
-          @removeInfo="removeInfo(item,index)"
-          @jinjaClick="jinjaClick"
-          @jinjaSelect="jinjaSelect"
-      />
-    </div>
-    <div class="inputField" style="display: block">
-      <div class="content-class addInfoClass" @click="addInfoClick">+ 添加消息</div>
-    </div>
-
-    <!--输入变量-->
-    <div v-show="addVarShow" class="inputField" style="margin-top: 10px">
-      <p>输入变量</p>
-      <i class="el-icon-plus iPlus" @click="addVarClick"></i>
-    </div>
-    <div v-show="addVarShow" class="inputField addVarClass" style="margin-top: 5px;gap: 5px"
-         v-for="(item,index) in addVarList"
-         :key="item.id">
-      <el-input v-model="item.name" placeholder="变量名" style="width: 130px;font-size: 13px"></el-input>
-      <selectV
-          ref="saveTagInput"
-          style="flex: 1"
-          :data="contextOptList"
-          :name="'name'"
-          :select="'select'"
-          @syncValue="(e)=>{syncValue(e,index)}"
-      ></selectV>
-      <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index)"/>
+      <codeInputBox :topTitle="'PYTHON3'" :modelTitle="'deepseek32b'"></codeInputBox>
     </div>
 
     <div class="content-line"></div>
 
-    <!--记忆-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>记忆</p>
-      <el-tooltip effect="light" content="聊天记忆设置" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-      <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
+    <!--超时设置-->
+    <div class="inputField" style="justify-content: start;column-gap: 6px;cursor: pointer"
+         @click="timeoutShow=!timeoutShow">
+      <i class="el-icon-arrow-down" ref="timeoutRef"></i>
+      <p>超时设置</p>
     </div>
-    <div v-if="memoryVal" class="inputField" style="margin-top: 5px;justify-content: start;column-gap: 6px;">
-      <el-switch v-model="memoryWindowVal"></el-switch>
-      <p style="font-weight: normal;color: #676f83;font-size: 12px">记忆窗口</p>
-      <el-slider
-          style="margin-left: auto;width: 235px"
-          v-model="memoryNum"
-          :min="1"
-          :max="100"
-          :step="1"
-          :disabled="!memoryWindowVal"
-          show-input>
-      </el-slider>
-    </div>
-
-    <!--视觉-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>视觉</p>
-      <el-tooltip effect="light"
-                  content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-      <el-switch v-model="visionVal" style="margin-left: auto"></el-switch>
+    <div v-if="timeoutShow" class="inputField abnormalDetail" style="display: block">
+      <div v-for="(item,index) in timeoutList" :key="index" style="margin-top: 5px">
+        <p style="margin-left: 5px;font-weight:normal;">{{ item.name }}<span
+            style="color: #667085;font-size: 13px;"> ( s )</span></p>
+        <el-input-number v-model="item.num" :min="item.min" :max="item.max"></el-input-number>
+      </div>
     </div>
 
     <div class="content-line"></div>
@@ -118,13 +30,15 @@
       <p>输出变量</p>
     </div>
     <div v-if="outputShow" class="inputField outputVar">
-      <p><strong>text</strong> String</p>
-      <p>生成内容</p>
+      <div v-for="(item,index) in outputList" :key="index" style="margin-top: 5px">
+        <p><strong>{{ item.name }}</strong> {{ item.type }}</p>
+        <p>{{ item.text }}</p>
+      </div>
     </div>
 
-    <!--失败时重试-->
     <div class="content-line"></div>
 
+    <!--失败时重试-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>失败时重试</p>
       <el-switch v-model="failVal" style="margin-left: auto"></el-switch>
@@ -167,9 +81,19 @@
         <p style="margin-bottom: 5px;margin-left: 5px"><span style="color: #2c3e50;font-weight:bold;font-size: 13px;">text</span>
           String</p>
         <el-input
+            style="margin-bottom: 10px"
             placeholder="请输入"
             v-model="abnormalInput">
         </el-input>
+
+        <p style="margin-left: 5px"><span style="color: #2c3e50;font-weight:bold;font-size: 13px;">status_code</span>
+          Number</p>
+        <el-input-number v-model="statusCodeNum" :min="0"></el-input-number>
+
+        <p style="margin-left: 5px;margin-bottom: 3px"><span style="color: #2c3e50;font-weight:bold;font-size: 13px;">headers</span>
+          Object</p>
+        <codeInputBox :starShow="false" :topTitleShow="false" :topTitle="'PYTHON3'"
+                      :modelTitle="'deepseek32b'"></codeInputBox>
       </div>
       <div v-if="abnormalVal=='异常分支'">
         <p style="font-size: 13px;color: #2c3e50;margin-bottom: 5px">在画布自定义失败分支逻辑。</p>
@@ -180,21 +104,19 @@
 </template>
 
 <script>
-import promptPublic from "@/modelVue/formComponent/component/promptPublic.vue";
-import selectV from "@/modelVue/formComponent/component/selectV.vue";
-import modelAlert from "@/modelVue/formComponent/component/modelAlert.vue";
+import codeInputBox from "@/modelVue/formComponent/component/codeInputBox.vue";
 
 export default {
-  name: 'llmCom',
+  name: 'httpCom',
   props: [],
   components: {
-    selectV,
-    promptPublic,
-    modelAlert
+    codeInputBox
   },
+
   computed: {},
   data() {
     return {
+      statusCodeNum: 0,
       modelTitle: 'deepseek32b',
       modelOptShow: false,
 
@@ -241,6 +163,8 @@ export default {
       memoryWindowVal: false,
       memoryNum: 57,
 
+      timeoutShow: false,
+
       outputShow: false,
       visionVal: false,
 
@@ -282,98 +206,88 @@ export default {
         {
           id: Math.random(),
           titleSelect: false,
-          removeShow: false
         },
         {
           id: Math.random(),
           titleSelect: true,
-          topTitle: 'USER'
         }
       ],
 
       addVarShow: false,
-      addVarList: []
+      addVarList: [
+        {
+          id: Math.random(),
+          name: 'sys.files',
+          value: 'sys.files',
+          defaultTags: [{name: 'sys.files'}]
+        }
+      ],
+
+      // 超时设置
+      timeoutList: [
+        {
+          name: '连接超时',
+          num: 10,
+          min: 1,
+          max: 300
+        },
+        {
+          name: '读取超时',
+          num: 10,
+          min: 1,
+          max: 600
+        },
+        {
+          name: '写入超时',
+          num: 10,
+          min: 1,
+          max: 600
+        },
+      ],
+
+      // 输出变量
+      outputList: [
+        {
+          name: 'body',
+          type: 'String',
+          text: '响应内容'
+        },
+        {
+          name: 'status_code',
+          type: 'Number',
+          text: '响应状态码'
+        },
+        {
+          name: 'headers',
+          type: 'Object',
+          text: '响应头列表JSON'
+        },
+        {
+          name: 'files',
+          type: 'Array[File]',
+          text: '文件列表'
+        },
+      ],
+
 
     }
   },
   watch: {
     outputShow: function (newVal) {
-      this.$setRotate(newVal,this.$refs.outputRef)
+      this.$setRotate(newVal, this.$refs.outputRef)
     },
+    timeoutShow: function (newVal) {
+      this.$setRotate(newVal, this.$refs.timeoutRef)
+    }
   },
   created() {
 
   },
   mounted() {
 
-  },
-  methods: {
-    modelOptClick() {
-      this.modelOptShow = true
-      // this.$refs.modelAlertRef.modelOptShow = true
-    },
-    // jinja判断是否显示输入变量
-    jinjaClick() {
-      this.addVarShow = this.$refs.promptRef.some(item => item.switchVal == true)
-    },
-    // jinja选中后添加输入变量内容
-    jinjaSelect(e) {
-      let obj = {
-        id: Math.random(),
-        name: e.name,
-        value: ''
-      }
-      this.addVarList.push(obj)
-      this.$nextTick(() => {
-        let refs = this.$refs.saveTagInput
-        refs[refs.length - 1].contextTags = [{name: e.name}]
-      })
-    },
-    // 输入变量选中后同步变量名
-    syncValue(e, index) {
-      console.log(e, '-=-=-=-=-=')
-      console.log(this.addVarList[index])
-      this.addVarList[index].name = e.tag
-    },
-
-    // 输入变量 - 添加
-    addVarClick() {
-      let obj = {
-        id: Math.random(),
-        name: '',
-        value: ''
-      }
-      this.addVarList.push(obj)
-    },
-    // 输入变量 - 删除
-    addVarListRemove(val, index) {
-      this.addVarList.splice(index, 1)
-    },
-
-    // 添加消息
-    addInfoClick() {
-      let topTitle;
-      const lastItem = this.infoList[this.infoList.length - 1]
-      if (lastItem && lastItem.topTitle === 'ASSISTANT') {
-        topTitle = 'USER'
-      } else {
-        topTitle = 'ASSISTANT'
-      }
-
-      let obj = {
-        id: Math.random(),
-        titleSelect: true,
-        topTitle: topTitle
-      }
-      this.infoList.push(obj)
-    },
-    // 消息 - 删除
-    removeInfo(val, index) {
-      if (this.infoList.length < 2) return
-      this.infoList.splice(index, 1)
-    },
 
   },
+  methods: {},
 }
 </script>
 
@@ -391,6 +305,31 @@ export default {
 
     .el-input__icon {
       line-height: 32px;
+    }
+
+    .el-input-number {
+      width: 100%;
+      overflow: hidden;
+
+      .el-input__inner {
+        padding: 0 !important;
+      }
+    }
+
+    .el-input-number__increase {
+      width: 24px !important;
+      height: 29px !important;
+      top: 4px;
+      line-height: 32px;
+      border-radius: 0 7px 7px 0;
+    }
+
+    .el-input-number__decrease {
+      width: 24px !important;
+      height: 29px !important;
+      top: 4px;
+      line-height: 32px;
+      border-radius: 7px 0 0 7px;
     }
   }
 }
@@ -412,6 +351,7 @@ export default {
 .addVarClass {
   ::v-deep {
     .el-input__inner {
+      width: 100% !important;
       background: #f9fafb;
     }
   }
@@ -510,6 +450,8 @@ export default {
 
   .el-input-number {
     width: 110px;
+    overflow: hidden;
+
   }
 
   .el-input-number__increase {
@@ -539,7 +481,6 @@ export default {
     line-height: 28px;
   }
 
-
   .el-button--danger {
     border: 0;
     background: #f2f4f7 !important;
@@ -568,5 +509,6 @@ export default {
   .el-input__inner::placeholder {
     font-size: 13px;
   }
+
 }
 </style>

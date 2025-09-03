@@ -1,7 +1,7 @@
 <template>
   <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
     <div class="topClass">
-      <div class="titleSelectClass" @click="titleAlertShow=true">
+      <div class="titleSelectClass" v-if="topTitleShow" @click="titleAlertShow=true">
         <el-tooltip :open-delay="1000" effect="light" :content="titleSelectVal"
                     placement="top">
           <p class="title">{{ titleSelectVal }}</p>
@@ -12,7 +12,7 @@
             {{ item }}</p>
         </div>
       </div>
-      <img v-show="starShow" @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
+      <img v-if="starShow"  @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
       <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
@@ -80,7 +80,7 @@ export default {
       type: String,
       default: ''
     },
-    jinShow: {
+    topTitleShow: {
       type: Boolean,
       default: true
     },
@@ -88,18 +88,10 @@ export default {
       type: Boolean,
       default: true
     },
-    removeShow: {
-      type: Boolean,
-      default: true
-    },
     topTitle: {
       type: String,
       default: 'SYSTEM'
     },
-    titleSelect: {
-      type: Boolean,
-      default: false
-    }
   },
   components: {},
   computed: {},
@@ -221,10 +213,10 @@ export default {
     // 放大
     amplifyClick() {
       if (this.amplifyTag) {
-        this.$refs.cm.$el.querySelector('.CodeMirror').style.height = '175px'
+        this.$refs.cm.$el.querySelector('.CodeMirror').style.height = '170px'
         this.$refs.promptRef.style.height = '200px'
       } else {
-        this.$refs.cm.$el.querySelector('.CodeMirror').style.height = '375px'
+        this.$refs.cm.$el.querySelector('.CodeMirror').style.height = '370px'
         this.$refs.promptRef.style.height = '400px'
       }
       this.amplifyTag = !this.amplifyTag;
@@ -279,7 +271,7 @@ export default {
   height: 200px;
   background: #f2f4f7;
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px 10px 10px 10px;
   display: flex;
   flex-direction: column;
   border: 2px solid #f2f4f7;
@@ -291,6 +283,7 @@ export default {
     align-items: center;
     column-gap: 6px;
     font-weight: normal;
+    margin-bottom: 5px;
 
     .generator, .xClass {
       cursor: pointer;
@@ -592,7 +585,7 @@ export default {
   .CodeMirror {
     box-sizing: border-box;
     flex: 1;
-    height: 175px;
+    height: 170px;
     padding-top: 3px;
     padding-right: 5px;
     border-radius: 8px;

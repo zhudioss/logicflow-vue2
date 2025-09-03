@@ -96,7 +96,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
-        uniqueCom: '',
+        uniqueCom: 'httpCom',
         icon: require('@/assets/http请求.png'),
     },
     {

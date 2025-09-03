@@ -105,11 +105,7 @@ export default {
   },
   watch: {
     outputShow: function (newVal) {
-      if (newVal) {
-        this.$refs.outputRef.style.transform = 'rotate(-180deg)'
-      } else {
-        this.$refs.outputRef.style.transform = 'rotate(0deg)'
-      }
+      this.$setRotate(newVal,this.$refs.outputRef)
     },
   },
   created() {

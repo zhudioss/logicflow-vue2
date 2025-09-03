@@ -30,6 +30,14 @@ Vue.use(ElementUI)
 Vue.use(VueCodemirror)
 
 Vue.prototype.bus = bus
+Vue.prototype.$setRotate = function (show, dom) {
+    if (show) {
+        dom.style.transform = 'rotate(-180deg)'
+    } else {
+        dom.style.transform = 'rotate(0deg)'
+    }
+}
+
 
 Vue.config.productionTip = false
 

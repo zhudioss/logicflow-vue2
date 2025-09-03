@@ -52,6 +52,7 @@ import endCom from '@/modelVue/formComponent/component/endCom.vue'
 import aggCom from '@/modelVue/formComponent/component/aggCom.vue'
 import domExCom from '@/modelVue/formComponent/component/domExCom.vue'
 import codeCom from '@/modelVue/formComponent/component/codeCom.vue'
+import httpCom from '@/modelVue/formComponent/component/httpCom.vue'
 
 export default {
   name: 'branchComponent',
@@ -63,7 +64,8 @@ export default {
     knowledgeRet,
     aggCom,
     domExCom,
-    codeCom
+    codeCom,
+    httpCom
 
   },
   computed: {},
@@ -77,7 +79,8 @@ export default {
         'endCom',
         'aggCom',
         'domExCom',
-        'codeCom'
+        'codeCom',
+        'httpCom'
       ]
     }
   },

@@ -63,11 +63,7 @@ export default {
   },
   watch: {
     selectListShow: function (newVal) {
-      if (newVal) {
-        this.$refs.selectIRef.style.transform = 'rotate(-180deg)'
-      } else {
-        this.$refs.selectIRef.style.transform = 'rotate(0deg)'
-      }
+      this.$setRotate(newVal,this.$refs.selectIRef)
     },
   },
   created() {
