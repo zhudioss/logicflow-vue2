@@ -25,7 +25,7 @@
 
     <!--提示词的输入框-->
     <div class="inputField" style="display: block">
-      <codeInputBox :topTitle="'PYTHON3'"></codeInputBox>
+      <codeInputBox :topTitle="'PYTHON3'" :modelTitle="'deepseek32b'"></codeInputBox>
     </div>
 
     <div class="content-line"></div>

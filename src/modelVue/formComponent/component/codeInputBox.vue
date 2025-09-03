@@ -17,29 +17,29 @@
       <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
 
-    <codemirror ref="cm" :options="cmOptions"></codemirror>
+    <codemirror ref="cm" v-model="codeValue" :options="cmOptions"></codemirror>
 
     <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
 
-    <el-dialog :append-to-body="true" title="提示词生成器" :visible.sync="dialogTableVisible" @close="dialogClose">
+    <el-dialog :append-to-body="true" title="代码生成器" :visible.sync="dialogTableVisible" @close="dialogClose">
       <div class="dialog-content dialogLeft">
         <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
         <div class="dialogLeft-content">
           <img src="@/assets/模型.png" alt="" height="20">
           <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
         </div>
-        <el-divider content-position="left">试一试</el-divider>
-        <div class="tryClass">
-          <div v-for="(item,index) in tryList" :key="index" @click="tryClick(item)">
-            <img :src="item.img" alt="" height="20">
-            <p>{{ item.text }}</p>
-          </div>
-        </div>
+        <!--<el-divider content-position="left">试一试</el-divider>-->
+        <!--<div class="tryClass">-->
+        <!--  <div v-for="(item,index) in tryList" :key="index" @click="tryClick(item)">-->
+        <!--    <img :src="item.img" alt="" height="20">-->
+        <!--    <p>{{ item.text }}</p>-->
+        <!--  </div>-->
+        <!--</div>-->
         <p style="font-weight: bold;margin-bottom: 10px">指令</p>
         <el-input
             type="textarea"
             :rows="5"
-            placeholder="写下清晰、具体的说明"
+            placeholder="请输入您想要生成的代码的详细描述。"
             resize="none"
             v-model="textarea">
         </el-input>
@@ -105,6 +105,7 @@ export default {
   computed: {},
   data() {
     return {
+      codeValue: '',
       cmOptions: {
         mode: 'python',
         theme: 'dracula',
@@ -117,43 +118,6 @@ export default {
       xInsertTag: false,
       showTip: false,
       hoverMenuStyle: {},
-      contextOptList: [
-        {
-          name: 'sys.query',
-          type: 'String',
-          select: false
-        },
-        {
-          name: 'sys.dialogue_count',
-          type: 'Number',
-          select: false
-        },
-        {
-          name: 'sys.conversation_id',
-          type: 'String',
-          select: false
-        },
-        {
-          name: 'sys.user_id',
-          type: 'String',
-          select: false
-        },
-        {
-          name: 'sys.files',
-          type: 'Array[file]',
-          select: false
-        },
-        {
-          name: 'sys.app_id',
-          type: 'String',
-          select: false
-        },
-        {
-          name: 'sys.workflow_id',
-          type: 'String',
-          select: false
-        },
-      ],
 
       dialogTableVisible: false,
       tryList: [
@@ -215,20 +179,7 @@ export default {
         'PYTHON3',
         'JAVASCRIPT',
       ],
-      contentValue: '为对话提供高层指导',
 
-      domList: [
-        {
-          ref: 'editableDiv',
-          fun: this.onChangeJin,
-        },
-        {
-          ref: 'jinjaDiv',
-          fun: this.onChange
-        }
-      ],
-      editShow: true,
-      jinjaShow: false
     }
   },
   watch: {},
@@ -236,25 +187,16 @@ export default {
 
   },
   mounted() {
-    this.getTooltip(this.topTitle)
   },
   methods: {
-    getTooltip(val) {
-      switch (val) {
-        case 'SYSTEM':
-          this.contentValue = '为对话提供高层指导'
-          break
-        case 'PYTHON3':
-          this.contentValue = '向模型提供指令、查询或任何基于文本的输入'
-          break
-        case 'JAVASCRIPT':
-          this.contentValue = '基于用户消息的模型回复'
-          break
-      }
-    },
     titleAlertClick(val) {
+      this.codeValue = ''
+      if (val === 'PYTHON3') {
+        this.cmOptions.mode = 'python'
+      } else {
+        this.cmOptions.mode = 'javascript'
+      }
       this.titleSelectVal = val
-      this.getTooltip(val)
       this.titleAlertShow = false
     },
     // 四角星
@@ -262,211 +204,35 @@ export default {
       this.dialogTableVisible = true
     },
 
-    // Jinja
-    jinjaClick() {
-      this.$emit('jinjaClick')
-    },
-
-    // 删除
-    removeInfo() {
-      this.$emit('removeInfo')
-    },
-
     // 复制
     copyClick() {
-      const dom = this.switchVal ? this.$refs.jinjaDiv : this.$refs.editableDiv
-      if (!dom) return
-
-      // 获取 HTML 和 纯文本
-      const html = dom.innerHTML
-      const text = dom.innerText
-
-      if (navigator.clipboard && window.ClipboardItem) {
-        // ✅ 同时写入 HTML 和 纯文本
-        const clipboardItem = new ClipboardItem({
-          "text/html": new Blob([html], {type: "text/html"}),
-          "text/plain": new Blob([text], {type: "text/plain"})
-        })
-
-        navigator.clipboard.write([clipboardItem]).then(() => {
-          this.showTip = true
-          setTimeout(() => {
-            this.showTip = false
-          }, 500)
-        }).catch(err => {
-          console.error("复制失败：", err)
+      // 获取编辑器实例
+      const cm = this.$refs.cm.codemirror
+      const value = cm.getValue() // 获取代码内容
+      navigator.clipboard.writeText(value).then(() => {
+        this.showTip = true
+        setTimeout(() => {
           this.showTip = false
-        })
-      } else {
-        // 不支持 ClipboardItem 的旧浏览器 fallback → 只能复制纯文本
-        navigator.clipboard.writeText(text)
-      }
+        }, 500)
+      }).catch(() => {
+        this.showTip = false
+      })
     },
 
-    xInsert() {
-      this.xInsertTag = true
-      if (this.switchVal) {
-        this.$refs.jinjaDiv.focus()
-        this.onChangeJin()
-      } else {
-        this.$refs.editableDiv.focus()
-        this.onChange()
-      }
-
-    },
     // 放大
     amplifyClick() {
       if (this.amplifyTag) {
-        this.$refs.cm.$el.querySelector('.CodeMirror').style.height='175px'
+        this.$refs.cm.$el.querySelector('.CodeMirror').style.height = '175px'
         this.$refs.promptRef.style.height = '200px'
       } else {
-        this.$refs.cm.$el.querySelector('.CodeMirror').style.height='375px'
+        this.$refs.cm.$el.querySelector('.CodeMirror').style.height = '375px'
         this.$refs.promptRef.style.height = '400px'
       }
       this.amplifyTag = !this.amplifyTag;
     },
 
-    onChange() {
-      this.showHoverMenu = false
-      const sel = window.getSelection();
-      if (sel.focusNode) {
-        this.$nextTick(() => {
-          const anchorOffset = sel.anchorOffset
-          const text = sel.focusNode.textContent
 
-          if (text[anchorOffset - 1] === '/' || text[anchorOffset - 1] === '{' || this.xInsertTag) {
-            if (sel.rangeCount === 0) return;
-
-            const rect = this.getCursorRect(sel);
-            if (!rect) return;
-
-            const pageWidth = document.documentElement.clientWidth || window.innerWidth;
-            const top = rect.top + rect.height;
-            const left = rect.left;
-
-            this.hoverMenuStyle = {
-              top: top + 'px',
-              left: pageWidth - left > 300 ? `${left}px` : `${left - 300}px`,
-            };
-            setTimeout(() => {
-              this.showHoverMenu = true;
-            }, 100)
-
-          }
-        })
-      }
-    },
-
-    onChangeJin() {
-      this.showHoverMenu = false
-      const sel = window.getSelection();
-      if (sel.focusNode) {
-        this.$nextTick(() => {
-          const anchorOffset = sel.anchorOffset
-          const text = sel.focusNode.textContent
-
-          if (text[anchorOffset - 1] === '/' || text[anchorOffset - 1] === '{' || this.xInsertTag) {
-            if (sel.rangeCount === 0) return;
-
-            const rect = this.getCursorRect(sel);
-            if (!rect) return;
-
-            const pageWidth = document.documentElement.clientWidth || window.innerWidth;
-            const top = rect.top + rect.height;
-            const left = rect.left;
-
-            this.hoverMenuStyle = {
-              top: top + 'px',
-              left: pageWidth - left > 300 ? `${left}px` : `${left - 300}px`,
-            };
-            setTimeout(() => {
-              this.showHoverMenu = true;
-            }, 100)
-
-          }
-        })
-      }
-    },
-
-    getCursorRect(selection) {
-      if (!selection.rangeCount) return null;
-
-      const range = selection.getRangeAt(0).cloneRange();
-      range.collapse(true);
-
-      let rect = range.getBoundingClientRect();
-
-      // 光标在空行或空节点时，插入零宽空格测量
-      if (rect.top === 0 && rect.left === 0) {
-        const span = document.createElement('span');
-        span.textContent = '\u200b';
-        range.insertNode(span);
-        rect = span.getBoundingClientRect();
-        span.remove();
-      }
-
-      return rect;
-    },
-
-    // 选择上下文
-    insertTagHTML(val) {
-      const dom = this.switchVal ? this.$refs.jinjaDiv : this.$refs.editableDiv
-      if (!dom) return
-
-      const sel = window.getSelection()
-      if (!sel || sel.rangeCount === 0) return
-      const range = sel.getRangeAt(0)
-
-
-      // 创建可交互的标签 HTML
-      const wrapper = document.createElement('div')
-
-
-      if (this.switchVal) {
-        wrapper.innerHTML = `{ { ${val.name} } }`
-      } else {
-        wrapper.className = 'custom-tag'
-        wrapper.setAttribute('contenteditable', 'false')
-        wrapper.innerHTML = `${val.name} <span class="tag-close">x</span>`
-      }
-      wrapper.style.userSelect = 'none'
-      wrapper.style.display = 'inline-block'
-      wrapper.style.margin = '0 2px'
-
-      // 因为复制功能这里换成全局监听了
-      // wrapper.querySelector('.tag-close').addEventListener('click', (e) => {
-      //   e.stopPropagation()
-      //   wrapper.remove()
-      // })
-
-      range.insertNode(wrapper)
-
-      // 光标移到标签后面
-      const newRange = document.createRange()
-      newRange.setStartAfter(wrapper)
-      newRange.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(newRange)
-
-      this.content = dom.innerHTML
-
-      // 删除光标左侧的 '/' 或 '{'
-      const startContainer = range.startContainer
-      const startOffset = range.startOffset
-      if (startContainer.nodeType === 3 && startOffset > 0) {
-        const text = startContainer.textContent
-        const char = text[startOffset - 1]
-        if (char === '/' || char === '{') {
-          startContainer.textContent = text.slice(0, startOffset - 1)
-        }
-      }
-      if (this.switchVal) {
-        this.$emit('jinjaSelect', val)
-      }
-      this.showHoverMenu = false
-    },
-
-
+    // 点击有整体的边框效果
     addClass() {
       const el = this.$refs.promptRef;
       el.classList.add('active');
@@ -476,6 +242,8 @@ export default {
       el.classList.remove('active');
     },
 
+
+    // 试一试
     tryClick(val) {
       this.textarea = val.value
     },
@@ -826,6 +594,8 @@ export default {
     box-sizing: border-box;
     flex: 1;
     height: 175px;
+    padding-top: 3px;
+    padding-right: 5px;
   }
 
 }
