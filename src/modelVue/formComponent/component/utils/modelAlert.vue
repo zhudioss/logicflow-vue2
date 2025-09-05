@@ -2,7 +2,7 @@
   <div ref="box" class="modelAlertClass">
     <div>模型</div>
     <div class="content-class" @click="optSelect" ref="optSelectRef">
-      <img src="@/assets/模型.png" alt="" height="20">
+      <img src="../../../../assets/模型.png" alt="" height="20">
       <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
       <i class="el-icon-arrow-down" ref="selectIRef"></i>
     </div>
@@ -18,9 +18,9 @@
         <div class="selectOpt-class" @click.stop="selectOptClick(item)"
              v-for="(item,index) in selectOptList"
              :key="index">
-          <img src="@/assets/模型.png" alt="" height="20">
+          <img src="../../../../assets/模型.png" alt="" height="20">
           <div class="title-class">{{ item.value }}</div>
-          <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
+          <img src="../../../../assets/对勾.png" alt="" height="20" v-show="item.select">
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
       <div style="margin-right: 2px">{{ item.name }}</div>
       <el-tooltip effect="light" :content="item.content"
                   placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
+        <img src="../../../../assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-slider
           style="margin-left: auto;width: 235px"
@@ -50,7 +50,7 @@
           停止序列
           <el-tooltip effect="light" style="transform: translateY(3px)"
                       content="API 将停止生成更多的 token 。返回的文本将不包含停止序列" placement="top">
-            <img src="@/assets/问号.png" alt="" height="13">
+            <img src="../../../../assets/问号.png" alt="" height="13">
           </el-tooltip>
         </p>
         <p>输入序列（最多四个）</p>

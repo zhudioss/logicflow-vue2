@@ -6,15 +6,15 @@
                     placement="top">
           <p class="title">{{ titleSelectVal }}</p>
         </el-tooltip>
-        <img src="@/assets/上下.png" alt="" height="13">
+        <img src="../../../../assets/上下.png" alt="" height="13">
         <div v-if="titleAlertShow" class="titleAlert" v-click-outside-close="()=>{titleAlertShow=false}">
           <p v-for="(item,index) in titleAlertList" :key="index" @click.stop="titleAlertClick(item)">
             {{ item }}</p>
         </div>
       </div>
-      <img v-if="starShow"  @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
-      <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
-      <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
+      <img v-if="starShow" @click="starClick" class="generator" src="../../../../assets/四角星.png" alt="" height="16">
+      <img class="xClass" src="../../../../assets/复制.png" alt="" height="16" @click="copyClick">
+      <img class="xClass" src="../../../../assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
 
     <codemirror ref="cm" v-model="codeValue" :options="cmOptions"></codemirror>
@@ -25,7 +25,7 @@
       <div class="dialog-content dialogLeft">
         <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
         <div class="dialogLeft-content">
-          <img src="@/assets/模型.png" alt="" height="20">
+          <img src="../../../../assets/模型.png" alt="" height="20">
           <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
         </div>
         <!--<el-divider content-position="left">试一试</el-divider>-->
@@ -44,7 +44,7 @@
             v-model="textarea">
         </el-input>
         <el-button size="medium" type="primary" style="margin-left: auto;" @click="generateClick">
-          <img src="@/assets/四角星-白.png" alt="" height="11" style="margin-right: 2px">
+          <img src="../../../../assets/四角星-白.png" alt="" height="11" style="margin-right: 2px">
           生成
         </el-button>
       </div>
@@ -52,7 +52,7 @@
       <div class="dialog-content dialogRight" v-loading="loading" element-loading-text="为您编排应用程序中..."
            element-loading-background="#fff" element-loading-spinner="el-icon-loading">
         <div class="prompt" v-if="!autoContextShow">
-          <img src="@/assets/四角星-灰.png" alt="" height="50">
+          <img src="../../../../assets/四角星-灰.png" alt="" height="50">
           <p>在左侧描述您的用例，</p>
           <p>编排浏览将在此处显示。</p>
         </div>

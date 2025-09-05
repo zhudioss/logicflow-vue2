@@ -2,12 +2,7 @@
   <div class="warp-detail">
     <div>
       <!-- 组件 -->
-      <component
-          v-for="(item,index) in componentsList"
-          :key="index"
-          :is="item"
-          v-show="detailForm.uniqueCom==item"
-      ></component>
+      <component :is="detailForm.uniqueCom"></component>
 
       <div class="line-class"></div>
       <div class="inputField">
@@ -45,14 +40,14 @@
 </template>
 
 <script>
-import startCom from '@/modelVue/formComponent/component/startCom.vue'
-import llmCom from '@/modelVue/formComponent/component/llmCom.vue'
-import knowledgeRet from '@/modelVue/formComponent/component/knowledgeRet.vue'
-import endCom from '@/modelVue/formComponent/component/endCom.vue'
-import aggCom from '@/modelVue/formComponent/component/aggCom.vue'
-import domExCom from '@/modelVue/formComponent/component/domExCom.vue'
-import codeCom from '@/modelVue/formComponent/component/codeCom.vue'
-import httpCom from '@/modelVue/formComponent/component/httpCom.vue'
+import startCom from '@/modelVue/formComponent/component/com/startCom.vue'
+import llmCom from '@/modelVue/formComponent/component/com/llmCom.vue'
+import knowledgeCom from '@/modelVue/formComponent/component/com/knowledgeCom.vue'
+import endCom from '@/modelVue/formComponent/component/com/endCom.vue'
+import aggCom from '@/modelVue/formComponent/component/com/aggCom.vue'
+import domExCom from '@/modelVue/formComponent/component/com/domExCom.vue'
+import codeCom from '@/modelVue/formComponent/component/com/codeCom.vue'
+import httpCom from '@/modelVue/formComponent/component/com/httpCom.vue'
 
 export default {
   name: 'branchComponent',
@@ -61,7 +56,7 @@ export default {
     startCom,
     llmCom,
     endCom,
-    knowledgeRet,
+    knowledgeCom,
     aggCom,
     domExCom,
     codeCom,
@@ -72,16 +67,6 @@ export default {
   data() {
     return {
       input: '',
-      componentsList: [
-        'startCom',
-        'llmCom',
-        'knowledgeRet',
-        'endCom',
-        'aggCom',
-        'domExCom',
-        'codeCom',
-        'httpCom'
-      ]
     }
   },
   watch: {},

@@ -71,7 +71,7 @@
                   class="drag-item"
               >
 
-                <img src="@/assets/拖拽.png" alt="" class="drag-handle" height="23" style="cursor: move;">
+                <img src="../../../../assets/拖拽.png" alt="" class="drag-handle" height="23" style="cursor: move;">
                 <el-input
                     v-model="item.value"
                     placeholder="请输入内容"

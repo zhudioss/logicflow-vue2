@@ -1,7 +1,7 @@
 <template>
   <div class="modelSelectCom">
     <div class="content-class" style="width: auto" @click="optSelect" ref="optSelectRef">
-      <img src="@/assets/模型.png" alt="" height="20">
+      <img src="../../../../assets/模型.png" alt="" height="20">
       <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
       <i class="el-icon-arrow-down" ref="selectIRef"></i>
     </div>
@@ -17,9 +17,9 @@
         <div class="selectOpt-class" @click.stop="selectOptClick(item,'模型')"
              v-for="(item,index) in  selectOptList"
              :key="index">
-          <img src="@/assets/模型.png" alt="" height="20">
+          <img src="../../../../assets/模型.png" alt="" height="20">
           <div class="title-class">{{ item.value }}</div>
-          <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
+          <img src="../../../../assets/对勾.png" alt="" height="20" v-show="item.select">
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@ export default {
     background: #fff;
     padding: 13px;
     position: absolute;
-    top: 62px;
+    top: 77px;
     z-index: 99999;
     border-radius: 8px;
     border: 1px solid #e4e4e4;

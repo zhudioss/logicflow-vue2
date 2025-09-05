@@ -1,66 +1,11 @@
 <template>
   <div>
-    <!--模型-->
-    <div class="inputField">
-      <p>模型</p>
-    </div>
-    <div class="inputField" style="display: block;margin-bottom: 10px">
-      <div class="content-class" @click="modelOptClick">
-        <img src="@/assets/模型.png" alt="" height="20">
-        <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
-        <i class="el-icon-s-operation"></i>
-      </div>
-      <modelAlert
-          v-click-outside-close="()=>{modelOptShow=false}"
-          v-if="modelOptShow"
-          :modelTitle="modelTitle"
-          @changeModelTitle="(e)=>modelTitle=e.value"
-      ></modelAlert>
-
-    </div>
-
-    <!--上下文-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>上下文</p>
-      <el-tooltip effect="light" content="您可以导入知识库作为上下文"
-                  placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-    </div>
-    <div class="inputField" style="display: block;margin-top: 5px">
-      <selectV
-          :data="contextOptList"
-          :name="'name'"
-          :select="'select'"
-      ></selectV>
-    </div>
-
-    <!--提示词的输入框-->
-    <div class="inputField" style="display: block">
-      <promptPublic
-          ref="promptRef"
-          v-for="(item,index) in infoList"
-          :key="item.id"
-          :removeShow="item.removeShow"
-          style="margin-top: 10px"
-          :modelTitle="modelTitle"
-          :titleSelect="item.titleSelect"
-          :topTitle="item.topTitle"
-          @removeInfo="removeInfo(item,index)"
-          @jinjaClick="jinjaClick"
-          @jinjaSelect="jinjaSelect"
-      />
-    </div>
-    <div class="inputField" style="display: block">
-      <div class="content-class addInfoClass" @click="addInfoClick">+ 添加消息</div>
-    </div>
-
     <!--输入变量-->
-    <div v-show="addVarShow" class="inputField" style="margin-top: 10px">
+    <div class="inputField">
       <p>输入变量</p>
-      <i class="el-icon-plus iPlus" @click="addVarClick"></i>
+      <i class="el-icon-plus iPlus" @click="addVarClick('输入')"></i>
     </div>
-    <div v-show="addVarShow" class="inputField addVarClass" style="margin-top: 5px;gap: 5px"
+    <div class="inputField addVarClass" style="margin-top: 5px;gap: 5px"
          v-for="(item,index) in addVarList"
          :key="item.id">
       <el-input v-model="item.name" placeholder="变量名" style="width: 130px;font-size: 13px"></el-input>
@@ -70,61 +15,45 @@
           :data="contextOptList"
           :name="'name'"
           :select="'select'"
+          :defaultTags="item.defaultTags"
           @syncValue="(e)=>{syncValue(e,index)}"
       ></selectV>
-      <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index)"/>
+      <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index,'输入')"/>
     </div>
 
     <div class="content-line"></div>
 
-    <!--记忆-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>记忆</p>
-      <el-tooltip effect="light" content="聊天记忆设置" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-      <el-switch v-model="memoryVal" style="margin-left: auto"></el-switch>
-    </div>
-    <div v-if="memoryVal" class="inputField" style="margin-top: 5px;justify-content: start;column-gap: 6px;">
-      <el-switch v-model="memoryWindowVal"></el-switch>
-      <p style="font-weight: normal;color: #676f83;font-size: 12px">记忆窗口</p>
-      <el-slider
-          style="margin-left: auto;width: 235px"
-          v-model="memoryNum"
-          :min="1"
-          :max="100"
-          :step="1"
-          :disabled="!memoryWindowVal"
-          show-input>
-      </el-slider>
-    </div>
-
-    <!--视觉-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>视觉</p>
-      <el-tooltip effect="light"
-                  content="开启视觉功能将允许模型输入图片，并根据图像内容的理解回答用户问题" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-      <el-switch v-model="visionVal" style="margin-left: auto"></el-switch>
+    <!--提示词的输入框-->
+    <div class="inputField" style="display: block">
+      <codeInputBox :topTitle="'PYTHON3'" :modelTitle="'deepseek32b'"></codeInputBox>
     </div>
 
     <div class="content-line"></div>
 
     <!--输出变量-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;cursor: pointer"
-         @click="outputShow=!outputShow">
-      <i class="el-icon-arrow-down" ref="outputRef"></i>
+    <div class="inputField">
       <p>输出变量</p>
+      <i class="el-icon-plus iPlus" @click="addVarClick('输出')"></i>
     </div>
-    <div v-if="outputShow" class="inputField outputVar">
-      <p><strong>text</strong> String</p>
-      <p>生成内容</p>
+    <div class="inputField addVarClass" style="margin-top: 5px;gap: 5px"
+         v-for="(item,index) in outputList"
+         :key="item.id">
+      <el-input v-model="item.name" placeholder="变量名" style="width: 130px;font-size: 13px"></el-input>
+      <el-select popper-class="my-select-dropdown" v-model="item.type" placeholder="请选择" style="flex:1" class="aaa">
+        <el-option
+            v-for="item in typeOpt"
+            :key="item"
+            :label="item"
+            :value="item">
+        </el-option>
+      </el-select>
+      <el-button type="danger" plain icon="el-icon-delete" @click="addVarListRemove(item,index,'输出')"/>
     </div>
 
-    <!--失败时重试-->
+
     <div class="content-line"></div>
 
+    <!--失败时重试-->
     <div class="inputField" style="justify-content: start;column-gap: 6px;">
       <p>失败时重试</p>
       <el-switch v-model="failVal" style="margin-left: auto"></el-switch>
@@ -150,7 +79,7 @@
       <p>异常处理</p>
       <el-tooltip effect="light"
                   content="配置异常处理策略，当节点发生异常时触发" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
+        <img src="../../../../assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-select popper-class="my-select-dropdown" v-model="abnormalVal" placeholder="请选择" style="margin-left: auto">
         <el-option
@@ -180,18 +109,17 @@
 </template>
 
 <script>
-import promptPublic from "@/modelVue/formComponent/component/promptPublic.vue";
-import selectV from "@/modelVue/formComponent/component/selectV.vue";
-import modelAlert from "@/modelVue/formComponent/component/modelAlert.vue";
+import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
+import codeInputBox from "@/modelVue/formComponent/component/utils/codeInputBox.vue";
 
 export default {
-  name: 'llmCom',
+  name: 'codeCom',
   props: [],
   components: {
     selectV,
-    promptPublic,
-    modelAlert
+    codeInputBox
   },
+
   computed: {},
   data() {
     return {
@@ -282,30 +210,45 @@ export default {
         {
           id: Math.random(),
           titleSelect: false,
-          removeShow: false
         },
         {
           id: Math.random(),
           titleSelect: true,
-          topTitle: 'USER'
         }
       ],
 
       addVarShow: false,
-      addVarList: []
+      addVarList: [
+        {
+          id: Math.random(),
+          name: 'sys.files',
+          value: 'sys.files',
+          defaultTags: [{name: 'sys.files'}]
+        }
+      ],
+
+      // 输出变量
+      outputList: [
+        {
+          id: Math.random(),
+          name: 'sys.files',
+          type: 'String',
+        }
+      ],
+      typeOpt: ['String', 'Number', 'Array[Number]', 'Array[String]', 'Array[Object]', 'Object'],
+
 
     }
   },
   watch: {
     outputShow: function (newVal) {
-      this.$setRotate(newVal,this.$refs.outputRef)
+      this.$setRotate(newVal, this.$refs.outputRef)
     },
   },
   created() {
 
   },
   mounted() {
-
   },
   methods: {
     modelOptClick() {
@@ -321,7 +264,8 @@ export default {
       let obj = {
         id: Math.random(),
         name: e.name,
-        value: ''
+        value: '',
+        defaultTags: []
       }
       this.addVarList.push(obj)
       this.$nextTick(() => {
@@ -331,39 +275,39 @@ export default {
     },
     // 输入变量选中后同步变量名
     syncValue(e, index) {
-      console.log(e, '-=-=-=-=-=')
-      console.log(this.addVarList[index])
       this.addVarList[index].name = e.tag
     },
 
-    // 输入变量 - 添加
-    addVarClick() {
+    // 输入 / 输出 - 添加
+    addVarClick(text) {
       let obj = {
         id: Math.random(),
         name: '',
-        value: ''
       }
-      this.addVarList.push(obj)
+      if (text === '输入') {
+        obj.defaultTags = []
+        obj.value = ''
+        this.addVarList.push(obj)
+      } else {
+        obj.type = ''
+        this.outputList.push(obj)
+      }
     },
-    // 输入变量 - 删除
-    addVarListRemove(val, index) {
-      this.addVarList.splice(index, 1)
+
+    // 输入 / 输出 - 删除
+    addVarListRemove(val, index, text) {
+      if (text === '输入') {
+        this.addVarList.splice(index, 1)
+      } else {
+        this.outputList.splice(index, 1)
+      }
     },
 
     // 添加消息
     addInfoClick() {
-      let topTitle;
-      const lastItem = this.infoList[this.infoList.length - 1]
-      if (lastItem && lastItem.topTitle === 'ASSISTANT') {
-        topTitle = 'USER'
-      } else {
-        topTitle = 'ASSISTANT'
-      }
-
       let obj = {
         id: Math.random(),
         titleSelect: true,
-        topTitle: topTitle
       }
       this.infoList.push(obj)
     },
@@ -412,6 +356,7 @@ export default {
 .addVarClass {
   ::v-deep {
     .el-input__inner {
+      width: 100% !important;
       background: #f9fafb;
     }
   }
@@ -538,7 +483,6 @@ export default {
     width: 20px;
     line-height: 28px;
   }
-
 
   .el-button--danger {
     border: 0;

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import promptPublic from "@/modelVue/formComponent/component/promptPublic.vue";
+import promptPublic from "@/modelVue/formComponent/component/utils/promptPublic.vue";
 
 export default {
   name: 'endCom',

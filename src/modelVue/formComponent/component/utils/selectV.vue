@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import selectPullDown from "@/modelVue/formComponent/component/selectPullDown.vue";
+import selectPullDown from "@/modelVue/formComponent/component/utils/selectPullDown.vue";
 
 export default {
   name: 'selectV',

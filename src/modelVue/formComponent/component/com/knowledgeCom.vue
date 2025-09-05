@@ -43,10 +43,10 @@
           <div class="title" style="margin-top: 16px">
             Rerank 模型
             <el-tooltip effect="light" :content="rerankRadioList[1].content" placement="top">
-              <img src="@/assets/问号.png" alt="" height="13">
+              <img src="../../../../assets/问号.png" alt="" height="13">
             </el-tooltip>
           </div>
-          <modelSelectCom :propsModelTitle="propsModelTitle"></modelSelectCom>
+          <ModelSelect :propsModelTitle="propsModelTitle"></ModelSelect>
         </div>
         <div class="weightClass" v-if="rerankValue=='权重设置'">
           <el-slider
@@ -66,7 +66,7 @@
           <el-tooltip effect="light"
                       content="用户筛选与用户问题相似度最高的文本片段。系统同时回根据选用模型上下文窗口大小动态调整分段数量"
                       placement="top">
-            <img src="@/assets/问号.png" alt="" height="13">
+            <img src="../../../../assets/问号.png" alt="" height="13">
           </el-tooltip>
         </div>
         <el-slider
@@ -85,7 +85,7 @@
           <el-tooltip effect="light"
                       content="用于设置文本片段筛选的相似度阈值"
                       placement="top">
-            <img src="@/assets/问号.png" alt="" height="13">
+            <img src="../../../../assets/问号.png" alt="" height="13">
           </el-tooltip>
         </div>
         <el-slider
@@ -109,7 +109,7 @@
            @mouseout="knowListHover(item,'离开')"
       >
         <div class="left">
-          <img src="@/assets/文件夹.png" alt="" height="20">
+          <img src="../../../../assets/文件夹.png" alt="" height="20">
           <div>{{ item.name }}</div>
         </div>
         <div class="knowTag" v-show="!item.deleteShow">{{ item.tagName ? item.tagName : '高质量·混合检索' }}</div>
@@ -129,7 +129,7 @@
            @click="knowledgeClick(item,index)"
       >
         <div class="left">
-          <img src="@/assets/文件夹.png" alt="" height="20">
+          <img src="../../../../assets/文件夹.png" alt="" height="20">
           <el-tooltip :open-delay="1000" effect="light" :content="item.name" placement="top">
             <div>{{ item.name }}</div>
           </el-tooltip>
@@ -155,7 +155,7 @@
       <el-tooltip effect="light"
                   content="元数据过滤是使用元数据属性（例如标签、类别或者访问权限）来细化和控制系统内相关的检索过程"
                   placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
+        <img src="../../../../assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-select popper-class="my-select-dropdown" v-model="abnormalVal" placeholder="请选择" style="margin-left: auto">
         <el-option
@@ -170,7 +170,7 @@
       <div v-if="abnormalVal=='自动'">
         <p style="margin-bottom: 5px">根据 Query Variable 自动生成元数据过滤条件</p>
         <div class="content-class" @click="modelOptClick">
-          <img src="@/assets/模型.png" alt="" height="20">
+          <img src="../../../../assets/模型.png" alt="" height="20">
           <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
           <i class="el-icon-s-operation"></i>
         </div>
@@ -215,9 +215,9 @@
 </template>
 
 <script>
-import selectV from "@/modelVue/formComponent/component/selectV.vue";
-import modelSelectCom from '@/modelVue/formComponent/component/modelSelectCom.vue'
-import modelAlert from "@/modelVue/formComponent/component/modelAlert.vue";
+import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
+import ModelSelect from '@/modelVue/formComponent/component/utils/modelSelect.vue'
+import modelAlert from "@/modelVue/formComponent/component/utils/modelAlert.vue";
 
 export default {
   name: 'knowledgeRet',
@@ -225,7 +225,7 @@ export default {
   components: {
     modelAlert,
     selectV,
-    modelSelectCom
+    ModelSelect
   },
   computed: {},
   data() {
@@ -368,7 +368,7 @@ export default {
   },
   watch: {
     outputShow: function (newVal) {
-      this.$setRotate(newVal,this.$refs.outputRef)
+      this.$setRotate(newVal, this.$refs.outputRef)
     },
   },
   created() {

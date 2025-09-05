@@ -64,7 +64,7 @@ export const componentsList = [
             width: 240,
             height: 50,
         },
-        uniqueCom: 'knowledgeRet',
+        uniqueCom: 'knowledgeCom',
         icon: require('@/assets/知识检索.png'),
     },
     {

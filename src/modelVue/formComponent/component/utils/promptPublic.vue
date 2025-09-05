@@ -6,7 +6,7 @@
                     placement="top">
           <p class="title">{{ titleSelectVal }}</p>
         </el-tooltip>
-        <img src="@/assets/上下.png" alt="" height="13">
+        <img src="../../../../assets/上下.png" alt="" height="13">
         <div class="titleAlert" v-if="titleAlertShow" v-click-outside-close="()=>{titleAlertShow=false}">
           <p v-for="(item,index) in titleAlertList" :key="index" @click.stop="titleAlertClick(item)">
             {{ item }}</p>
@@ -18,9 +18,9 @@
       </el-tooltip>
       <el-tooltip v-show="topTitle!=='回复'" effect="light" :content="contentValue"
                   placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
+        <img src="../../../../assets/问号.png" alt="" height="13">
       </el-tooltip>
-      <img v-show="starShow" @click="starClick" class="generator" src="@/assets/四角星.png" alt="" height="16">
+      <img v-show="starShow" @click="starClick" class="generator" src="../../../../assets/四角星.png" alt="" height="16">
       <el-divider v-if="starShow" direction="vertical"></el-divider>
       <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
         <div v-show="jinShow">
@@ -32,9 +32,9 @@
       <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">
         <div class="xClass" :style="`margin-left:${starShow?0:'auto'} `" @click="xInsert">{𝓧}</div>
       </el-tooltip>
-      <img class="xClass" src="@/assets/删除.png" v-show="removeShow" height="20" @click="removeInfo">
-      <img class="xClass" src="@/assets/复制.png" alt="" height="16" @click="copyClick">
-      <img class="xClass" src="@/assets/放大.png" alt="" height="16" @click="amplifyClick">
+      <img class="xClass" src="../../../../assets/删除.png" v-show="removeShow" height="20" @click="removeInfo">
+      <img class="xClass" src="../../../../assets/复制.png" alt="" height="16" @click="copyClick">
+      <img class="xClass" src="../../../../assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
     <div v-show="!switchVal" contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
     <div v-show="switchVal" contenteditable="true" class="editableDivClass" ref="jinjaDiv" @input="onChangeJin"></div>
@@ -45,7 +45,7 @@
          :style="hoverMenuStyle"
          v-click-outside-close.stop="()=>{showHoverMenu=false,xInsertTag = false}">
       <div class="context-class" @click="insertTagHTML({name:'上下文'})" v-show="!switchVal">
-        <img src="@/assets/上下文.png" alt="" height="17">
+        <img src="../../../../assets/上下文.png" alt="" height="17">
         <p>上下文</p>
       </div>
       <p style="color:#676f83" v-show="!switchVal">开始</p>
@@ -55,7 +55,7 @@
              :key="index">
           <span style="color:#3f58fd;font-weight: bold">{𝓧}</span>
           <div class="title-class">{{ item.name }}</div>
-          <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
+          <img src="../../../../assets/对勾.png" alt="" height="20" v-show="item.select">
           <span style="margin-left: auto">{{ item.type }}</span>
         </div>
       </div>
@@ -65,7 +65,7 @@
       <div class="dialog-content dialogLeft">
         <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
         <div class="dialogLeft-content">
-          <img src="@/assets/模型.png" alt="" height="20">
+          <img src="../../../../assets/模型.png" alt="" height="20">
           <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
         </div>
         <el-divider content-position="left">试一试</el-divider>
@@ -84,7 +84,7 @@
             v-model="textarea">
         </el-input>
         <el-button size="medium" type="primary" style="margin-left: auto;" @click="generateClick">
-          <img src="@/assets/四角星-白.png" alt="" height="11" style="margin-right: 2px">
+          <img src="../../../../assets/四角星-白.png" alt="" height="11" style="margin-right: 2px">
           生成
         </el-button>
       </div>
@@ -92,7 +92,7 @@
       <div class="dialog-content dialogRight" v-loading="loading" element-loading-text="为您编排应用程序中..."
            element-loading-background="#fff" element-loading-spinner="el-icon-loading">
         <div class="prompt" v-if="!autoContextShow">
-          <img src="@/assets/四角星-灰.png" alt="" height="50">
+          <img src="../../../../assets/四角星-灰.png" alt="" height="50">
           <p>在左侧描述您的用例，</p>
           <p>编排浏览将在此处显示。</p>
         </div>

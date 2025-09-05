@@ -1,62 +1,24 @@
 <template>
   <div>
-    <!--变量赋值-->
-    <div v-for="(itt,ind) in groupList" :key="itt.id" style="margin-bottom: 10px"
-         @mouseenter="groupListHover(itt,'滑入')"
-         @mouseleave="groupListHover(itt,'离开')">
-      <div class="inputField" style="justify-content: start">
-        <p>{{ aggGroupSwitch ? `Group${ind + 1}` : '变量赋值'}}</p>
-        <div style="position: relative">
-          <el-button
-              type="danger"
-              v-if="itt.removeShow"
-              class="noBackRemove"
-              @click="removeGroupList(ind)"
-              style="left: 0px;position: absolute;top:50%;transform:translateY(-50%) scale(0.8)"
-              plain
-              icon="el-icon-delete"
-          />
-        </div>
-        <i class="el-icon-plus iPlus" @click="addClick(itt)" style="margin-left: auto;"></i>
-      </div>
-      <div class="inputField" style="display: block">
-        <div class="set-class" v-show="itt.variableList.length<=0">
-          添加需要赋值的变量
-        </div>
-        <div v-show="itt.variableList.length>0" class="variableListClass" v-for="(item,index) in itt.variableList"
-             :key="item.id">
-          <selectV
-              :data="contextOptList"
-              :name="'name'"
-              :select="'select'"
-              style="flex: 1"
-          ></selectV>
-          <el-button class="backRemove" type="danger" plain icon="el-icon-delete"
-                     @click="variableListRemove(itt,index)"/>
-        </div>
-      </div>
+    <!--输入变量-->
+    <div class="inputField" style="justify-content: start">
+      <p>输入变量</p>
     </div>
-    <div class="inputField" style="display: block" v-if="aggGroupSwitch">
-      <div class="content-class addInfoClass" style=" margin-top: 10px;" @click="addGroupClick">
-        + 添加分组
-      </div>
+    <div class="inputField" style="display: block;margin-top: 5px;">
+      <selectV
+          :data="contextOptList"
+          :name="'name'"
+          :select="'select'"
+      ></selectV>
     </div>
+    <div class="inputField" style="font-weight: normal;color:#676f83;margin-top: 5px;font-size: 12px;padding-left: 20px;">
+      支持的文件类型：txt、markdown、mdx、pdf、html、xlsx、xls、docx、csv、md、htm。
+    </div>
+
     <div class="content-line"></div>
 
-    <!--聚合分组-->
-    <div class="inputField" style="justify-content: start;column-gap: 6px;margin-top: 15px">
-      <p>聚合分组</p>
-      <el-tooltip effect="light"
-                  content="开启该功能后，变量聚合器内可以同时聚合多组变量" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
-      </el-tooltip>
-      <el-switch v-model="aggGroupSwitch" style="margin-left: auto" @change="switchClick"></el-switch>
-    </div>
-
-    <div class="content-line" v-if="aggGroupSwitch"></div>
-
     <!--输出变量-->
-    <div v-if="aggGroupSwitch" class="inputField" style="justify-content: start;column-gap: 6px;cursor: pointer"
+    <div class="inputField" style="justify-content: start;column-gap: 6px;cursor: pointer"
          @click="outputShow=!outputShow">
       <i class="el-icon-arrow-down" ref="outputRef"></i>
       <p>输出变量</p>
@@ -72,10 +34,10 @@
 </template>
 
 <script>
-import selectV from "@/modelVue/formComponent/component/selectV.vue";
+import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
 
 export default {
-  name: 'aggCom',
+  name: 'domExCom',
   props: [],
   components: {
     selectV
@@ -93,9 +55,9 @@ export default {
       ],
       groupOutputList: [
         {
-          name: 'Group1.output',
-          type: 'Any',
-          value: 'Group1的输出量'
+          name: 'text',
+          type: 'String',
+          value: '提取的文本'
         },
       ],
 

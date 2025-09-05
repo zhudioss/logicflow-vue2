@@ -16,7 +16,7 @@
         <el-tooltip :open-delay="500" effect="light" placement="left" :content="item.name">
           <div class="title-class">{{ item.name }}</div>
         </el-tooltip>
-        <img src="@/assets/对勾.png" alt="" height="20" v-show="item.select">
+        <img src="../../../../assets/对勾.png" alt="" height="20" v-show="item.select">
         <span style="margin-left: auto">{{ item.type }}</span>
       </div>
     </div>

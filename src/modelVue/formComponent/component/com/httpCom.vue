@@ -64,7 +64,7 @@
       <p>异常处理</p>
       <el-tooltip effect="light"
                   content="配置异常处理策略，当节点发生异常时触发" placement="top">
-        <img src="@/assets/问号.png" alt="" height="13">
+        <img src="../../../../assets/问号.png" alt="" height="13">
       </el-tooltip>
       <el-select popper-class="my-select-dropdown" v-model="abnormalVal" placeholder="请选择" style="margin-left: auto">
         <el-option
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import codeInputBox from "@/modelVue/formComponent/component/codeInputBox.vue";
+import codeInputBox from "@/modelVue/formComponent/component/utils/codeInputBox.vue";
 
 export default {
   name: 'httpCom',
@@ -269,7 +269,6 @@ export default {
         },
       ],
 
-
     }
   },
   watch: {
@@ -284,8 +283,6 @@ export default {
 
   },
   mounted() {
-
-
   },
   methods: {},
 }
