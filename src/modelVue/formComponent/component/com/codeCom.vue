@@ -39,7 +39,7 @@
          v-for="(item,index) in outputList"
          :key="item.id">
       <el-input v-model="item.name" placeholder="变量名" style="width: 130px;font-size: 13px"></el-input>
-      <el-select popper-class="my-select-dropdown" v-model="item.type" placeholder="请选择" style="flex:1" class="aaa">
+      <el-select popper-class="my-select-dropdown" v-model="item.type" placeholder="请选择" style="flex:1">
         <el-option
             v-for="item in typeOpt"
             :key="item"
@@ -350,30 +350,6 @@ export default {
     .el-tag {
       margin: 0;
     }
-  }
-}
-
-.addVarClass {
-  ::v-deep {
-    .el-input__inner {
-      width: 100% !important;
-      background: #f9fafb;
-    }
-  }
-
-  .setVarClass {
-    flex: 1;
-    height: 30px;
-    background: #f9fafb;
-    cursor: pointer;
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    font-weight: normal;
-    padding-left: 10px;
-    color: #98a2b2;
-    border: 1px solid #e4e4e4;
   }
 }
 

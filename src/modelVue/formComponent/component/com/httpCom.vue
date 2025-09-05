@@ -4,6 +4,17 @@
     <div class="inputField">
       <p>API</p>
     </div>
+    <div class="inputField addVarClass" style="margin: 5px 0 10px;gap: 5px">
+      <el-select popper-class="my-select-dropdown" v-model="apiType" placeholder="请选择" style="flex:1">
+        <el-option
+            v-for="item in apiTypeList"
+            :key="item"
+            :label="item"
+            :value="item">
+        </el-option>
+      </el-select>
+      <el-input v-model="apiType" placeholder="变量名" style="width: 70%;font-size: 13px"></el-input>
+    </div>
 
     <!--HEADERS-->
     <div class="inputField">
@@ -173,6 +184,15 @@ export default {
   computed: {},
   data() {
     return {
+      apiType: 'POST',
+      apiTypeList: [
+        'GET',
+        'POST',
+        'HEAD',
+        'PATCH',
+        'PUT',
+        'DELETE',
+      ],
       radio: '',
       radioList: [
         {
@@ -421,30 +441,6 @@ export default {
     .el-tag {
       margin: 0;
     }
-  }
-}
-
-.addVarClass {
-  ::v-deep {
-    .el-input__inner {
-      width: 100% !important;
-      background: #f9fafb;
-    }
-  }
-
-  .setVarClass {
-    flex: 1;
-    height: 30px;
-    background: #f9fafb;
-    cursor: pointer;
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    font-weight: normal;
-    padding-left: 10px;
-    color: #98a2b2;
-    border: 1px solid #e4e4e4;
   }
 }
 

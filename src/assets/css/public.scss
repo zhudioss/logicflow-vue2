@@ -443,3 +443,32 @@
   padding: 0;
   pointer-events: none;
 }
+
+.addVarClass {
+  .el-input__inner {
+    height: 32px !important;
+    width: 100% !important;
+    background: #f9fafb;
+    font-size: 12px;
+  }
+
+  .el-input--suffix .el-input__inner {
+    background: #f2f4f7;
+    border: 0;
+  }
+
+  .setVarClass {
+    flex: 1;
+    height: 30px;
+    background: #f9fafb;
+    cursor: pointer;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    padding-left: 10px;
+    color: #98a2b2;
+    border: 1px solid #e4e4e4;
+  }
+}

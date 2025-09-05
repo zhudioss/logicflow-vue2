@@ -409,28 +409,7 @@ export default {
   }
 }
 
-.addVarClass {
-  ::v-deep {
-    .el-input__inner {
-      background: #f9fafb;
-    }
-  }
 
-  .setVarClass {
-    flex: 1;
-    height: 30px;
-    background: #f9fafb;
-    cursor: pointer;
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    font-weight: normal;
-    padding-left: 10px;
-    color: #98a2b2;
-    border: 1px solid #e4e4e4;
-  }
-}
 
 ::v-deep {
   .el-tag {
