@@ -1,8 +1,7 @@
 <template>
   <div>
-    <!--提示词的输入框-->
-    <div class="inputField" style="display: block">
-      <codeInputBox :topTitle="'PYTHON3'" :modelTitle="'deepseek32b'"></codeInputBox>
+    <div class="inputField">
+      <p>API</p>
     </div>
 
     <div class="content-line"></div>
@@ -92,7 +91,8 @@
 
         <p style="margin-left: 5px;margin-bottom: 3px"><span style="color: #2c3e50;font-weight:bold;font-size: 13px;">headers</span>
           Object</p>
-        <codeInputBox :starShow="false" :topTitleShow="false" :topTitle="'PYTHON3'"
+        <codeInputBox :modeJS="true" :codeDefault="codeDefault" :starShow="false" :topTitleShow="false"
+                      :topTitle="'PYTHON3'"
                       :modelTitle="'deepseek32b'"></codeInputBox>
       </div>
       <div v-if="abnormalVal=='异常分支'">
@@ -116,6 +116,7 @@ export default {
   computed: {},
   data() {
     return {
+      codeDefault: '{}',
       statusCodeNum: 0,
       modelTitle: 'deepseek32b',
       modelOptShow: false,

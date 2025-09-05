@@ -92,14 +92,22 @@ export default {
       type: String,
       default: 'SYSTEM'
     },
+    codeDefault: {
+      type: String,
+      default: ''
+    },
+    modeJS: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {},
   computed: {},
   data() {
     return {
-      codeValue: '',
+      codeValue: this.codeDefault ? this.codeDefault : '',
       cmOptions: {
-        mode: 'python',
+        mode: this.modeJS ? 'javascript' : 'python',
         theme: 'dracula',
         lineNumbers: true,
       },
