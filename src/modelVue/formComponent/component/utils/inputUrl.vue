@@ -1,55 +1,21 @@
 <template>
-  <div class="promptPublic" @click="addClass" ref="promptRef" v-click-outside-close.stop="removeClass">
+  <div class="promptPublic">
     <div class="topClass">
-      <div class="titleSelectClass" v-if="titleSelect" @click="titleAlertShow=true">
-        <el-tooltip :open-delay="1000" effect="light" :content="titleSelectVal"
-                    placement="top">
-          <p class="title">{{ titleSelectVal }}</p>
-        </el-tooltip>
-        <img src="../../../../assets/上下.png" alt="" height="13">
-        <div class="titleAlert" v-if="titleAlertShow" v-click-outside-close="()=>{titleAlertShow=false}">
-          <p v-for="(item,index) in titleAlertList" :key="index" @click.stop="titleAlertClick(item)">
-            {{ item }}</p>
-        </div>
-      </div>
-      <el-tooltip v-else :open-delay="500" effect="light" :content="topTitle"
-                  placement="top">
-        <p style="margin-right: 3px" class="title">{{ topTitle }}</p>
-      </el-tooltip>
-      <el-tooltip v-show="topTitleIconShow" effect="light" :content="contentValue"
-                  placement="top">
-        <img src="../../../../assets/问号.png" alt="" height="13">
-      </el-tooltip>
-      <img v-show="starShow" @click="starClick" class="generator" src="../../../../assets/四角星.png" alt=""
-           height="16">
-      <el-divider v-if="starShow" direction="vertical"></el-divider>
-      <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
-        <div v-show="jinShow" style="margin-right: 3px">
-          <span>Jinja</span>
-          <el-switch v-model="switchVal" @change="jinjaClick"></el-switch>
-        </div>
-      </el-tooltip>
-
       <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">
         <div class="xClass" :style="`margin-left:${starShow?0:'auto'} `" @click="xInsert">{𝓧}</div>
       </el-tooltip>
-      <img class="xClass" src="../../../../assets/删除.png" v-show="removeShow" height="20" @click="removeInfo">
-      <img class="xClass" src="../../../../assets/复制.png" alt="" height="16" @click="copyClick">
-      <img class="xClass" src="../../../../assets/放大.png" alt="" height="16" @click="amplifyClick">
     </div>
-    <div v-show="!switchVal" contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
-    <div v-show="switchVal" contenteditable="true" class="editableDivClass" ref="jinjaDiv" @input="onChange"></div>
-    <div v-if="showTip" class="copy-tip" contenteditable="false">已复制</div>
-    <!-- 自定义悬浮菜单 -->
+    <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
 
+    <!-- 自定义悬浮菜单 -->
     <div class="modelSelectClass hover-menu" v-show="showHoverMenu"
          :style="hoverMenuStyle"
          v-click-outside-close.stop="()=>{showHoverMenu=false,xInsertTag = false}">
-      <div class="context-class" @click="insertTagHTML({name:'上下文'})" v-show="!switchVal">
+      <div class="context-class" @click="insertTagHTML({name:'上下文'})">
         <img src="../../../../assets/上下文.png" alt="" height="17">
         <p>上下文</p>
       </div>
-      <p style="color:#676f83" v-show="!switchVal">开始</p>
+      <p style="color:#676f83">开始</p>
       <div style="flex: 1;overflow-y: auto">
         <div class="selectOpt-class" @click.stop="insertTagHTML(item)"
              v-for="(item,index) in  contextOptList"
@@ -61,53 +27,6 @@
         </div>
       </div>
     </div>
-
-    <el-dialog :append-to-body="true" title="提示词生成器" :visible.sync="dialogTableVisible" @close="dialogClose">
-      <div class="dialog-content dialogLeft">
-        <p>提示词生成器使用配置的模型来优化提示词，以获得更高的质量和更好的结构。清写出清晰详细的说明。</p>
-        <div class="dialogLeft-content">
-          <img src="../../../../assets/模型.png" alt="" height="20">
-          <div class="title-class" :title="modelTitle">{{ modelTitle }}</div>
-        </div>
-        <el-divider content-position="left">试一试</el-divider>
-        <div class="tryClass">
-          <div v-for="(item,index) in tryList" :key="index" @click="tryClick(item)">
-            <img :src="item.img" alt="" height="20">
-            <p>{{ item.text }}</p>
-          </div>
-        </div>
-        <p style="font-weight: bold;margin-bottom: 10px">指令</p>
-        <el-input
-            type="textarea"
-            :rows="5"
-            placeholder="写下清晰、具体的说明"
-            resize="none"
-            v-model="textarea">
-        </el-input>
-        <el-button size="medium" type="primary" style="margin-left: auto;" @click="generateClick">
-          <img src="../../../../assets/四角星-白.png" alt="" height="11" style="margin-right: 2px">
-          生成
-        </el-button>
-      </div>
-      <el-divider direction="vertical"></el-divider>
-      <div class="dialog-content dialogRight" v-loading="loading" element-loading-text="为您编排应用程序中..."
-           element-loading-background="#fff" element-loading-spinner="el-icon-loading">
-        <div class="prompt" v-if="!autoContextShow">
-          <img src="../../../../assets/四角星-灰.png" alt="" height="50">
-          <p>在左侧描述您的用例，</p>
-          <p>编排浏览将在此处显示。</p>
-        </div>
-        <div class="autoContextClass" v-if="autoContextShow">
-          <div class="centerClass">
-            <pre>{{ autoContextValue }}</pre>
-          </div>
-          <div class="footerClass">
-            <el-button size="medium" @click="dialogTableVisible = false" style="margin-left: auto">取消</el-button>
-            <el-button size="medium" type="primary" @click="dialogTableVisible=false">应用</el-button>
-          </div>
-        </div>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -115,42 +34,12 @@
 import {autoContextValue} from './promptPublic-contexnt'
 
 export default {
-  name: 'promptPublic',
-  props: {
-    modelTitle: {
-      type: String,
-      default: ''
-    },
-    jinShow: {
-      type: Boolean,
-      default: true
-    },
-    starShow: {
-      type: Boolean,
-      default: true
-    },
-    removeShow: {
-      type: Boolean,
-      default: true
-    },
-    topTitle: {
-      type: String,
-      default: 'SYSTEM'
-    },
-    titleSelect: {
-      type: Boolean,
-      default: false
-    },
-    topTitleIconShow: {
-      type: Boolean,
-      default: true
-    }
-  },
+  name: 'inputUrl',
+  props: {},
   components: {},
   computed: {},
   data() {
     return {
-      switchVal: false,
       amplifyTag: false,
       showHoverMenu: false,
       xInsertTag: false,
@@ -269,7 +158,7 @@ export default {
 
     // 清空输入框空格问题
     this.domList.forEach(item => {
-      const dom = this.$refs[item]
+      const dom = this.$refs[item.ref]
       dom.addEventListener('input', () => {
         if (dom.innerHTML === '<br>') {
           dom.innerHTML = ''
@@ -300,75 +189,12 @@ export default {
           break
       }
     },
-    titleAlertClick(val) {
-      this.titleSelectVal = val
-      this.getTooltip(val)
-      this.titleAlertShow = false
-    },
-    // 四角星
-    starClick() {
-      this.dialogTableVisible = true
-    },
-
-    // Jinja
-    jinjaClick() {
-      this.$emit('jinjaClick')
-    },
-
-    // 删除
-    removeInfo() {
-      this.$emit('removeInfo')
-    },
-
-    // 复制
-    copyClick() {
-      const dom = this.switchVal ? this.$refs.jinjaDiv : this.$refs.editableDiv
-      if (!dom) return
-
-      // 获取 HTML 和 纯文本
-      const html = dom.innerHTML
-      const text = dom.innerText
-
-      if (navigator.clipboard && window.ClipboardItem) {
-        // ✅ 同时写入 HTML 和 纯文本
-        const clipboardItem = new ClipboardItem({
-          "text/html": new Blob([html], {type: "text/html"}),
-          "text/plain": new Blob([text], {type: "text/plain"})
-        })
-
-        navigator.clipboard.write([clipboardItem]).then(() => {
-          this.showTip = true
-          setTimeout(() => {
-            this.showTip = false
-          }, 500)
-        }).catch(err => {
-          console.error("复制失败：", err)
-          this.showTip = false
-        })
-      } else {
-        // 不支持 ClipboardItem 的旧浏览器 fallback → 只能复制纯文本
-        navigator.clipboard.writeText(text)
-      }
-    },
 
     xInsert() {
       this.xInsertTag = true
-      if (this.switchVal) {
-        this.$refs.jinjaDiv.focus()
-      } else {
-        this.$refs.editableDiv.focus()
-      }
+      this.$refs.editableDiv.focus()
       this.onChange()
 
-    },
-    // 放大
-    amplifyClick() {
-      if (this.amplifyTag) {
-        this.$refs.promptRef.style.height = '100px'
-      } else {
-        this.$refs.promptRef.style.height = '300px'
-      }
-      this.amplifyTag = !this.amplifyTag;
     },
 
     onChange() {
@@ -401,6 +227,7 @@ export default {
         })
       }
     },
+
     getCursorRect(selection) {
       if (!selection.rangeCount) return null;
 
@@ -478,42 +305,6 @@ export default {
       }
       this.showHoverMenu = false
     },
-
-
-    addClass() {
-      const el = this.$refs.promptRef;
-      el.classList.add('active');
-    },
-    removeClass() {
-      const el = this.$refs.promptRef;
-      el.classList.remove('active');
-    },
-
-    tryClick(val) {
-      this.textarea = val.value
-    },
-
-    generateClick() {
-      if (!this.textarea) {
-        this.$notify({
-          title: '指令 为必填项',
-          type: 'warning',
-        });
-        return
-      }
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-        this.autoContextShow = true
-      }, 2000)
-    },
-
-    dialogClose() {
-      this.loading = false
-      this.autoContextShow = false
-    }
-
-
   },
   beforeDestroy() {
   },

@@ -284,11 +284,11 @@ export default {
           titleSelect: false,
           removeShow: false
         },
-        {
-          id: Math.random(),
-          titleSelect: true,
-          topTitle: 'USER'
-        }
+        // {
+        //   id: Math.random(),
+        //   titleSelect: true,
+        //   topTitle: 'USER'
+        // }
       ],
 
       addVarShow: false,
