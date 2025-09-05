@@ -14,16 +14,17 @@
       </div>
       <el-tooltip v-else :open-delay="500" effect="light" :content="topTitle"
                   placement="top">
-        <p style="font-weight: bold" class="title">{{ topTitle }}</p>
+        <p style="margin-right: 3px" class="title">{{ topTitle }}</p>
       </el-tooltip>
-      <el-tooltip v-show="topTitle!=='回复'" effect="light" :content="contentValue"
+      <el-tooltip v-show="topTitleIconShow" effect="light" :content="contentValue"
                   placement="top">
         <img src="../../../../assets/问号.png" alt="" height="13">
       </el-tooltip>
-      <img v-show="starShow" @click="starClick" class="generator" src="../../../../assets/四角星.png" alt="" height="16">
+      <img v-show="starShow" @click="starClick" class="generator" src="../../../../assets/四角星.png" alt=""
+           height="16">
       <el-divider v-if="starShow" direction="vertical"></el-divider>
       <el-tooltip effect="light" content="开启支持 Jinja 模版" placement="top">
-        <div v-show="jinShow">
+        <div v-show="jinShow" style="margin-right: 3px">
           <span>Jinja</span>
           <el-switch v-model="switchVal" @change="jinjaClick"></el-switch>
         </div>
@@ -139,6 +140,10 @@ export default {
     titleSelect: {
       type: Boolean,
       default: false
+    },
+    topTitleIconShow: {
+      type: Boolean,
+      default: true
     }
   },
   components: {},
@@ -572,7 +577,7 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    column-gap: 6px;
+    //column-gap: 6px;
     font-weight: normal;
 
     .generator, .xClass {
@@ -597,6 +602,10 @@ export default {
     ::v-deep {
       .el-divider {
         background: #DCDFE6;
+      }
+
+      .el-divider--vertical {
+        margin: 0 7px 0 3px;
       }
     }
   }
@@ -867,10 +876,7 @@ export default {
 }
 
 .title {
-  max-width: 51px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  font-weight: bold;
 }
 
 ::v-deep {

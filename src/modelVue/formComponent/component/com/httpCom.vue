@@ -25,7 +25,37 @@
           {{ item.label }}
         </el-radio>
       </el-radio-group>
+
+      <!--json输出框-->
+      <promptPublic
+          v-if="radio=='JSON'"
+          :topTitle="'JSON'"
+          :jinShow="false"
+          :starShow="false"
+          :removeShow="false"
+          :topTitleIconShow="false"
+      ></promptPublic>
+
+      <!--raw输入框-->
+      <promptPublic
+          v-if="radio=='raw'"
+          :topTitle="'RAW TEXT'"
+          :jinShow="false"
+          :starShow="false"
+          :removeShow="false"
+          :topTitleIconShow="false"
+      ></promptPublic>
+
+      <!--binary-->
+      <selectV
+          v-if="radio=='binary'"
+          :data="contextOptList"
+          :name="'name'"
+          :select="'select'"
+      ></selectV>
+
     </div>
+
 
     <div class="content-line"></div>
 
@@ -128,12 +158,16 @@
 
 <script>
 import codeInputBox from "@/modelVue/formComponent/component/utils/codeInputBox.vue";
+import promptPublic from "@/modelVue/formComponent/component/utils/promptPublic.vue";
+import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
 
 export default {
   name: 'httpCom',
   props: [],
   components: {
-    codeInputBox
+    codeInputBox,
+    promptPublic,
+    selectV
   },
 
   computed: {},

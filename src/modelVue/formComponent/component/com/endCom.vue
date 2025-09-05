@@ -4,6 +4,7 @@
         :jinShow="false"
         :starShow="false"
         :removeShow="false"
+        :topTitleIconShow="false"
         :topTitle="'回复'"
     ></promptPublic>
   </div>
