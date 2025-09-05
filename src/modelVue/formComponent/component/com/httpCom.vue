@@ -1,7 +1,30 @@
 <template>
   <div>
+    <!--API-->
     <div class="inputField">
       <p>API</p>
+    </div>
+
+    <!--HEADERS-->
+    <div class="inputField">
+      <p>HEADERS</p>
+    </div>
+
+    <!--PARAMS-->
+    <div class="inputField">
+      <p>PARAMS</p>
+    </div>
+
+    <!--BODY-->
+    <div class="inputField">
+      <p>BODY</p>
+    </div>
+    <div class="inputField" style="display: block;margin-top: 5px">
+      <el-radio-group v-model="radio">
+        <el-radio :label="item.label" v-for="(item,index) in radioList" :key="index">
+          {{ item.label }}
+        </el-radio>
+      </el-radio-group>
     </div>
 
     <div class="content-line"></div>
@@ -116,6 +139,27 @@ export default {
   computed: {},
   data() {
     return {
+      radio: '',
+      radioList: [
+        {
+          label: 'none'
+        },
+        {
+          label: 'form-data'
+        },
+        {
+          label: 'x-www-form-urlencoded'
+        },
+        {
+          label: 'JSON'
+        },
+        {
+          label: 'raw'
+        },
+        {
+          label: 'binary'
+        },
+      ],
       codeDefault: '{}',
       statusCodeNum: 0,
       modelTitle: 'deepseek32b',
@@ -506,6 +550,16 @@ export default {
 
   .el-input__inner::placeholder {
     font-size: 13px;
+  }
+
+  .el-radio {
+    margin-right: 16px;
+    margin-bottom: 5px;
+  }
+
+  .el-radio__label {
+    font-size: 13px;
+    padding-left: 5px;
   }
 
 }
