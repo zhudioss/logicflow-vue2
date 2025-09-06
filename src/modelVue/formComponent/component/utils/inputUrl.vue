@@ -1,10 +1,10 @@
 <template>
   <div class="promptPublic">
-    <div class="topClass">
-      <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">
-        <div class="xClass" :style="`margin-left:${starShow?0:'auto'} `" @click="xInsert">{𝓧}</div>
-      </el-tooltip>
-    </div>
+    <!--<div class="topClass">-->
+    <!--  <el-tooltip :open-delay="500" effect="light" content="快速插入" placement="top">-->
+    <!--    <div class="xClass" :style="`margin-left:${starShow?0:'auto'} `" @click="xInsert">{𝓧}</div>-->
+    <!--  </el-tooltip>-->
+    <!--</div>-->
     <div contenteditable="true" class="editableDivClass" ref="editableDiv" @input="onChange"></div>
 
     <!-- 自定义悬浮菜单 -->
@@ -145,7 +145,7 @@ export default {
       ],
       contentValue: '为对话提供高层指导',
 
-      domList: ['editableDiv', 'jinjaDiv'],
+      domList: ['editableDiv'],
       editShow: true,
       jinjaShow: false
     }
@@ -158,7 +158,7 @@ export default {
 
     // 清空输入框空格问题
     this.domList.forEach(item => {
-      const dom = this.$refs[item.ref]
+      const dom = this.$refs[item]
       dom.addEventListener('input', () => {
         if (dom.innerHTML === '<br>') {
           dom.innerHTML = ''
@@ -313,14 +313,12 @@ export default {
 
 <style lang="scss" scoped>
 .promptPublic {
-  height: 100px;
   background: #f2f4f7;
   border-radius: 8px;
-  padding: 10px;
   display: flex;
   flex-direction: column;
-  border: 2px solid #f2f4f7;
   position: relative;
+
 
   .topClass {
     width: 100%;
@@ -359,23 +357,10 @@ export default {
     }
   }
 
-  .copy-tip {
-    width: calc(100% - 20px);
-    height: calc(100% - 47px);
-    position: absolute;
-    color: #fff;
-    background: #000000a1;
-    top: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    font-size: 12px;
-  }
 }
 
 .editableDivClass {
-  flex: 1;
+  height: 100px;
   font-weight: normal;
   overflow-y: auto;
   white-space: pre-wrap; /* 保持换行 */
@@ -384,9 +369,10 @@ export default {
   outline: none;
   position: relative;
   line-height: 26px;
+  padding-left: 10px;
 
   &:empty::before {
-    content: "这里写你的提示词，输入 ' { ' 插入变量、输入 ' / ' 插入提示内容块";
+    content: "输入 URL，输入变量时请键入 “/”";
     color: #98a2b2;
     pointer-events: none; /* 不阻止点击 */
   }

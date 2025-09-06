@@ -13,7 +13,7 @@
             :value="item">
         </el-option>
       </el-select>
-      <el-input v-model="apiType" placeholder="变量名" style="width: 70%;font-size: 13px"></el-input>
+      <inputUrl style="width: 75%"></inputUrl>
     </div>
 
     <!--HEADERS-->
@@ -171,6 +171,7 @@
 import codeInputBox from "@/modelVue/formComponent/component/utils/codeInputBox.vue";
 import promptPublic from "@/modelVue/formComponent/component/utils/promptPublic.vue";
 import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
+import inputUrl from "@/modelVue/formComponent/component/utils/inputUrl.vue";
 
 export default {
   name: 'httpCom',
@@ -178,7 +179,8 @@ export default {
   components: {
     codeInputBox,
     promptPublic,
-    selectV
+    selectV,
+    inputUrl
   },
 
   computed: {},
