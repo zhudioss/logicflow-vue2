@@ -553,10 +553,6 @@ export default {
       border-radius: 8px;
       padding-left: 10px;
     }
-
-    .el-input__icon {
-      line-height: 32px;
-    }
   }
 }
 
@@ -589,11 +585,6 @@ export default {
 }
 
 ::v-deep {
-  .miniButton {
-    padding: 6px 8px;
-    border-radius: 6px;
-    margin-left: auto;
-  }
 
   .el-tag {
     margin-right: 5px;
@@ -605,61 +596,6 @@ export default {
     width: 40%;
   }
 
-  .button-new-tag {
-    height: 32px;
-    width: 100%;
-    line-height: 30px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 8px;
-    border: 1px dashed #DCDFE6 !important;
-    color: #bec4ce;
-    filter: none !important;
-
-    &:hover {
-      background-color: #fff;
-      color: #667085 !important;
-      border-color: #bec4ce !important;
-    }
-  }
-
-  .input-new-tag {
-    width: 100%;
-
-    .el-input__inner {
-      height: 32px;
-      border-radius: 8px;
-      padding: 0 10px;
-      //transform: translateY(1px);
-      border: 1px dashed #DCDFE6 !important;
-    }
-  }
-
-  .el-switch__core {
-    width: 28px !important;
-    height: 16px;
-    border-radius: 5px;
-
-    &:after {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-    }
-  }
-
-  .el-switch.is-checked .el-switch__core::after {
-    margin-left: -13px;
-  }
-
-  .el-slider__runway.show-input {
-    margin-right: 120px;
-  }
-
-  .el-slider__button {
-    width: 5px;
-    border-radius: 3px;
-  }
-
   .el-input__inner {
     height: 32px;
     border: 1px solid #e4e4e4;
@@ -668,10 +604,6 @@ export default {
     &:hover {
       filter: none;
     }
-  }
-
-  .el-input__icon {
-    line-height: 32px;
   }
 
   .el-input-number {
@@ -694,10 +626,6 @@ export default {
 
   .el-input--suffix .el-input__inner {
     width: 60px;
-    padding-left: 9px;
-    padding-right: 24px;
-    font-size: 12px;
-    height: 28px;
   }
 
   .el-select .el-input .el-select__caret {

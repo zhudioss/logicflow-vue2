@@ -42,7 +42,8 @@
         {{ item.type }}
       </div>
     </div>
-    <el-dialog :append-to-body="true" title="添加变量" :visible.sync="dialogFormVisible" @close="closeDialog">
+    <el-dialog custom-class="my-dialog" :append-to-body="true" title="添加变量" :visible.sync="dialogFormVisible"
+               @close="closeDialog">
       <el-form :model="form" :rules="rules" ref="formRef">
         <el-form-item label="字段类型" prop="fieldName">
           <el-radio-group v-model="form.fieldName">
@@ -96,7 +97,7 @@
         </el-form-item>
         <el-form-item label="支持的文件类型" v-if="form.fieldName=='单文件'||form.fieldName=='文件列表'"
                       prop="checkboxGroup">
-          <el-checkbox-group v-model="form.checkboxGroup">
+          <el-checkbox-group class="my-checkbox-group" v-model="form.checkboxGroup">
             <el-checkbox
                 :label="item.label"
                 border v-for="(item,index) in checkboxList" :key="index"
@@ -517,154 +518,4 @@ export default {
   }
 }
 
-::v-deep {
-  .el-form-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-
-    .el-form-item__label {
-      text-align: left;
-      font-size: 15px;
-      font-weight: bold;
-    }
-  }
-
-  // 单选框
-  .el-radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .el-radio-button {
-    width: calc((100% - 20px) / 3) !important;
-    height: 60px;
-  }
-
-  .el-radio-button__inner {
-    font-weight: normal;
-    border: none;
-    border: 1px solid #e3e3e3 !important;
-    border-radius: 8px !important;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    background: #fcfcfd;
-
-    &:hover {
-      color: #409eff;
-      border: 1px solid #409eff !important;
-    }
-  }
-
-
-  .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-    background-color: #ecf5ff;
-    box-shadow: none;
-    color: #409eff;
-    border: 1px solid #409eff !important;
-  }
-
-  .el-input__inner {
-    background: #f9fafb;
-    border-radius: 8px !important;
-  }
-
-  .el-input-number__decrease {
-    width: 30%;
-    border-radius: 8px 0 0 8px;
-  }
-
-  .el-input-number__increase {
-    width: 30%;
-    border-radius: 0 8px 8px 0;
-  }
-
-  .el-input-number {
-    width: 100%;
-  }
-
-  .el-checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 5px;
-  }
-
-  .el-checkbox {
-    margin: 0 !important;
-  }
-
-  .el-checkbox__input {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .el-checkbox.is-bordered {
-    height: auto;
-    padding: 0 15px;
-    border-radius: 8px;
-  }
-
-  .el-checkbox__label {
-    padding: 0;
-    display: flex;
-    align-items: center;
-    width: calc(100% - 35px);
-    column-gap: 15px;
-    padding: 9px 0;
-    font-weight: normal !important;
-    flex-wrap: wrap;
-
-    p {
-      text-wrap: wrap;
-    }
-
-  }
-
-  .el-checkbox__input.is-checked + .el-checkbox__label {
-    color: #667085;
-  }
-
-  .el-tag {
-    margin-right: 10px;
-    border-radius: 8px;
-  }
-
-  .button-new-tag {
-    height: 32px;
-    line-height: 30px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 8px;
-    border-style: dashed;
-    color: #bec4ce;
-    font-weight: normal;
-
-    &:hover {
-      background-color: #fff;
-      color: #667085 !important;
-      border-color: #bec4ce;
-    }
-  }
-
-  .input-new-tag {
-    width: 161px;
-
-    .el-input__inner {
-      height: 32px;
-      transform: translateY(1px);
-      border-style: dashed;
-    }
-  }
-
-}
 </style>

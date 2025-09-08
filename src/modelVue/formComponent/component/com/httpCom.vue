@@ -3,8 +3,14 @@
     <!--API-->
     <div class="inputField">
       <p>API</p>
+      <el-button class="miniButton" type="primary" plain icon="el-icon-help" size="mini"
+                 @click="apiButtonClick('鉴权')">鉴权 {{ apiAuthTitle }}
+      </el-button>
+      <el-button style="margin-left: 5px" class="miniButton" type="primary" plain icon="el-icon-upload" size="mini"
+                 @click="apiButtonClick('导入')">导入cURL
+      </el-button>
     </div>
-    <div class="inputField addVarClass" style="margin: 5px 0 10px;gap: 5px">
+    <div class="inputField addVarClass" style="margin: 7px 0 10px;gap: 5px">
       <el-select popper-class="my-select-dropdown" v-model="apiType" placeholder="请选择" style="flex:1">
         <el-option
             v-for="item in apiTypeList"
@@ -15,6 +21,53 @@
       </el-select>
       <inputUrl style="width: 75%"></inputUrl>
     </div>
+    <el-dialog custom-class="my-dialog" :append-to-body="true" title="鉴权" :visible.sync="authentication">
+      <el-form :model="form" ref="formRef">
+        <el-form-item label="鉴权类型" class="auth-form-item">
+          <el-radio-group v-model="form.authType">
+            <el-radio-button label="无" style="height: 32px"></el-radio-button>
+            <el-radio-button label="API-Key" style="height: 32px"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="API鉴权类型" v-if="form.authType==='API-Key'">
+          <el-radio-group v-model="form.authApiType">
+            <el-radio-button label="基础" style="height: 32px"></el-radio-button>
+            <el-radio-button label="Bearer" style="height: 32px"></el-radio-button>
+            <el-radio-button label="自定义" style="height: 32px"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Header" v-if="form.authApiType==='自定义'&&form.authType==='API-Key'">
+          <el-input v-model="form.header" placeholder="请输入"></el-input>
+        </el-form-item>
+
+        <el-form-item label="API Key" v-if="form.authType==='API-Key'">
+          <el-select
+              v-model="form.apiKeyVal"
+              clearable
+              multiple
+              filterable
+              allow-create
+              default-first-option
+              placeholder="请选择或输入 API Key">
+            <el-option
+                v-for="item in apiKeyList"
+                :key="item.name"
+                :label="item.name"
+                :value="item.name">
+              <span style="float: left">
+                 <span style="color:#3f58fd;font-size: 13px">{𝓧}</span>
+                {{ item.name }}
+              </span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.type }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="medium" @click="authentication = false" style="margin-left: auto">取消</el-button>
+        <el-button size="medium" type="primary" @click="enterClick">保存</el-button>
+      </div>
+    </el-dialog>
 
     <!--HEADERS-->
     <div class="inputField">
@@ -186,6 +239,47 @@ export default {
   computed: {},
   data() {
     return {
+      authentication: false,
+      apiAuthTitle: '无',
+      form: {
+        authType: '无',
+        authApiType: '基础',
+        header: '',
+        apiKeyVal: []
+      },
+      apiKeyList: [
+        {
+          name: 'sys.query',
+          type: 'String',
+        },
+        {
+          name: 'sys.dialogue_count',
+          type: 'Number',
+        },
+        {
+          name: 'sys.conversation_id',
+          type: 'String',
+        },
+        {
+          name: 'sys.user_id',
+          type: 'String',
+        },
+        {
+          name: 'sys.files',
+          type: 'Array[file]',
+        },
+        {
+          name: 'sys.app_id',
+          type: 'String',
+        },
+        {
+          name: 'sys.workflow_id',
+          type: 'String',
+        },
+      ],
+      rules: [
+        {}
+      ],
       apiType: 'POST',
       apiTypeList: [
         'GET',
@@ -219,7 +313,6 @@ export default {
       codeDefault: '{}',
       statusCodeNum: 0,
       modelTitle: 'deepseek32b',
-      modelOptShow: false,
 
       // 下拉选择需要的数据
       contextOptList: [
@@ -260,14 +353,9 @@ export default {
         },
       ],
 
-      memoryVal: true,
-      memoryWindowVal: false,
-      memoryNum: 57,
-
       timeoutShow: false,
 
       outputShow: false,
-      visionVal: false,
 
       failVal: false,
       failList: [
@@ -301,26 +389,6 @@ export default {
         {
           label: '异常分支',
           value: '异常分支'
-        }
-      ],
-      infoList: [
-        {
-          id: Math.random(),
-          titleSelect: false,
-        },
-        {
-          id: Math.random(),
-          titleSelect: true,
-        }
-      ],
-
-      addVarShow: false,
-      addVarList: [
-        {
-          id: Math.random(),
-          name: 'sys.files',
-          value: 'sys.files',
-          defaultTags: [{name: 'sys.files'}]
         }
       ],
 
@@ -385,7 +453,18 @@ export default {
   },
   mounted() {
   },
-  methods: {},
+  methods: {
+    apiButtonClick(val) {
+      if (val === '鉴权') {
+        this.authentication = true
+      }
+
+    },
+    enterClick() {
+      this.authentication = false
+      this.apiAuthTitle = this.form.authType
+    }
+  },
 }
 </script>
 
@@ -401,9 +480,6 @@ export default {
       padding-left: 10px;
     }
 
-    .el-input__icon {
-      line-height: 32px;
-    }
 
     .el-input-number {
       width: 100%;
@@ -446,68 +522,16 @@ export default {
   }
 }
 
+.auth-form-item {
+  ::v-deep {
+    .el-radio-button {
+      width: calc((100% - 10px) / 2) !important;
+      height: 60px;
+    }
+  }
+}
+
 ::v-deep {
-  .el-tag {
-    margin-right: 5px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-  }
-
-  .button-new-tag {
-    height: 32px;
-    width: 100%;
-    line-height: 30px;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 8px;
-    border: 1px dashed #DCDFE6 !important;
-    color: #bec4ce;
-    filter: none !important;
-
-    &:hover {
-      background-color: #fff;
-      color: #667085 !important;
-      border-color: #bec4ce !important;
-    }
-  }
-
-  .input-new-tag {
-    width: 100%;
-
-    .el-input__inner {
-      height: 32px;
-      border-radius: 8px;
-      padding: 0 10px;
-      //transform: translateY(1px);
-      border: 1px dashed #DCDFE6 !important;
-    }
-  }
-
-  .el-switch__core {
-    width: 28px !important;
-    height: 16px;
-    border-radius: 5px;
-
-    &:after {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-    }
-  }
-
-  .el-switch.is-checked .el-switch__core::after {
-    margin-left: -13px;
-  }
-
-  .el-slider__runway.show-input {
-    margin-right: 120px;
-  }
-
-  .el-slider__button {
-    width: 5px;
-    border-radius: 3px;
-  }
-
   .el-input__inner {
     height: 32px;
     border: 1px solid #e4e4e4;
@@ -518,9 +542,6 @@ export default {
     }
   }
 
-  .el-input__icon {
-    line-height: 32px;
-  }
 
   .el-input-number {
     width: 110px;
@@ -544,44 +565,12 @@ export default {
 
   .el-input--suffix .el-input__inner {
     width: 82px;
-    padding-left: 9px;
-    padding-right: 24px;
-    font-size: 12px;
-    height: 28px;
+
   }
 
   .el-select .el-input .el-select__caret {
     width: 20px;
     line-height: 28px;
-  }
-
-  .el-button--danger {
-    border: 0;
-    background: #f2f4f7 !important;
-    padding: 7px;
-    height: 32px;
-    width: 32px !important;
-    border-radius: 8px;
-    box-shadow: none;
-
-
-    i {
-      font-weight: bold;
-      font-size: 15px;
-    }
-  }
-
-  .el-button--danger.is-plain {
-    color: #667085;
-
-    &:hover {
-      background: #fee4e2 !important;
-      color: #d92d20;
-    }
-  }
-
-  .el-input__inner::placeholder {
-    font-size: 13px;
   }
 
   .el-radio {

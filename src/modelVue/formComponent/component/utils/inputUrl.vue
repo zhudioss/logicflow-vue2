@@ -200,6 +200,7 @@ export default {
     onChange() {
       this.showHoverMenu = false
       const sel = window.getSelection();
+      console.log(sel,';;;;;;;;')
       if (sel.focusNode) {
         this.$nextTick(() => {
           const anchorOffset = sel.anchorOffset
@@ -317,7 +318,7 @@ export default {
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  position: relative;
+  //position: relative;
 
 
   .topClass {
@@ -367,7 +368,7 @@ export default {
   word-break: break-word; /* 新标准 */
   overflow-wrap: break-word; /* 兼容老浏览器 */
   outline: none;
-  position: relative;
+  //position: relative;
   line-height: 26px;
   padding-left: 10px;
 

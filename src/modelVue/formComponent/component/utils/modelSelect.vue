@@ -169,9 +169,6 @@ export default {
         padding-left: 30px;
       }
 
-      .el-input__icon {
-        line-height: 32px;
-      }
     }
   }
 }
