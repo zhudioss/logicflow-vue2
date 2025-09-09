@@ -177,7 +177,7 @@ export default {
   },
   watch: {
     selectListShow: function (newVal) {
-      this.$setRotate(newVal,this.$refs.selectIRef)
+      this.$setRotate(newVal, this.$refs.selectIRef)
     },
   },
   created() {
@@ -328,6 +328,26 @@ export default {
         font-size: 13px;
         border-radius: 8px;
         padding-left: 30px;
+      }
+    }
+  }
+
+  ::v-deep {
+    .button-new-tag {
+      width: 100%;
+      height: 32px;
+      line-height: 30px;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-radius: 8px;
+      border: 1px dashed #bec4ce;
+      color: #bec4ce;
+      font-weight: normal;
+
+      &:hover {
+        background-color: #fff;
+        color: #667085 !important;
+        border-color: #bec4ce;
       }
     }
   }
