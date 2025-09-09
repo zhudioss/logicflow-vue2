@@ -874,11 +874,6 @@ export default {
     color: #676f83;
   }
 
-  .el-textarea__inner {
-    background: #f1f3f6;
-    font-size: 13px !important;
-  }
-
   .el-loading-spinner .el-loading-text {
     text-align: center;
     margin-top: 10px;

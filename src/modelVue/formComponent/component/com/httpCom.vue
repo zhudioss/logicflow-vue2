@@ -21,8 +21,9 @@
       </el-select>
       <inputUrl style="width: 75%"></inputUrl>
     </div>
-    <el-dialog custom-class="my-dialog" :append-to-body="true" title="鉴权" :visible.sync="authentication">
-      <el-form :model="form" ref="formRef">
+    <el-dialog @close="closeDialog" custom-class="my-dialog" :append-to-body="true" title="鉴权"
+               :visible.sync="authentication">
+      <el-form :rules="rules" :model="form" ref="formRef">
         <el-form-item label="鉴权类型" class="auth-form-item">
           <el-radio-group v-model="form.authType">
             <el-radio-button label="无" style="height: 32px"></el-radio-button>
@@ -36,11 +37,11 @@
             <el-radio-button label="自定义" style="height: 32px"></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="Header" v-if="form.authApiType==='自定义'&&form.authType==='API-Key'">
-          <el-input v-model="form.header" placeholder="请输入"></el-input>
+        <el-form-item prop="header" label="Header" v-if="form.authApiType==='自定义'&&form.authType==='API-Key'">
+          <el-input v-model="form.header" placeholder="请输入 Header"></el-input>
         </el-form-item>
 
-        <el-form-item label="API Key" v-if="form.authType==='API-Key'">
+        <el-form-item prop="apiKeyVal" label="API Key" v-if="form.authType==='API-Key'">
           <el-select
               v-model="form.apiKeyVal"
               clearable
@@ -66,6 +67,20 @@
       <div slot="footer" class="dialog-footer">
         <el-button size="medium" @click="authentication = false" style="margin-left: auto">取消</el-button>
         <el-button size="medium" type="primary" @click="enterClick">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog custom-class="my-dialog" :append-to-body="true" title="导入cURL" :visible.sync="curlShow">
+      <el-input
+          type="textarea"
+          :rows="10"
+          placeholder="请输入您想要生成的代码的详细描述。"
+          resize="none"
+          v-model="textarea">
+      </el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="medium" @click="curlShow = false" style="margin-left: auto">取消</el-button>
+        <el-button size="medium" type="primary" @click="curlShow=false">保存</el-button>
       </div>
     </el-dialog>
 
@@ -239,6 +254,8 @@ export default {
   computed: {},
   data() {
     return {
+      textarea: '',
+      curlShow: false,
       authentication: false,
       apiAuthTitle: '无',
       form: {
@@ -277,9 +294,14 @@ export default {
           type: 'String',
         },
       ],
-      rules: [
-        {}
-      ],
+      rules: {
+        header: [
+          {required: true, message: '请输入 Header', trigger: 'blur'},
+        ],
+        apiKeyVal: [
+          {required: true, message: '请选择或输入 API Key', trigger: 'change'}
+        ],
+      },
       apiType: 'POST',
       apiTypeList: [
         'GET',
@@ -457,12 +479,25 @@ export default {
     apiButtonClick(val) {
       if (val === '鉴权') {
         this.authentication = true
+      } else {
+        this.curlShow = true
       }
 
     },
+    closeDialog() {
+      this.$refs.formRef.resetFields()
+    },
     enterClick() {
-      this.authentication = false
-      this.apiAuthTitle = this.form.authType
+      this.$refs.formRef.validate((valid) => {
+        if (valid) {
+          // console.log('验证通过，提交表单');
+          this.authentication = false
+          this.apiAuthTitle = this.form.authType
+        } else {
+          // console.warn('表单校验失败');
+          return false;
+        }
+      });
     }
   },
 }
