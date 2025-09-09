@@ -1,4 +1,4 @@
-export default function clickNodeAdd(currentNode, type) {
+export default function clickNodeAdd(currentNode, type, properties) {
     const startEdge = this.lf.getNodeOutgoingEdge(currentNode.id); // 以当前node的为起点的线
 
     let x, y, newNode, tag = true
@@ -29,6 +29,7 @@ export default function clickNodeAdd(currentNode, type) {
     }
     if (tag) {
         newNode = this.lf.addNode({
+            properties,
             type,
             x,
             y,

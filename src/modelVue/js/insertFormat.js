@@ -1,4 +1,4 @@
-export default function insertFormat(model, type, currentNode) {
+export default function insertFormat(model, type, currentNode, properties) {
     const {sourceNodeId, targetNodeId} = model;
     const lf = this.lf;
 
@@ -63,7 +63,7 @@ export default function insertFormat(model, type, currentNode) {
     }
 
     // 添加插入节点
-    const newNode = lf.addNode({type, x, y});
+    const newNode = lf.addNode({properties, type, x, y});
 
     // 添加两条连接新节点的边
     const sourceEnd = getAnchorByTag(sourceNodeId, 'end');

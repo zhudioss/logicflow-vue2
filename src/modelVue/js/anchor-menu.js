@@ -4,6 +4,10 @@ export const anchorMenu = [
         name: '开始',
         type: 'start-v',
         icon: require('@/assets/开始.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     // {
     //     id: Math.random(),
@@ -16,6 +20,10 @@ export const anchorMenu = [
         name: 'LLM',
         type: 'llm-v',
         icon: require('@/assets/llm.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     // {
     //     id: Math.random(),
@@ -28,12 +36,20 @@ export const anchorMenu = [
         name: '知识检索',
         type: 'knowledge-v',
         icon: require('@/assets/知识检索.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     {
         id: Math.random(),
         name: '代码执行',
         type: 'code-v',
         icon: require('@/assets/代码执行.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     // {
     //     id: Math.random(),
@@ -46,12 +62,20 @@ export const anchorMenu = [
         name: 'http请求',
         type: 'http-v',
         icon: require('@/assets/http请求.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     {
         id: Math.random(),
         name: '条件分支',
         type: 'branch-v',
         icon: require('@/assets/条件分支.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     // {
     //     id: Math.random(),
@@ -70,18 +94,30 @@ export const anchorMenu = [
         name: '变量聚合',
         type: 'agg-v',
         icon: require('@/assets/变量聚合.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     {
         id: Math.random(),
         name: '文档提取',
         type: 'domEx-v',
         icon: require('@/assets/文档提取.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
     {
         id: Math.random(),
         name: '直接回复',
         type: 'end-v',
         icon: require('@/assets/直接回复.png'),
+        properties: {
+            width: 240,
+            height: 50,
+        },
     },
 ]
 

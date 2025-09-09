@@ -21,7 +21,7 @@
     <!--    锚点菜单-->
     <div id="anchor-menu">
       <div class="content" v-for="item in anchorMenu" :key="item.id"
-           @click="addNodeClick(item.type)">
+           @click="addNodeClick(item.type,item.properties)">
         <img :src="item.icon" alt="" draggable="false">
         <p>{{ item.name }}</p>
       </div>
@@ -306,15 +306,15 @@ export default {
     },
 
     // 添加节点
-    addNodeClick(type) {
+    addNodeClick(type, properties) {
       const currentNode = window.currentNode;
       if (!currentNode) return;
       const model = window.currentNode.props.model
 
       if (model.BaseType === 'node') {  // 判断点击的 node 或 edge
-        clickNodeAdd.call(this, currentNode, type);
+        clickNodeAdd.call(this, currentNode, type, properties);
       } else {
-        insertFormat.call(this, model, type, currentNode)
+        insertFormat.call(this, model, type, currentNode,properties)
       }
 
       // 关闭菜单
