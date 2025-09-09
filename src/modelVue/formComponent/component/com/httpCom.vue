@@ -88,10 +88,17 @@
     <div class="inputField">
       <p>HEADERS</p>
     </div>
+    <div class="inputField" style="margin:5px 0 10px ">
+      <keyValue :listLength="3"></keyValue>
+    </div>
+
 
     <!--PARAMS-->
     <div class="inputField">
       <p>PARAMS</p>
+    </div>
+    <div class="inputField" style="margin:5px 0 10px ">
+      <keyValue :listLength="1"></keyValue>
     </div>
 
     <!--BODY-->
@@ -104,6 +111,11 @@
           {{ item.label }}
         </el-radio>
       </el-radio-group>
+
+      <keyValue v-if="radio=='form-data'" :listLength="1" :typeShow="true"></keyValue>
+
+      <!--x-www-form-urlencoded--->
+      <keyValue v-if="radio=='x-www-form-urlencoded'" style="width: auto" :listLength="1"></keyValue>
 
       <!--json输出框-->
       <promptPublic
@@ -134,7 +146,6 @@
       ></selectV>
 
     </div>
-
 
     <div class="content-line"></div>
 
@@ -240,6 +251,7 @@ import codeInputBox from "@/modelVue/formComponent/component/utils/codeInputBox.
 import promptPublic from "@/modelVue/formComponent/component/utils/promptPublic.vue";
 import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
 import inputUrl from "@/modelVue/formComponent/component/utils/inputUrl.vue";
+import keyValue from "@/modelVue/formComponent/component/utils/keyValue.vue";
 
 export default {
   name: 'httpCom',
@@ -248,7 +260,8 @@ export default {
     codeInputBox,
     promptPublic,
     selectV,
-    inputUrl
+    inputUrl,
+    keyValue
   },
 
   computed: {},
@@ -476,13 +489,13 @@ export default {
   mounted() {
   },
   methods: {
+
     apiButtonClick(val) {
       if (val === '鉴权') {
         this.authentication = true
       } else {
         this.curlShow = true
       }
-
     },
     closeDialog() {
       this.$refs.formRef.resetFields()
@@ -498,7 +511,8 @@ export default {
           return false;
         }
       });
-    }
+    },
+
   },
 }
 </script>

@@ -113,88 +113,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.selectVClass {
-  .modelOpt-class {
-    position: absolute;
-    width: 400px;
-    top: -30px;
-    z-index: 99;
-    left: -423px;
-    background: #fff;
-    border-radius: 15px;
-    border: 1px solid #e4e4e4;
-    padding: 12px 16px;
-    color: #2c3e50;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-
-    .paramsContent {
-      margin-top: 5px;
-      display: flex;
-      font-weight: normal;
-      align-items: center;
-      font-size: 12px;
-    }
-
-    .params-foot {
-      margin-top: 5px;
-      display: flex;
-      font-weight: normal;
-      align-items: center;
-      font-size: 12px;
-      column-gap: 42px;
-    }
-  }
-
-  .modelSelectClass {
-    width: calc(100% - 75px);
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    height: 250px;
-    background: #fff;
-    padding: 13px;
-    position: absolute;
-    top: 74px;
-    z-index: 99999;
-    border-radius: 8px;
-    border: 1px solid #e4e4e4;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-
-    p {
-      margin: 10px 0 3px;
-      font-size: 12px;
-    }
-
-    .selectOpt-class {
-      border-radius: 8px;
-      height: 32px;
-      font-weight: normal;
-      color: #354052;
-      cursor: pointer;
-      padding: 0 5px;
-      display: flex;
-      align-items: center;
-      column-gap: 6px;
-
-      &:hover {
-        background: #f1f3f6;
-      }
-    }
-
-    ::v-deep {
-      .el-input__inner {
-        height: 32px;
-        background: #f9fafb;
-        font-size: 13px;
-        border-radius: 8px;
-        padding-left: 30px;
-      }
-    }
-  }
-}
-
 .contextClass {
   margin-top: 0;
+
+  .title-class {
+    max-width: 80% !important;
+  }
 
   &:hover {
     background: #f2f4f7 !important;
