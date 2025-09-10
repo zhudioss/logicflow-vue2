@@ -1,5 +1,4 @@
 export default function clickNodeAdd(currentNode, type, properties) {
-    console.log(currentNode, '-=-=-=-=-=-==-=-=-=')
     const startEdge = this.lf.getNodeOutgoingEdge(currentNode.id); // 以当前node的为起点的线
 
     const anchorId = currentNode.anchorId;
@@ -7,7 +6,6 @@ export default function clickNodeAdd(currentNode, type, properties) {
         edge => edge.sourceAnchorId === anchorId
     );
 
-    console.log('该锚点的出边:', startEdgesFromAnchor);
     let x, y, newNode, tag = true
     switch (currentNode.tag) {
         case 'end':

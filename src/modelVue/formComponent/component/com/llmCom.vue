@@ -331,8 +331,6 @@ export default {
     },
     // 输入变量选中后同步变量名
     syncValue(e, index) {
-      console.log(e, '-=-=-=-=-=')
-      console.log(this.addVarList[index])
       this.addVarList[index].name = e.tag
     },
 

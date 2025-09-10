@@ -49,7 +49,6 @@ export default {
 
   },
   mounted() {
-    console.log(1)
   },
   methods: {
     // 搜索模型

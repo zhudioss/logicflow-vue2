@@ -200,7 +200,6 @@ export default {
     onChange() {
       this.showHoverMenu = false
       const sel = window.getSelection();
-      console.log(sel,';;;;;;;;')
       if (sel.focusNode) {
         this.$nextTick(() => {
           const anchorOffset = sel.anchorOffset
