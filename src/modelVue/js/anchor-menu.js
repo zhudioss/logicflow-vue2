@@ -74,7 +74,7 @@ export const anchorMenu = [
         icon: require('@/assets/条件分支.png'),
         properties: {
             width: 240,
-            height: 50,
+            height: 100,
         },
     },
     // {
@@ -121,13 +121,13 @@ export const anchorMenu = [
     },
 ]
 
-export function anchorPublic(e, id, tag) {
+export function anchorPublic(e, id, tag, anchorId) {
     e.stopPropagation(); // 防止事件冒泡
     const menu = document.getElementById('anchor-menu');
 
     //向外派发事件
     this.props.graphModel.eventCenter.emit('custom:anchorClick', {node: this.props.model, tag});
-    window.currentNode = {...this, ...e, id, tag};
+    window.currentNode = {...this, ...e, id, tag, anchorId};
 
     const canvasWidth = window.innerWidth;
     const canvasHeight = window.innerHeight;

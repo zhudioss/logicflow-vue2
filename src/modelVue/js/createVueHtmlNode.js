@@ -30,9 +30,10 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
 
     // 设置锚点数据
     getDefaultAnchor() {
-        const {x, y, width, type, id, properties} = this;
+        const {x, y, width, height, type, id, properties} = this;
         const left_A = x - width / 2
         const right_A = x + width / 2
+
         if (type === 'start-v') {
             return [
                 {
@@ -44,7 +45,7 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
                 },
             ];
         }
-        if (type !== 'start-v' && type !== 'end-v') {
+        if (type !== 'start-v' && type !== 'end-v' && type !== 'branch-v') {
             return [
                 {
                     x: left_A,
@@ -61,6 +62,53 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
                     tag: 'end',
                 }
             ];
+        }
+        if (type == 'branch-v') {
+            const anchors = [
+                {
+                    x: left_A,
+                    y,
+                    show: properties.hideAnchor ? 'none' : 'block',
+                    id: `left_${id}`,
+                    tag: 'start',
+                }
+            ];
+            const count = 2; // 右侧锚点个数
+
+            for (let i = 0; i < count; i++) {
+                const anchorY = y - height / 2 + (height / (count + 1)) * (i + 1);
+                anchors.push({
+                    x: right_A,
+                    y: anchorY,
+                    show: 'block',
+                    id: `right_${i}_${id}`,
+                    tag: 'end',
+                });
+            }
+            return anchors;
+            // return [
+            //     {
+            //         x: left_A,
+            //         y,
+            //         show: properties.hideAnchor ? 'none' : 'block',
+            //         id: `left_${id}`,
+            //         tag: 'start',
+            //     },
+            //     {
+            //         x: right_A,
+            //         y: top,
+            //         show: 'block',
+            //         id: `right_${id}`,
+            //         tag: 'end',
+            //     },
+            //     // {
+            //     //     x: right_A,
+            //     //     y: y + 30,
+            //     //     show: 'block',
+            //     //     id: `right1_${id}`,
+            //     //     tag: 'end',
+            //     // }
+            // ];
         }
         if (type === 'end-v') {
             return [
@@ -163,7 +211,9 @@ export function createVueHtmlNode({type, component, modelClass = VueHtmlNodeMode
                         transform: `translate(${x - 9}, ${y - 9})`,
                         style: 'cursor: pointer;transition:0.3s',
                         onclick: (e) => {
-                            anchorPublic.call(this, e, this.id, tag);
+                            // this.id 为 nodeId
+                            // id 为 anchorId
+                            anchorPublic.call(this, e, this.id, tag, id);
                         },
                         onmouseenter: (e) => {
                             const image = e.target;

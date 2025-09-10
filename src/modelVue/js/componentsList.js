@@ -105,7 +105,7 @@ export const componentsList = [
         component: branchV,
         properties: {
             width: 240,
-            height: 50,
+            height: 100,
         },
         uniqueCom: '',
         icon: require('@/assets/条件分支.png'),
