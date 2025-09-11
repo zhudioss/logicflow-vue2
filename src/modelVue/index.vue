@@ -11,7 +11,7 @@
          @dragover.prevent="onDragOver"></div>
 
     <!--浏览、功能、更新、发布-->
-    <div class="functionalArea" style="position: fixed;top: 5px;right: 5px;z-index: 99">
+    <div class="functionalArea">
       <el-button icon="el-icon-video-play" @click="changeLineColor" size="mini">浏览</el-button>
       <el-button icon="el-icon-menu" size="mini">功能</el-button>
       <el-button class="blueButton" icon="el-icon-refresh" size="mini">更新</el-button>
@@ -19,8 +19,7 @@
 
     </div>
 
-
-    <!--    锚点菜单-->
+    <!-- 锚点菜单-->
     <div id="anchor-menu">
       <div class="content" v-for="item in anchorMenu" :key="item.id"
            @click="addNodeClick(item.type,item.properties)">
@@ -29,7 +28,7 @@
       </div>
     </div>
 
-    <!--    右键菜单-->
+    <!-- 右键菜单-->
     <div id="custom-menu" v-show="rightMenuShow"
          :style="{ top: this.menuPosition.y + 'px', left: this.menuPosition.x + 'px' }">
       <div class="content" v-for="item in rightMenuShowList" :key="item.id"
@@ -243,7 +242,7 @@ export default {
           type: 'dot', // 'dot' | 'mesh'
           config: {
             color: '#e2e4ec', // 点的颜色
-            thickness: 1.5, // 点的大小
+            thickness: 2, // 点的大小
           },
         },
         nodeTextEdit: false,// 禁止修改node内容
