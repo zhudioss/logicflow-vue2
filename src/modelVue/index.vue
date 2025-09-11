@@ -210,7 +210,7 @@ export default {
           break
         case '自适应':
           this.lf.fitView()
-          this.lf.zoom(0.8) // 默认
+          this.lf.zoom(0.78) // 默认
           this.lf.translateCenter() // 居中
           break
         case '上一步':
@@ -277,7 +277,7 @@ export default {
       // 缩放
       this.lf.setZoomMaxSize(2);  // 缩放最大
       this.lf.setZoomMiniSize(0.5); // 最小
-      this.lf.zoom(0.8) // 默认
+      this.lf.zoom(0.78) // 默认
       this.lf.translateCenter() // 居中
 
       // 全局控制，点击edge线变色
