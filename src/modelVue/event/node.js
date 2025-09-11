@@ -60,12 +60,13 @@ export default function nodeEvent() {
                 const parentCls = getClassName(e.target.parentNode);
 
                 if (targetCls.includes('warpCard')) {
-                    e.target.style.border = '1.5px solid #3f58fd';
+                    e.target.style.border = '2px solid #3f58fd';
                 }
                 if (parentCls.includes('warpCard')) {
-                    e.target.parentNode.style.border = '1.5px solid #3f58fd';
+                    e.target.parentNode.style.border = '2px solid #3f58fd';
                 }
-                item.vm.$el.style.border = '1.5px solid #3f58fd'
+                // 小地图中的边框
+                item.vm.$el.style.border = '2px solid #3f58fd'
 
 
                 const {
