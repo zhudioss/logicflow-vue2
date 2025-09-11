@@ -2,6 +2,16 @@
 import vueInstanceManager from "@/modelVue/js/vueInstanceManager";
 import contextmenuFun from '../event/contextmenuFun'
 
+function getClassName(el) {
+    if (!el) return '';
+    if (typeof el.className === 'string') {
+        return el.className;
+    } else if (el.className && typeof el.className.baseVal === 'string') {
+        return el.className.baseVal; // SVG 元素
+    }
+    return '';
+}
+
 export default function nodeEvent() {
     // 经过node
     this.lf.on('node:mouseenter', ({data}) => {
@@ -30,15 +40,33 @@ export default function nodeEvent() {
     });
 
     // 点击node
-    this.lf.on('node:click', ({data}) => {
+    this.lf.on('node:click', ({data, e}) => {
         const _this = this
 
         this.rightMenuShow = false
         const nodeId = data.id;
         const vueManager = vueInstanceManager.getAll()
-        vueManager.forEach(item => {
+        vueManager.forEach((item, index) => {
+
             if (item.id === nodeId) {
+
+                // 点击节点，添加边框颜色
+                const domAll = document.getElementsByClassName('warpCard')
+                Array.from(domAll).forEach(dom => {
+                    dom.style.border = 'none';
+                });
+
+                const targetCls = getClassName(e.target);
+                const parentCls = getClassName(e.target.parentNode);
+
+                if (targetCls.includes('warpCard')) {
+                    e.target.style.border = '1.5px solid #3f58fd';
+                }
+                if (parentCls.includes('warpCard')) {
+                    e.target.parentNode.style.border = '1.5px solid #3f58fd';
+                }
                 item.vm.$el.style.border = '1.5px solid #3f58fd'
+
 
                 const {
                     label,
@@ -57,8 +85,6 @@ export default function nodeEvent() {
                 })
 
                 this.drawer = true
-            } else {
-                item.vm.$el.style.border = 'none'
             }
         })
     });

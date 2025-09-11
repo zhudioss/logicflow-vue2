@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="home">
-    <div class="drag-panel" style="position: fixed;z-index:999;">
+    <div class="drag-panel" style="position: absolute;z-index:999;">
       <div v-for="(item,index) in componentsList" :key="index" draggable="true"
            @dragstart="onDragStart($event, JSON.stringify(item))">
         <img :src="item.icon" alt="" draggable="false">
@@ -28,12 +28,25 @@
     </div>
 
     <!--    右键菜单-->
-    <div id="custom-menu" v-show="rightMenuShow" :style="{ top: menuPosition.y + 'px', left: menuPosition.x + 'px' }">
+    <div id="custom-menu" v-show="rightMenuShow"
+         :style="{ top: this.menuPosition.y + 'px', left: this.menuPosition.x + 'px' }">
       <div class="content" v-for="item in rightMenuShowList" :key="item.id"
            @click="handleMenuClick('delete')">
         <img :src="item.icon" alt="" draggable="false">
         <p>{{ item.name }}</p>
       </div>
+    </div>
+
+    <div class="controlClass">
+      <el-button
+          v-for="(item,index) in controlList"
+          :key="index"
+          :title="item.name"
+          :disabled="item.disabled"
+          :icon="item.icon"
+          size="mini"
+          @click="controlClick(item.name)"
+      ></el-button>
     </div>
 
     <!--  弹窗-->
@@ -76,9 +89,7 @@
 
 <script>
 import LogicFlow from '@logicflow/core';
-import {Control, DndPanel, MiniMap} from "@logicflow/extension";
-
-// LogicFlow.use(Control);
+import {MiniMap} from "@logicflow/extension";
 
 import "@logicflow/core/lib/style/index.css";
 import "@logicflow/extension/lib/style/index.css"
@@ -117,17 +128,40 @@ export default {
   },
   data() {
     return {
+      controlList: [
+        {
+          name: '放大',
+          icon: "el-icon-zoom-in",
+          disabled: false,
+        },
+        {
+          name: '缩小',
+          icon: "el-icon-zoom-out",
+          disabled: false,
+        },
+        {
+          name: '自适应',
+          icon: "el-icon-place",
+          disabled: false,
+        },
+        {
+          name: '上一步',
+          icon: "el-icon-back",
+          disabled: true,
+        },
+        {
+          name: '下一步',
+          icon: "el-icon-right",
+          disabled: true,
+        },
+      ],
       lf: '',
-
       // 渲染数据
       nodeData,
-
       // vue组件组册
       componentsList,
-
       // 导出数据 记录vue组件完成情况
       childIds: [],
-
       // 自定义菜单
       anchorMenu,
 
@@ -165,6 +199,28 @@ export default {
     window.addEventListener('click', () => this.menuDom.style.display = 'none')
   },
   methods: {
+    controlClick(name) {
+      console.log(this.lf.history, '[][][]')
+      switch (name) {
+        case '放大':
+          this.lf.zoom(true);
+          break
+        case '缩小':
+          this.lf.zoom(false);
+          break
+        case '自适应':
+          this.lf.fitView()
+          this.lf.zoom(0.8) // 默认
+          this.lf.translateCenter() // 居中
+          break
+        case '上一步':
+          this.lf.history.undoAble() ? this.lf.undo() : null
+          break
+        case '下一步':
+          this.lf.history.redoAble() ? this.lf.redo() : null
+          break
+      }
+    },
     init() {
       this.lf = new LogicFlow({
         container: document.querySelector('#lf-container'),
@@ -175,8 +231,8 @@ export default {
             width: 200,
             height: 100,
             showEdge: true,
-            rightPosition: 5,
-            bottomPosition: 5,
+            leftPosition: 10,
+            bottomPosition: 52,
           },
         },
         grid: {
@@ -184,14 +240,14 @@ export default {
           visible: true,
           type: 'dot', // 'dot' | 'mesh'
           config: {
-            color: '#e2e4ed', // 点的颜色
-            thickness: 1, // 点的大小
+            color: '#e2e4ec', // 点的颜色
+            thickness: 1.5, // 点的大小
           },
         },
         nodeTextEdit: false,// 禁止修改node内容
         edgeTextEdit: false,// 禁止修改edge内容
         stopScrollGraph: true, // 禁止鼠标滚动画布
-        stopZoomGraph: true, // 禁止缩放画布
+        // stopZoomGraph: true, // 禁止缩放画布
         adjustEdge: false, // 禁止用户拖动中间
         // 取消连线边框
         edgeSelectedOutline: false,
@@ -218,11 +274,11 @@ export default {
 
       this.lf.render(this.nodeData);
 
-
-      // 缩放居中
-      this.lf.zoom(0.8)
-      this.lf.translateCenter()
-
+      // 缩放
+      this.lf.setZoomMaxSize(2);  // 缩放最大
+      this.lf.setZoomMiniSize(0.5); // 最小
+      this.lf.zoom(0.8) // 默认
+      this.lf.translateCenter() // 居中
 
       // 全局控制，点击edge线变色
       this.lf.setTheme({
@@ -239,7 +295,15 @@ export default {
       edgeEvent.call(this)
       anchorEvent.call(this)
 
-      // this.lf.extension.miniMap.show()  // 小地图
+      // 监听 history 状态变化
+      this.lf.on('history:change', ({data}) => {
+        const canUndo = this.lf.history.undoAble()
+        const canRedo = this.lf.history.redoAble()
+        canUndo ? this.controlList[3].disabled = false : null
+        canUndo ? this.controlList[4].disabled = false : null
+      })
+
+      this.lf.extension.miniMap.show()  // 小地图
     },
 
     onDragStart(event, data) {
@@ -314,7 +378,7 @@ export default {
       if (model.BaseType === 'node') {  // 判断点击的 node 或 edge
         clickNodeAdd.call(this, currentNode, type, properties);
       } else {
-        insertFormat.call(this, model, type, currentNode,properties)
+        insertFormat.call(this, model, type, currentNode, properties)
       }
 
       // 关闭菜单

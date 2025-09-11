@@ -37,14 +37,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.warpCard {
-  width: 240px;
-  height: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow-y: auto;
-}
+
 
 ul {
   margin-top: 5px;

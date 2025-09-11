@@ -1,5 +1,6 @@
 <template>
-  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
+  <div class="warpCard start-class"
+       :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
       <img src="@/assets/条件分支.png" alt="">
       条件分支
@@ -33,16 +34,17 @@ export default {
         resolve();
       });
     },
+    handleClick() {
+      // const dom = document.querySelector('.warpCard')
+      // console.log(dom,'////')
+      // dom.style.border = '1.5px solid #3f58fd'
+      // console.log('点击的是真实画布上的 HtmlNode:', this.properties.id);
+      // 在这里调用业务逻辑，比如修改边框
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.warpCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow-y: auto;
-}
 </style>
 

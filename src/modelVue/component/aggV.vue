@@ -38,11 +38,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.warpCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow-y: auto;
-}
+
 </style>
 

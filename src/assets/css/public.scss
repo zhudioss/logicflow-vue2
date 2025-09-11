@@ -13,9 +13,14 @@
 .warpCard {
   background: #fcfcfd;
   box-sizing: border-box;
-  border-radius: 12px;
+  border-radius: 15px;
   overflow: hidden;
   padding: 0 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
 
   .head {
     padding: 7px;

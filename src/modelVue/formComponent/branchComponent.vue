@@ -71,7 +71,7 @@ export default {
   },
   watch: {},
   mounted() {
-    console.log(this.detailBranchList, '--=-=-=-=')
+    console.log(this.detailBranchList, 'detailBranchList')
     console.log(this.detailForm, 'detailForm')
   },
   methods: {}
