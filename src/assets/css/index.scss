@@ -231,7 +231,7 @@
     background: #155aef;
     color: #fff;
 
-    &:hover {
+    &:hover, &:focus {
       background: #1351d8;
       color: #fff;
     }
