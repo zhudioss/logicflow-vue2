@@ -9,12 +9,14 @@
     </div>
     <div id="lf-container" style="width: 100%; height:100vh;overflow: hidden" @drop="onDrop"
          @dragover.prevent="onDragOver"></div>
-    <div style="position: fixed;top: 5px;right: 5px;z-index: 99">
-      <el-button @click="exportButton">导出数据
-      </el-button>
-      <el-button @click="changeLineColor">Edge
-        - A
-      </el-button>
+
+    <!--浏览、功能、更新、发布-->
+    <div class="functionalArea" style="position: fixed;top: 5px;right: 5px;z-index: 99">
+      <el-button icon="el-icon-video-play" @click="changeLineColor" size="mini">浏览</el-button>
+      <el-button icon="el-icon-menu" size="mini">功能</el-button>
+      <el-button class="blueButton" icon="el-icon-refresh" size="mini">更新</el-button>
+      <el-button class="blueButton" icon="el-icon-s-promotion" @click="exportButton" size="mini">发布</el-button>
+
     </div>
 
 
@@ -37,6 +39,7 @@
       </div>
     </div>
 
+    <!--小地图和control工具栏-->
     <div class="controlClass">
       <el-button
           v-for="(item,index) in controlList"
@@ -200,7 +203,6 @@ export default {
   },
   methods: {
     controlClick(name) {
-      console.log(this.lf.history, '[][][]')
       switch (name) {
         case '放大':
           this.lf.zoom(true);
