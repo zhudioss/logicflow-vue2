@@ -183,25 +183,29 @@ export default {
     }
 
     .branchListClass {
-      width: calc(100% - 60px);
+      width: calc(100% - 42px);
       font-weight: normal;
       margin-bottom: 8px;
       position: relative;
-      background: #667085;
-      //border: 1px solid #ccc;
+      background: #f2f4f7;
+      border: 1px solid #f2f4f7;
       padding: 5px;
       border-radius: 10px;
 
 
       &:has(.contentDelete:hover) {
-        background: #F56C6C;
+        border: 1px solid #F56C6C;
+        //background: #fef3f2;
       }
 
       .contentDelete {
+        background: #fff;
+        width: 28px;
+        height: 28px;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        right: -48px;
+        right: -36px;
       }
 
 
