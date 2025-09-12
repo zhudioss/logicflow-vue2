@@ -76,7 +76,7 @@ export default {
         obj = {
           id: Math.random()
         }
-        item.branchList.push(val)
+        item.branchList.push(obj)
       }
     },
     removeClick(index) {
@@ -99,6 +99,7 @@ export default {
     }
 
     .branchListClass {
+      height: 50px;
       font-weight: normal;
       margin-bottom: 10px;
     }
