@@ -577,7 +577,6 @@ export default {
   }
 
 
-
   .el-loading-spinner .el-loading-text {
     text-align: center;
     margin-top: 10px;

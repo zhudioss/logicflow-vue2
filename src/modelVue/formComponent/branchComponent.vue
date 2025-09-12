@@ -48,6 +48,7 @@ import aggCom from '@/modelVue/formComponent/component/com/aggCom.vue'
 import domExCom from '@/modelVue/formComponent/component/com/domExCom.vue'
 import codeCom from '@/modelVue/formComponent/component/com/codeCom.vue'
 import httpCom from '@/modelVue/formComponent/component/com/httpCom.vue'
+import branchCom from '@/modelVue/formComponent/component/com/branchCom.vue'
 
 export default {
   name: 'branchComponent',
@@ -60,7 +61,8 @@ export default {
     aggCom,
     domExCom,
     codeCom,
-    httpCom
+    httpCom,
+    branchCom
 
   },
   computed: {},

@@ -107,7 +107,7 @@ export const componentsList = [
             width: 240,
             height: 100,
         },
-        uniqueCom: '',
+        uniqueCom: 'branchCom',
         icon: require('@/assets/条件分支.png'),
     },
     // {
