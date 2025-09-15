@@ -1,9 +1,9 @@
 <template>
   <div class="branchCom">
-    <div v-for="(item,index) in ifList" :key="item.id">
+    <div v-for="(item,index) in ifList" :key="item.id" style="position: relative;">
       <div class="inputField" style="justify-content: start;column-gap: 6px;">
         <div class="ifClass">
-          <p style="line-height: 23px;width: 50px">{{ item.title }}</p>
+          <p style="line-height: 23px;width: 55px">{{ item.title }}</p>
           <div style="flex: 1">
             <div class="branchListClass addVarClass" v-for="(itt,inn) in item.branchList" :key="itt.id">
               <div class="top">
@@ -51,6 +51,12 @@
           </div>
         </div>
       </div>
+      <div class="andOrClass" v-if="item.branchList.length>1">
+        <div class="line"></div>
+        <el-button size="mini" type="primary" plain class="miniButton" @click="andOrButtonClick(item)">
+          {{ item.andOrType }}<i class="el-icon-refresh el-icon--right"></i>
+        </el-button>
+      </div>
       <div class="content-line"></div>
     </div>
 
@@ -74,12 +80,18 @@ export default {
         {
           id: Math.random(),
           title: 'IF',
+          andOrType: 'AND',
           branchList: [
             {
               id: Math.random(),
               varOption: '包含',
               branchVal: ''
-            }
+            },
+            {
+              id: Math.random(),
+              varOption: '包含',
+              branchVal: ''
+            },
           ]
         }
       ],
@@ -140,12 +152,21 @@ export default {
 
   },
   methods: {
+    andOrButtonClick(item) {
+      if (item.andOrType === 'AND') {
+        item.andOrType = 'OR'
+      } else {
+        item.andOrType = 'AND'
+      }
+    },
+
     addInfoClick(val, item) {
       let obj;
       if (val === 'ELIF') {
         obj = {
           id: Math.random(),
           title: 'ELIF',
+          andOrType: 'AND',
           branchList: []
         }
         this.ifList.push(obj)
@@ -158,6 +179,7 @@ export default {
         item.branchList.push(obj)
       }
     },
+
     removeClick(name, index, item) {
       if (name === 'branchList') {
         item.branchList.splice(index, 1)
@@ -199,7 +221,7 @@ export default {
       }
 
       .contentDelete {
-        background: #fff;
+        background: transparent;
         width: 28px;
         height: 28px;
         position: absolute;
@@ -213,6 +235,41 @@ export default {
         align-items: center;
         display: flex;
         margin-bottom: 8px;
+      }
+    }
+  }
+
+  .andOrClass {
+    width: 74px;
+    height: auto;
+    //background: red;
+    position: absolute;
+    top: 0px;
+    bottom: 45px;
+    overflow: hidden;
+
+    .line {
+      width: 33px;
+      height: auto;
+      border-radius: 10px;
+      position: absolute;
+      top: 25px;
+      bottom: 25px;
+      right: -20px;
+      border: 1px solid #dddee1;
+    }
+
+    .miniButton {
+      font-weight: bold;
+      position: absolute;
+      right: -3px;
+      top: 50%;
+      transform: scale(0.83) translateY(-50%);
+
+      ::v-deep {
+        .el-icon-refresh:before {
+          font-weight: bold;
+        }
       }
     }
   }
