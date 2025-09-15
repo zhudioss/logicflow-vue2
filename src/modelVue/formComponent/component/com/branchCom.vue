@@ -71,7 +71,7 @@ import selectV from "@/modelVue/formComponent/component/utils/selectV.vue";
 
 export default {
   name: 'branchCom',
-  props: [],
+  props: ['lf', 'nodeModelId'],
   components: {selectV},
   computed: {},
   data() {
@@ -141,7 +141,8 @@ export default {
         '不是',
         '为空',
         '不为空',
-      ]
+      ],
+      anchorNum: 2
     }
   },
   watch: {},
@@ -170,6 +171,7 @@ export default {
           branchList: []
         }
         this.ifList.push(obj)
+        this.nodeModelAddAnchor(++this.anchorNum, 30)
       } else {
         obj = {
           id: Math.random(),
@@ -180,11 +182,26 @@ export default {
       }
     },
 
+    nodeModelAddAnchor(num, step) {
+      const nodeModel = this.lf.getNodeModelById(this.nodeModelId)
+      const oldHeight = nodeModel.height
+      const newHeight = nodeModel.height + step
+
+      nodeModel.setProperties({
+        extraAnchors: num,
+        height: newHeight
+      })
+
+      nodeModel.height = newHeight
+      nodeModel.y = nodeModel.y + (newHeight - oldHeight) / 2
+    },
+
     removeClick(name, index, item) {
       if (name === 'branchList') {
         item.branchList.splice(index, 1)
       } else {
         this.ifList.splice(index, 1)
+        this.nodeModelAddAnchor(--this.anchorNum, -30)
       }
 
     }

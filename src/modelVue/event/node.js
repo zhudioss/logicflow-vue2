@@ -45,6 +45,7 @@ export default function nodeEvent() {
 
         this.rightMenuShow = false
         const nodeId = data.id;
+        this.nodeModelId = data.id;
         const vueManager = vueInstanceManager.getAll()
         vueManager.forEach((item, index) => {
 
@@ -56,6 +57,7 @@ export default function nodeEvent() {
                     dom.style.border = 'none';
                 });
 
+                this.tagE = e.target
                 const targetCls = getClassName(e.target);
                 const parentCls = getClassName(e.target.parentNode);
 

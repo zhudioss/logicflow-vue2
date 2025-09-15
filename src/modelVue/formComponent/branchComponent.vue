@@ -2,7 +2,7 @@
   <div class="warp-detail">
     <div>
       <!-- 组件 -->
-      <component :is="detailForm.uniqueCom"></component>
+      <component :is="detailForm.uniqueCom" :lf="lf" :nodeModelId="nodeModelId"></component>
 
       <div class="line-class"></div>
       <div class="inputField">
@@ -52,7 +52,7 @@ import branchCom from '@/modelVue/formComponent/component/com/branchCom.vue'
 
 export default {
   name: 'branchComponent',
-  props: ['detailBranchList', 'detailForm'],
+  props: ['detailBranchList', 'detailForm', 'lf', 'nodeModelId'],
   components: {
     startCom,
     llmCom,
@@ -73,8 +73,8 @@ export default {
   },
   watch: {},
   mounted() {
-    console.log(this.detailBranchList, 'detailBranchList')
-    console.log(this.detailForm, 'detailForm')
+    // console.log(this.detailBranchList, 'detailBranchList')
+    // console.log(this.detailForm, 'detailForm')
   },
   methods: {}
 }

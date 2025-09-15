@@ -73,10 +73,11 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
                     tag: 'start',
                 }
             ];
-            const count = 2; // 右侧锚点个数
+            const count = properties.extraAnchors ? properties.extraAnchors : 2; // 右侧锚点个数
 
             for (let i = 0; i < count; i++) {
-                const anchorY = y - height / 2 + (height / (count + 1)) * (i + 1);
+                // const anchorY = y - height / 2 + (height / (count + 1)) * (i + 1);
+                const anchorY = y - height / 2 + 30 * (i + 1); // 按固定间距排
                 anchors.push({
                     x: right_A,
                     y: anchorY,
@@ -121,6 +122,10 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
                 },
             ];
         }
+    }
+
+    addField(item) {
+        // console.log(item)
     }
 
     // 连接规则

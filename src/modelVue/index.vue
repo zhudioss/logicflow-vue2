@@ -81,7 +81,9 @@
         </div>
         <div class="line-class"></div>
         <branchComponent
+            :lf="lf"
             :detailBranchList="detailBranchList"
+            :nodeModelId="nodeModelId"
             :detailForm="detailForm"
             style="flex: 1;overflow-y: auto;"/>
       </div>
@@ -188,6 +190,7 @@ export default {
         label: '',
         icon: '',
       },
+      nodeModelId: '',
       detailBranchList: [],
       describeInput: '',
       moreAlertShow: false,
