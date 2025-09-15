@@ -289,7 +289,7 @@ export default {
         bezier: {
           onClick: (e) => {
             e.stopPropagation()
-            e.target.setAttribute('stroke', '#3f58fd'); // 放大
+            e.target.setAttribute('stroke', '#3f58fd');
           }
         }
       });
