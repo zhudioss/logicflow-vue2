@@ -182,6 +182,7 @@ export default {
       }
     },
 
+    // 锚点添加 / 删除
     nodeModelAddAnchor(num, step) {
       const nodeModel = this.lf.getNodeModelById(this.nodeModelId)
       const oldHeight = nodeModel.height
