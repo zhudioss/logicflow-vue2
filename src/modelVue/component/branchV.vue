@@ -5,6 +5,9 @@
       <img src="@/assets/条件分支.png" alt="">
       条件分支
     </div>
+    <div class="judgment">
+      <div v-for="(item,index) in properties.judgmentList" :key="index">{{ item.name }}</div>
+    </div>
   </div>
 </template>
 
@@ -46,5 +49,28 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.warpCard {
+  position: relative;
+
+  .judgment {
+    height: auto;
+    position: absolute;
+    right: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    top: 20px;
+    bottom: 29px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+    div {
+      text-align: right;
+    }
+  }
+}
+
+
 </style>
 

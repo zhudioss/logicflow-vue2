@@ -75,6 +75,14 @@ export const anchorMenu = [
         properties: {
             width: 240,
             height: 100,
+            judgmentList: [
+                {
+                    name: 'IF'
+                },
+                {
+                    name: 'ELSE',
+                }
+            ]
         },
     },
     // {

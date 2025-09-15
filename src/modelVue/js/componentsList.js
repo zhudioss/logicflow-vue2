@@ -106,6 +106,14 @@ export const componentsList = [
         properties: {
             width: 240,
             height: 100,
+            judgmentList: [
+                {
+                    name: 'IF'
+                },
+                {
+                    name: 'ELSE',
+                }
+            ]
         },
         uniqueCom: 'branchCom',
         icon: require('@/assets/条件分支.png'),

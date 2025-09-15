@@ -188,13 +188,26 @@ export default {
       const oldHeight = nodeModel.height
       const newHeight = nodeModel.height + step
 
+      // 顶部位置不动
+      nodeModel.y = nodeModel.y + (newHeight - oldHeight) / 2
+
+      const judgmentList = nodeModel.getProperties().judgmentList
+      if (step > 0) {
+        judgmentList.push({name: 'ELSE'})
+      } else {
+        judgmentList.pop()
+      }
+
+      // 设置properties
       nodeModel.setProperties({
         extraAnchors: num,
-        height: newHeight
+        height: newHeight,
+        judgmentList
       })
 
+      // 重新设置nodeModel高度
       nodeModel.height = newHeight
-      nodeModel.y = nodeModel.y + (newHeight - oldHeight) / 2
+
     },
 
     removeClick(name, index, item) {

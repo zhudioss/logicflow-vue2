@@ -21,8 +21,19 @@ export const nodeData =
                     "width": 240,
                     "height": 100,
                     "hideAnchor": true,
-                    "startInput": ""
-                }
+                    "startInput": "",
+                    "judgmentList": [
+                        {
+                            "name": 'IF'
+                        },
+                        {
+                            "name": 'ELSE',
+                        },
+                        // {
+                        //     "name": 'ELSE',
+                        // }
+                    ]
+                },
             },
             {
                 "id": "f402c9f8-a7a6-4575-a74f-1c2b884433f0",
