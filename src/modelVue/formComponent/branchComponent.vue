@@ -2,7 +2,9 @@
   <div class="warp-detail">
     <div>
       <!-- 组件 -->
-      <component :is="detailForm.uniqueCom" :lf="lf" :nodeModelId="nodeModelId"></component>
+      <keep-alive>
+        <component :is="detailForm.uniqueCom" :lf="lf" :nodeModelId="nodeModelId"></component>
+      </keep-alive>
 
       <div class="line-class"></div>
       <div class="inputField">
