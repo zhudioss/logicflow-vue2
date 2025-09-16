@@ -176,7 +176,7 @@ export default {
 
       rightMenuShowList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           name: '删除',
           icon: require('@/assets/删除.png'),
         },

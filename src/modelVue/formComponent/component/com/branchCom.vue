@@ -78,20 +78,20 @@ export default {
     return {
       ifList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           title: 'IF',
           andOrType: 'AND',
           branchList: [
-            {
-              id: Math.random(),
-              varOption: '包含',
-              branchVal: ''
-            },
-            {
-              id: Math.random(),
-              varOption: '包含',
-              branchVal: ''
-            },
+            // {
+            //   id: this.$nanoid(),
+            //   varOption: '包含',
+            //   branchVal: ''
+            // },
+            // {
+            //   id: this.$nanoid(),
+            //   varOption: '包含',
+            //   branchVal: ''
+            // },
           ]
         }
       ],
@@ -150,7 +150,6 @@ export default {
 
   },
   mounted() {
-
   },
   methods: {
     andOrButtonClick(item) {
@@ -165,7 +164,7 @@ export default {
       let obj;
       if (val === 'ELIF') {
         obj = {
-          id: Math.random(),
+          id: this.$nanoid(),
           title: 'ELIF',
           andOrType: 'AND',
           branchList: []
@@ -174,7 +173,7 @@ export default {
         this.nodeModelAddAnchor(++this.anchorNum, 30)
       } else {
         obj = {
-          id: Math.random(),
+          id: this.$nanoid(),
           varOption: '',
           branchVal: ''
         }

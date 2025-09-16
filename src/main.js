@@ -8,6 +8,10 @@ import {bus} from './utils/bus'
 import "@/assets/css/public.scss";
 import 'animate.css';
 
+import { nanoid } from 'nanoid'
+
+Vue.prototype.$nanoid = nanoid   // 全局挂载
+
 import ClickOutsideClose from '@/utils/click-outside-close'
 import resizeLeft from '@/utils/resizeLeft'
 

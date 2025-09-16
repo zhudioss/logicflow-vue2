@@ -104,7 +104,7 @@ export default {
     },
     addClick() {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         key: '',
         select: 'text',
         value: ''

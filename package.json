@@ -15,6 +15,7 @@
     "codemirror": "^5.65.20",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.14",
+    "nanoid": "^5.1.5",
     "sass": "^1.86.0",
     "sass-loader": "^16.0.5",
     "vue": "^2.6.14",

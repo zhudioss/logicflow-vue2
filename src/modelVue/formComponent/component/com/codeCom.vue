@@ -208,11 +208,11 @@ export default {
       ],
       infoList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           titleSelect: false,
         },
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           titleSelect: true,
         }
       ],
@@ -220,7 +220,7 @@ export default {
       addVarShow: false,
       addVarList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           name: 'sys.files',
           value: 'sys.files',
           defaultTags: [{name: 'sys.files'}]
@@ -230,7 +230,7 @@ export default {
       // 输出变量
       outputList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           name: 'sys.files',
           type: 'String',
         }
@@ -262,7 +262,7 @@ export default {
     // jinja选中后添加输入变量内容
     jinjaSelect(e) {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         name: e.name,
         value: '',
         defaultTags: []
@@ -281,7 +281,7 @@ export default {
     // 输入 / 输出 - 添加
     addVarClick(text) {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         name: '',
       }
       if (text === '输入') {
@@ -306,7 +306,7 @@ export default {
     // 添加消息
     addInfoClick() {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         titleSelect: true,
       }
       this.infoList.push(obj)

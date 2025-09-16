@@ -280,12 +280,12 @@ export default {
       ],
       infoList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           titleSelect: false,
           removeShow: false
         },
         // {
-        //   id: Math.random(),
+        //   id: this.$nanoid(),
         //   titleSelect: true,
         //   topTitle: 'USER'
         // }
@@ -319,7 +319,7 @@ export default {
     // jinja选中后添加输入变量内容
     jinjaSelect(e) {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         name: e.name,
         value: ''
       }
@@ -337,7 +337,7 @@ export default {
     // 输入变量 - 添加
     addVarClick() {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         name: '',
         value: ''
       }
@@ -359,7 +359,7 @@ export default {
       }
 
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         titleSelect: true,
         topTitle: topTitle
       }

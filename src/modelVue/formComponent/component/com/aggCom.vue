@@ -86,7 +86,7 @@ export default {
       aggGroupSwitch: false,
       groupList: [
         {
-          id: Math.random(),
+          id: this.$nanoid(),
           removeShow: false,
           variableList: []
         }
@@ -155,7 +155,7 @@ export default {
   methods: {
     addGroupClick() {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
         removeShow: false,
         variableList: [],
       }
@@ -168,7 +168,7 @@ export default {
 
     addClick(val) {
       let obj = {
-        id: Math.random(),
+        id: this.$nanoid(),
       }
       val.variableList.push(obj)
     },
@@ -189,7 +189,7 @@ export default {
       if (e === false) {
         this.groupList = [
           {
-            id: Math.random(),
+            id: this.$nanoid(),
             removeShow: false,
             variableList: [],
           }

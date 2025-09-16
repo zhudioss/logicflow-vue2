@@ -3,7 +3,7 @@
     <div>
       <!-- 组件 -->
       <keep-alive>
-        <component :is="detailForm.uniqueCom" :lf="lf" :nodeModelId="nodeModelId"></component>
+        <component :key="nodeModelId" :is="detailForm.uniqueCom" :lf="lf" :nodeModelId="nodeModelId"></component>
       </keep-alive>
 
       <div class="line-class"></div>
