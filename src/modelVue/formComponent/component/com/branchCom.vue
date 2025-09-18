@@ -186,15 +186,20 @@ export default {
     getAnchorsList(type, index) {
       const nodeModel = this.lf.getNodeModelById(this.nodeModelId) // 获取 nodeModel
       const list = nodeModel.anchors.filter(itt => itt.tag === 'end')
-      // console.log(JSON.parse(JSON.stringify(list)), '老的锚点')
       if (type === '+') {
         list.push({})
       } else {
         // 如果删除的锚点有线，先删除线
         const outgoingEdges = this.lf.getNodeOutgoingEdge(this.nodeModelId)
         const anchorID = list[index].id // 找到对应的要删除的anchorID
-        const edgesID = outgoingEdges.find(itt => itt.sourceAnchorId === anchorID)?.id ?? null // 找到需要删除的边
-        edgesID && this.lf.deleteEdge(edgesID);
+        const needEdge = outgoingEdges.find(itt => itt.sourceAnchorId === anchorID) // 找到需要删除的边
+        if (needEdge) {
+          this.lf.deleteEdge(needEdge.id)
+
+          // 删除后取消锚点隐藏
+          const edgeModel = this.lf.getNodeModelById(needEdge.targetNodeId);
+          edgeModel.setProperties({hideAnchor: false});
+        }
 
         // 如果删除的锚点没线，线标记其他有线的锚点
         const newOutgoingEdges = this.lf.getNodeOutgoingEdge(this.nodeModelId)
@@ -211,8 +216,6 @@ export default {
         list.splice(index, 1)
       }
       this.newAnchorsList = list
-      // console.log(this.newAnchorsList, '新的')
-
     },
 
     // 锚点添加 / 删除
