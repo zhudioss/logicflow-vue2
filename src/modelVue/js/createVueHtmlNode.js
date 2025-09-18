@@ -110,29 +110,6 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
             }
 
             return anchors;
-            // return [
-            //     {
-            //         x: left_A,
-            //         y,
-            //         show: properties.hideAnchor ? 'none' : 'block',
-            //         id: `left_${id}`,
-            //         tag: 'start',
-            //     },
-            //     {
-            //         x: right_A,
-            //         y: top,
-            //         show: 'block',
-            //         id: `right_${id}`,
-            //         tag: 'end',
-            //     },
-            //     // {
-            //     //     x: right_A,
-            //     //     y: y + 30,
-            //     //     show: 'block',
-            //     //     id: `right1_${id}`,
-            //     //     tag: 'end',
-            //     // }
-            // ];
         }
         if (type === 'end-v') {
             return [
