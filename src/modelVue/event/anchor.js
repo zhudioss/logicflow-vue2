@@ -21,14 +21,28 @@ export default function anchorEvent() {
 
     // 锚点监听
     this.lf.on('anchor:drop', ({data, nodeModel, edgeModel}) => {
-        console.log(data, 'data')
-        console.log(nodeModel, 'nodeModel')
-        console.log(edgeModel, 'edgeModel')
-
         // console.log(this.lf.getNodeIncomingEdge(edgeModel.targetNodeId),'获取目标的所有上一级节点')
         // console.log(this.lf.getNodeOutgoingEdge(nodeModel.id).length ,'获取节点所有的下一级节点')
         this.lf.getNodeIncomingEdge(edgeModel.targetNodeId).length > 1 &&
         this.lf.getNodeOutgoingEdge(nodeModel.id).length > 1 ? this.lf.deleteEdge(edgeModel.id) : null
+
+        // 处理用户随意连接导致顺序父子节点颠倒问题
+        if (data.tag === 'start') {
+            // 1、处理源头和目标节点和锚点颠倒
+            const sourceNodeId = edgeModel.targetNodeId // 节点
+            const targetNodeId = edgeModel.sourceNodeId
+            const sourceAnchorId = edgeModel.targetAnchorId // 锚点
+            const targetAnchorId = edgeModel.sourceAnchorId
+            // 2、删除颠倒后的线
+            this.lf.deleteEdge(edgeModel.id)
+            // 3、重新绘制线
+            this.lf.addEdge({
+                sourceNodeId,
+                targetNodeId,
+                sourceAnchorId,
+                targetAnchorId
+            });
+        }
 
         // 获取当前节点所有边
         const nodeEdgesList = this.lf.getNodeEdges(nodeModel.id);

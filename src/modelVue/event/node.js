@@ -80,6 +80,7 @@ export default function nodeEvent() {
                 _this.detailForm.icon = icon
                 _this.detailForm.uniqueCom = uniqueCom
                 const childAll = this.lf.getNodeOutgoingNode(data.id) // 所有子节点
+
                 this.detailBranchList = childAll.map(child => {
                     return ({
                         ...child,

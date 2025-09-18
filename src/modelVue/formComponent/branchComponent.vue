@@ -15,7 +15,7 @@
         <div class="nodeBranch-class">
           <div class="left">
             <div class="start-class">
-              <img src="@/assets/开始.png" alt="">
+              <img :src="detailForm.icon" alt="">
             </div>
             <div class="edge">
               <div></div>
@@ -73,10 +73,14 @@ export default {
       input: '',
     }
   },
-  watch: {},
+  watch: {
+  },
   mounted() {
+
+  },
+  updated() {
     // console.log(this.detailBranchList, 'detailBranchList')
-    // console.log(this.detailForm, 'detailForm')
+    console.log(this.detailForm, 'detailForm')
   },
   methods: {}
 }
