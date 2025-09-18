@@ -58,8 +58,8 @@ export default {
     right: 15px;
     font-size: 12px;
     font-weight: bold;
-    top: 20px;
-    bottom: 29px;
+    top: 22px;
+    bottom: 22px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

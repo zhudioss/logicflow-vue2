@@ -142,7 +142,7 @@ export default {
         '为空',
         '不为空',
       ],
-      anchorNum: 2
+      newAnchorsList: []
     }
   },
   watch: {},
@@ -170,7 +170,8 @@ export default {
           branchList: []
         }
         this.ifList.push(obj)
-        this.nodeModelAddAnchor(++this.anchorNum, 30)
+        this.getAnchorsList('+')
+        this.nodeModelAddAnchor(30)
       } else {
         obj = {
           id: this.$nanoid(),
@@ -181,8 +182,41 @@ export default {
       }
     },
 
+    // 获取重新定义的anchors集合
+    getAnchorsList(type, index) {
+      const nodeModel = this.lf.getNodeModelById(this.nodeModelId) // 获取 nodeModel
+      const list = nodeModel.anchors.filter(itt => itt.tag === 'end')
+      // console.log(JSON.parse(JSON.stringify(list)), '老的锚点')
+      if (type === '+') {
+        list.push({})
+      } else {
+        // 如果删除的锚点有线，先删除线
+        const outgoingEdges = this.lf.getNodeOutgoingEdge(this.nodeModelId)
+        const anchorID = list[index].id // 找到对应的要删除的anchorID
+        const edgesID = outgoingEdges.find(itt => itt.sourceAnchorId === anchorID)?.id ?? null // 找到需要删除的边
+        edgesID && this.lf.deleteEdge(edgesID);
+
+        // 如果删除的锚点没线，线标记其他有线的锚点
+        const newOutgoingEdges = this.lf.getNodeOutgoingEdge(this.nodeModelId)
+        const map = new Map(newOutgoingEdges.map(item => [item.sourceAnchorId, item]))  // 查找到有边的锚点
+        list.forEach(item => {
+          const match = map.get(item.id)
+          if (match) {
+            item.haveEdge = true
+            item.targetNodeId = match.targetNodeId
+          }
+        })
+
+        // 删除锚点
+        list.splice(index, 1)
+      }
+      this.newAnchorsList = list
+      // console.log(this.newAnchorsList, '新的')
+
+    },
+
     // 锚点添加 / 删除
-    nodeModelAddAnchor(num, step) {
+    nodeModelAddAnchor(step) {
       const nodeModel = this.lf.getNodeModelById(this.nodeModelId)
       const oldHeight = nodeModel.height
       const newHeight = nodeModel.height + step
@@ -199,14 +233,13 @@ export default {
 
       // 设置properties
       nodeModel.setProperties({
-        extraAnchors: num,
+        anchorsList: this.newAnchorsList,
         height: newHeight,
         judgmentList
       })
 
       // 重新设置nodeModel高度
       nodeModel.height = newHeight
-
     },
 
     removeClick(name, index, item) {
@@ -214,9 +247,30 @@ export default {
         item.branchList.splice(index, 1)
       } else {
         this.ifList.splice(index, 1)
-        this.nodeModelAddAnchor(--this.anchorNum, -30)
-      }
+        this.getAnchorsList('-', index + 1)
+        this.nodeModelAddAnchor(-30)
 
+
+        // 渲染完成后，去重新回绘制没有背删除的线
+        const newOutgoingEdges = this.lf.getNodeOutgoingEdge(this.nodeModelId)
+        const newEdgesIDs = newOutgoingEdges.map(itt => itt.id)
+
+        newEdgesIDs.forEach(itt => {
+          this.lf.deleteEdge(itt);
+        })
+
+        const nodeModel = this.lf.getNodeModelById(this.nodeModelId) // 获取 nodeModel
+        const list = nodeModel.anchors.filter(itt => itt.tag === 'end')
+        list.forEach((itt) => {
+          if (itt.haveEdge) {
+            this.lf.addEdge({
+              sourceNodeId: this.nodeModelId,
+              targetNodeId: itt.targetNodeId,
+              sourceAnchorId: itt.id,
+            })
+          }
+        })
+      }
     }
   },
 }

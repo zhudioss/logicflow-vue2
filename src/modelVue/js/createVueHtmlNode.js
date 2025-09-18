@@ -73,19 +73,42 @@ export class VueHtmlNodeModel extends HtmlNodeModel {
                     tag: 'start',
                 }
             ];
-            const count = properties.extraAnchors ? properties.extraAnchors : 2; // 右侧锚点个数
 
-            for (let i = 0; i < count; i++) {
-                // const anchorY = y - height / 2 + (height / (count + 1)) * (i + 1);
-                const anchorY = y - height / 2 + 30 * (i + 1); // 按固定间距排
-                anchors.push({
-                    x: right_A,
-                    y: anchorY,
-                    show: 'block',
-                    id: `right_${i}_${id}`,
-                    tag: 'end',
-                });
+            const top = y - height / 2   // 节点上边缘
+            if (properties.anchorsList) {
+                const n = properties.anchorsList.length
+                const gap = height / (n + 1)  // 等分，保证上下留白
+
+                properties.anchorsList.forEach((item, index) => {
+                    const anchorY = top + gap * (index + 1)
+                    anchors.push({
+                        x: right_A,
+                        y: anchorY,
+                        show: 'block',
+                        id: `right_${index}_${id}`,
+                        tag: 'end',
+                        haveEdge: item.haveEdge || '',
+                        targetNodeId: item.targetNodeId || ''
+                    })
+                })
+
+            } else {
+                // 默认两个锚点
+                const n = 2
+                const gap = height / (n + 1)
+
+                for (let i = 0; i < n; i++) {
+                    const anchorY = top + gap * (i + 1)
+                    anchors.push({
+                        x: right_A,
+                        y: anchorY,
+                        show: 'block',
+                        id: `right_${i}_${id}`,
+                        tag: 'end',
+                    })
+                }
             }
+
             return anchors;
             // return [
             //     {
