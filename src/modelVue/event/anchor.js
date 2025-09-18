@@ -28,7 +28,7 @@ export default function anchorEvent() {
 
         // 处理用户随意连接导致顺序父子节点颠倒问题
         if (data.tag === 'start') {
-            // 1、处理源头和目标节点和锚点颠倒
+            // 1、处理源头节点及目标节点和锚点颠倒
             const sourceNodeId = edgeModel.targetNodeId // 节点
             const targetNodeId = edgeModel.sourceNodeId
             const sourceAnchorId = edgeModel.targetAnchorId // 锚点
