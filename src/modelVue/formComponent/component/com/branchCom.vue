@@ -219,7 +219,7 @@ export default {
     },
 
     // 锚点添加 / 删除
-    nodeModelAddAnchor(step) {
+    nodeModelAddAnchor(step, index) {
       const nodeModel = this.lf.getNodeModelById(this.nodeModelId)
       const oldHeight = nodeModel.height
       const newHeight = nodeModel.height + step
@@ -231,7 +231,7 @@ export default {
       if (step > 0) {
         judgmentList.push({name: 'ELSE'})
       } else {
-        judgmentList.pop()
+        judgmentList.splice(index, 1)
       }
 
       // 设置properties
@@ -246,13 +246,13 @@ export default {
     },
 
     removeClick(name, index, item) {
+      console.log(index, '-=-=-=')
       if (name === 'branchList') {
         item.branchList.splice(index, 1)
       } else {
         this.ifList.splice(index, 1)
         this.getAnchorsList('-', index + 1)
-        this.nodeModelAddAnchor(-30)
-
+        this.nodeModelAddAnchor(-30, index + 1)
 
         // 渲染完成后，去重新回绘制没有背删除的线
         const newOutgoingEdges = this.lf.getNodeOutgoingEdge(this.nodeModelId)
