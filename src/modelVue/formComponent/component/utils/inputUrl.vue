@@ -621,27 +621,6 @@ export default {
     }
   }
 
-  .el-dialog {
-    width: 75%;
-  }
-
-  .el-dialog__body {
-    display: flex;
-    padding-bottom: 20px;
-
-    .el-divider--vertical {
-      height: auto;
-    }
-  }
-
-  .el-dialog__title {
-    color: #409eff;
-  }
-
-  .el-dialog__headerbtn {
-    display: block;
-  }
-
   .el-divider--horizontal {
     margin: 36px 0 15px;
   }

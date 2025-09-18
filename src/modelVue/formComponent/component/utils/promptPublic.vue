@@ -851,6 +851,7 @@ export default {
   .el-dialog__body {
     display: flex;
     padding-bottom: 20px;
+    min-height: 60vh;
 
     .el-divider--vertical {
       height: auto;
