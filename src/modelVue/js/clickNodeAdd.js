@@ -12,7 +12,9 @@ export default function clickNodeAdd(currentNode, type, properties) {
             if (startEdgesFromAnchor.length > 0) {
                 const nodeModel = this.lf.getNodeModelById(startEdgesFromAnchor.at(-1).targetNodeId) // 数组最后一个元素的model
                 x = nodeModel.x
-                y = nodeModel.y + 100
+                y = nodeModel.type === 'branch-v' || type === 'branch-v'
+                    ? nodeModel.y + 130
+                    : nodeModel.y + 100
 
                 // 如果一个节点有多个 以他终点的连线，是不允许添加的
                 const lastNodeEdges = this.lf.getNodeIncomingEdge(startEdgesFromAnchor.at(-1).targetNodeId)
