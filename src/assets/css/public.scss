@@ -21,6 +21,11 @@
   flex-direction: column;
   justify-content: center;
   overflow-y: auto;
+  cursor: grab;
+
+  &:active {
+    cursor: default;
+  }
 
   .head {
     padding: 7px;
