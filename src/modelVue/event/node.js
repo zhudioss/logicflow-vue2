@@ -81,9 +81,9 @@ export default function nodeEvent() {
                 _this.detailForm.icon = icon
                 _this.detailForm.uniqueCom = uniqueCom
 
-                childAll.call(this) // 同步详情页面子节点列表
-
                 this.backClickNodeId = data.id;
+
+                childAll.call(this) // 同步详情页面子节点列表
                 this.drawer = true
             }
         })
