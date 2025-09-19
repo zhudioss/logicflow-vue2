@@ -28,7 +28,7 @@
               <img :src="item.componentsData.icon" alt="">
               {{ item.componentsData.label }}
             </div>
-            <div class="right-content addNode-class">
+            <div class="right-content addNode-class" @click="addBranch">
               <div style="width:22px;height: 22px;text-align: center;margin-right: 10px;line-height: 22px;">
                 <i class="el-icon-plus"></i>
               </div>
@@ -73,8 +73,7 @@ export default {
       input: '',
     }
   },
-  watch: {
-  },
+  watch: {},
   mounted() {
 
   },
@@ -82,7 +81,15 @@ export default {
     // console.log(this.detailBranchList, 'detailBranchList')
     console.log(this.detailForm, 'detailForm')
   },
-  methods: {}
+  methods: {
+    // 添加分支
+    addBranch() {
+      // const menu = document.getElementById('anchor-menu');
+      // console.log(menu, 'p[p[p[p[');
+      // menu.style.display = 'block';
+
+    }
+  }
 }
 </script>
 <style lang="scss">

@@ -1,3 +1,5 @@
+import childAll from '@/modelVue/js/childAll'
+
 export default function clickNodeAdd(currentNode, type, properties) {
     const startEdge = this.lf.getNodeOutgoingEdge(currentNode.id); // 以当前node的为起点的线
 
@@ -52,6 +54,7 @@ export default function clickNodeAdd(currentNode, type, properties) {
             break
     }
     if (tag) {
+
         newNode = this.lf.addNode({
             properties,
             type,
@@ -63,6 +66,9 @@ export default function clickNodeAdd(currentNode, type, properties) {
             targetNodeId: currentNode.tag === 'end' ? newNode.id : currentNode.id, // 目标节点
             sourceAnchorId: currentNode.anchorId, // 起始锚点
         });
+
+        childAll.call(this) // 同步详情页面子节点列表
+
     }
     // else {
     //     this.$message({

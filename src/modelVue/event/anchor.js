@@ -1,4 +1,5 @@
 import {anchorMenu} from "@/modelVue/js/anchor-menu";
+import childAll from '@/modelVue/js/childAll'
 
 export default function anchorEvent() {
     // 点击锚点
@@ -58,5 +59,8 @@ export default function anchorEvent() {
                 seen.add(targetNodeId); // 记录首次出现的 edge
             }
         });
+
+        childAll.call(this) // 同步详情页面子节点列表
+
     })
 }

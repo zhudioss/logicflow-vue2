@@ -120,6 +120,7 @@ import clickNodeAdd from './js/clickNodeAdd'
 import branchComponent from './formComponent/branchComponent.vue'
 
 import {mapState} from 'vuex'
+import childAll from "@/modelVue/js/childAll";
 
 
 export default {
@@ -392,10 +393,12 @@ export default {
     // 右键菜单点击
     handleMenuClick(name) {
       if (name === 'delete') {
+        // 线删除
         if (this.currentNode.sourceNodeId && this.currentNode.targetNodeId) {
           const targetNodeModel = this.lf.getNodeModelById(this.currentNode.targetNodeId); // 下级model
           this.lf.getNodeIncomingEdge(targetNodeModel.id).length < 2 ? targetNodeModel.setProperties({hideAnchor: false}) : null
         } else {
+          // node删除
           const targetNodeModel = this.lf.getNodeOutgoingEdge(this.currentNode.id); // 所有下级edge
           targetNodeModel.forEach(edge => {
             const edgeModel = this.lf.getNodeModelById(edge.targetNodeId); // 下级model
@@ -403,6 +406,8 @@ export default {
           });
         }
         this.lf.deleteNode(this.currentNode.id) || this.lf.deleteEdge(this.currentNode.id);
+
+        childAll.call(this) // 同步详情页面子节点列表 // 同步详情页面子节点列表
       }
       this.rightMenuShow = false
     },

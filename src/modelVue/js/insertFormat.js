@@ -1,3 +1,5 @@
+import childAll from "@/modelVue/js/childAll";
+
 export default function insertFormat(model, type, currentNode, properties) {
     const {sourceNodeId, targetNodeId} = model;
     const lf = this.lf;
@@ -97,6 +99,8 @@ export default function insertFormat(model, type, currentNode, properties) {
             },
         });
     });
+
+    childAll.call(this) // 同步详情页面子节点列表
 }
 
 function childNodeEdgesAll(logicFlow, startNodeId) {

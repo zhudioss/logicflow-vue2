@@ -1,5 +1,6 @@
 // 全局注册管理器 函数工厂
 import vueInstanceManager from "@/modelVue/js/vueInstanceManager";
+import childAll from "@/modelVue/js/childAll";
 import contextmenuFun from '../event/contextmenuFun'
 
 function getClassName(el) {
@@ -79,15 +80,10 @@ export default function nodeEvent() {
                 _this.detailForm.label = label
                 _this.detailForm.icon = icon
                 _this.detailForm.uniqueCom = uniqueCom
-                const childAll = this.lf.getNodeOutgoingNode(data.id) // 所有子节点
 
-                this.detailBranchList = childAll.map(child => {
-                    return ({
-                        ...child,
-                        componentsData: this.componentsList.find(item => item.type === child.type)
-                    })
-                })
+                childAll.call(this) // 同步详情页面子节点列表
 
+                this.backClickNodeId = data.id;
                 this.drawer = true
             }
         })
