@@ -92,13 +92,22 @@ export default {
 
     // 子节点点击
     childNodeClick(val) {
-      const nodeModel = this.lf.getNodeModelById(val.id)
 
+      // 1、视觉中心定位到节点
+      this.lf.focusOn({
+        id: val.id
+      });
+
+      // 2、获取到节点的model数据
+      const nodeModel = this.lf.getNodeModelById(val.id)
       if (!nodeModel) return
+
+      // 3、通过js触发node:click事件传递model数据
       this.lf.graphModel.eventCenter.emit('node:click', {
         data: nodeModel.getData(),
         e: null
       })
+
     }
   }
 }

@@ -59,6 +59,7 @@
       .left {
         display: flex;
         align-items: center;
+        margin-top: 3px;
 
         .start-class {
           width: 35px;
@@ -97,11 +98,12 @@
       .right {
         flex: 1;
         background: #eff1f5;
-        border-radius: 10px;
+        border-radius: 8px;
         padding: 3px;
         display: flex;
         flex-direction: column;
         row-gap: 3px;
+        min-height: 35px;
 
         .right-content {
           background: #fff;
