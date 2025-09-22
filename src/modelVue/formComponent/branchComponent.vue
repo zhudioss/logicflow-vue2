@@ -24,16 +24,16 @@
             </div>
           </div>
           <div class="right">
-            <div class="right-content" v-for="item in detailBranchList" :key="item.id">
+            <div class="right-content" v-for="item in detailBranchList" :key="item.id" @click="childNodeClick(item)">
               <img :src="item.componentsData.icon" alt="">
               {{ item.componentsData.label }}
             </div>
-            <div class="right-content addNode-class" @click="addBranch">
-              <div style="width:22px;height: 22px;text-align: center;margin-right: 10px;line-height: 22px;">
-                <i class="el-icon-plus"></i>
-              </div>
-              添加分支
-            </div>
+            <!--<div class="right-content addNode-class" @click="addBranch">-->
+            <!--  <div style="width:22px;height: 22px;text-align: center;margin-right: 10px;line-height: 22px;">-->
+            <!--    <i class="el-icon-plus"></i>-->
+            <!--  </div>-->
+            <!--  添加分支-->
+            <!--</div>-->
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@ export default {
   },
   updated() {
     // console.log(this.detailBranchList, 'detailBranchList')
-    console.log(this.detailForm, 'detailForm')
+    // console.log(this.detailForm, 'detailForm')
   },
   methods: {
     // 添加分支
@@ -88,6 +88,17 @@ export default {
       // console.log(menu, 'p[p[p[p[');
       // menu.style.display = 'block';
 
+    },
+
+    // 子节点点击
+    childNodeClick(val) {
+      const nodeModel = this.lf.getNodeModelById(val.id)
+
+      if (!nodeModel) return
+      this.lf.graphModel.eventCenter.emit('node:click', {
+        data: nodeModel.getData(),
+        e: null
+      })
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="warpCard start-class" :style="`width:${properties.width}px;height:${properties.height}px`">
+  <div :class="`warpCard start-class class_${model.id}`" :style="`width:${properties.width}px;height:${properties.height}px`">
     <div class="title">
       <img src="@/assets/Agent.png" alt="">
       Agent
@@ -19,6 +19,9 @@ export default {
   },
   watch: {},
   mounted() {
+    this.model.setProperties({
+      className: `class_${this.model.id}`
+    })
     this.bus.$on('runChildMethod', () => this.updateNodeData())
   },
   methods: {

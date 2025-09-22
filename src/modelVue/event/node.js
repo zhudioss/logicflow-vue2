@@ -41,53 +41,99 @@ export default function nodeEvent() {
     });
 
     // 点击node
+    // this.lf.on('node:click', ({data, e}) => {
+    //     const _this = this
+    //
+    //     this.rightMenuShow = false
+    //     const nodeId = data.id;
+    //     this.nodeModelId = data.id;
+    //     const vueManager = vueInstanceManager.getAll()
+    //     vueManager.forEach((item, index) => {
+    //
+    //         if (item.id === nodeId) {
+    //
+    //             // 点击节点，添加边框颜色
+    //             const domAll = document.getElementsByClassName('warpCard')
+    //             Array.from(domAll).forEach(dom => {
+    //                 dom.style.border = 'none';
+    //             });
+    //
+    //             const targetCls = getClassName(e.target);
+    //             const parentCls = getClassName(e.target.parentNode);
+    //
+    //             if (targetCls.includes('warpCard')) {
+    //                 e.target.style.border = '2px solid #3f58fd';
+    //             }
+    //             if (parentCls.includes('warpCard')) {
+    //                 e.target.parentNode.style.border = '2px solid #3f58fd';
+    //             }
+    //             // 小地图中的边框
+    //             item.vm.$el.style.border = '2px solid #3f58fd'
+    //
+    //
+    //             const {
+    //                 label,
+    //                 icon,
+    //                 uniqueCom
+    //             } = this.componentsList.find(item => item.type === data.type)
+    //             _this.detailForm.label = label
+    //             _this.detailForm.icon = icon
+    //             _this.detailForm.uniqueCom = uniqueCom
+    //
+    //             this.backClickNodeId = data.id;
+    //
+    //             childAll.call(this) // 同步详情页面子节点列表
+    //             this.drawer = true
+    //         }
+    //     })
+    // });
+
     this.lf.on('node:click', ({data, e}) => {
         const _this = this
-
         this.rightMenuShow = false
-        const nodeId = data.id;
-        this.nodeModelId = data.id;
+        const nodeId = data.id
+        this.nodeModelId = data.id
+
         const vueManager = vueInstanceManager.getAll()
-        vueManager.forEach((item, index) => {
-
+        vueManager.forEach((item) => {
             if (item.id === nodeId) {
-
-                // 点击节点，添加边框颜色
+                // 清除所有边框
                 const domAll = document.getElementsByClassName('warpCard')
                 Array.from(domAll).forEach(dom => {
-                    dom.style.border = 'none';
-                });
+                    dom.style.border = 'none'
+                })
 
-                this.tagE = e.target
-                const targetCls = getClassName(e.target);
-                const parentCls = getClassName(e.target.parentNode);
+                let targetDom = null
+                if (e) {
+                    // 用户真实点击
+                    const targetCls = getClassName(e.target)
+                    const parentCls = getClassName(e.target.parentNode)
+                    if (targetCls.includes('warpCard')) targetDom = e.target
+                    if (parentCls.includes('warpCard')) targetDom = e.target.parentNode
+                } else {
+                    // js触发
+                    targetDom = document.querySelector(`.${data.properties.className}`)
+                }
 
-                if (targetCls.includes('warpCard')) {
-                    e.target.style.border = '2px solid #3f58fd';
+                if (targetDom) {
+                    targetDom.style.border = '2px solid #3f58fd'
                 }
-                if (parentCls.includes('warpCard')) {
-                    e.target.parentNode.style.border = '2px solid #3f58fd';
-                }
+
                 // 小地图中的边框
                 item.vm.$el.style.border = '2px solid #3f58fd'
 
-
-                const {
-                    label,
-                    icon,
-                    uniqueCom
-                } = this.componentsList.find(item => item.type === data.type)
+                const {label, icon, uniqueCom} = this.componentsList.find(it => it.type === data.type)
                 _this.detailForm.label = label
                 _this.detailForm.icon = icon
                 _this.detailForm.uniqueCom = uniqueCom
-
-                this.backClickNodeId = data.id;
+                this.backClickNodeId = data.id
 
                 childAll.call(this) // 同步详情页面子节点列表
                 this.drawer = true
             }
         })
-    });
+    })
+
 
     // 点击空白区域
     this.lf.on('blank:click', () => {

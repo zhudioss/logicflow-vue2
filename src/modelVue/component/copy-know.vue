@@ -1,5 +1,5 @@
 <template>
-  <div class="warpCard know-class">
+  <div :class="`warpCard know-class class_${model.id}`">
     <div class="head">
       TestComponent
     </div>
@@ -138,10 +138,10 @@ export default {
       return new Promise((resolve) => {
         const graph = this.model
         graph.setProperties({
-          input1:this.input1,
-          input2:this.input2,
-          value:this.value,
-          groupList:this.groupList,
+          input1: this.input1,
+          input2: this.input2,
+          value: this.value,
+          groupList: this.groupList,
         })
         this.bus.$emit("childMethodDone", graph.id);
         resolve();

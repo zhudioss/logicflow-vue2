@@ -12,7 +12,7 @@
 
     <!--浏览、功能、更新、发布-->
     <div class="functionalArea">
-      <el-button icon="el-icon-video-play" @click="changeLineColor" size="mini">浏览</el-button>
+      <el-button icon="el-icon-video-play" @click="changeLineColor" size="mini">预览</el-button>
       <el-button icon="el-icon-menu" size="mini">功能</el-button>
       <el-button class="blueButton" icon="el-icon-refresh" size="mini">更新</el-button>
       <el-button class="blueButton" icon="el-icon-s-promotion" @click="exportButton" size="mini">发布</el-button>
