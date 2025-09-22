@@ -52,8 +52,9 @@
     </div>
 
     <!--  弹窗-->
-    <transition enter-active-class="animate__animated animate__fadeInRight animate__faster">
-      <div v-resize-left class="drawer-class" v-show="drawer" ref="drawer">
+    <transition enter-active-class="animate__animated animate__fadeInRight animate__faster"
+                leave-active-class="animate__animated animate__fadeOut animate__faster">
+      <div v-show="drawer" v-resize-left class="drawer-class" ref="drawer">
         <div class="drawer-header">
           <div class="title">
             <img :src="detailForm.icon" alt="">
@@ -75,16 +76,20 @@
             </div>
           </div>
         </div>
-        <div style="padding:0 10px" class="describe">
-          <el-input ref="describe_ref" v-model="describeInput" placeholder="添加描述..."></el-input>
+        <div style="overflow: hidden;border-radius: 15px;flex: 1;display: flex;flex-direction: column"
+             v-loading="drawerLoading"
+             element-loading-text="详情数据加载中...">
+          <div style="padding:0 10px" class="describe">
+            <el-input ref="describe_ref" v-model="describeInput" placeholder="添加描述..."></el-input>
+          </div>
+          <div class="line-class"></div>
+          <branchComponent
+              :lf="lf"
+              :detailBranchList="detailBranchList"
+              :nodeModelId="nodeModelId"
+              :detailForm="detailForm"
+              style="flex: 1;overflow-y: auto;"/>
         </div>
-        <div class="line-class"></div>
-        <branchComponent
-            :lf="lf"
-            :detailBranchList="detailBranchList"
-            :nodeModelId="nodeModelId"
-            :detailForm="detailForm"
-            style="flex: 1;overflow-y: auto;"/>
       </div>
     </transition>
   </div>
@@ -132,6 +137,7 @@ export default {
   },
   data() {
     return {
+      drawerLoading: false,
       controlList: [
         {
           name: '放大',
