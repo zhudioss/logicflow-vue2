@@ -52,8 +52,8 @@
     </div>
 
     <!--  弹窗-->
-    <transition enter-active-class="animate__animated animate__fadeInRight animate__faster"
-                leave-active-class="animate__animated animate__fadeOut animate__faster">
+    <!--leave-active-class="animate__animated animate__fadeOut animate__faster"-->
+    <transition enter-active-class="animate__animated animate__fadeInRight animate__faster">
       <div v-resize-left class="drawer-class" v-show="drawer" ref="drawer">
         <div class="drawer-header">
           <div class="title">
