@@ -96,8 +96,8 @@
     <!--功能弹窗-->
     <transition enter-active-class="animate__animated animate__fadeIn animate__faster"
                 leave-active-class="animate__animated animate__fadeOut animate__faster">
-      <div v-show="functionMenuShow" class="functionMenu">
-        <div class="functionMenu-alert">
+      <div v-if="functionMenuShow" class="functionMenu">
+        <div class="functionMenu-alert" v-click-outside-close="()=>{this.functionMenuShow=false}">
           <div class="drawer-header">
             <div class="title">
               功能
