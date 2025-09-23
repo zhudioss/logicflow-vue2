@@ -13,7 +13,7 @@
     <!--浏览、功能、更新、发布-->
     <div class="functionalArea">
       <el-button icon="el-icon-video-play" @click="changeLineColor" size="mini">预览</el-button>
-      <el-button icon="el-icon-menu" size="mini">功能</el-button>
+      <el-button icon="el-icon-menu" size="mini" @click="functionMenuShow=true">功能</el-button>
       <el-button class="blueButton" icon="el-icon-refresh" size="mini">更新</el-button>
       <el-button class="blueButton" icon="el-icon-s-promotion" @click="exportButton" size="mini">发布</el-button>
 
@@ -51,7 +51,7 @@
       ></el-button>
     </div>
 
-    <!--  弹窗-->
+    <!--详情页弹窗-->
     <transition enter-active-class="animate__animated animate__fadeInRight animate__faster"
                 leave-active-class="animate__animated animate__fadeOut animate__faster">
       <div v-show="drawer" v-resize-left class="drawer-class" ref="drawer">
@@ -91,6 +91,34 @@
               style="flex: 1;overflow-y: auto;"/>
         </div>
       </div>
+    </transition>
+
+    <!--功能弹窗-->
+    <transition enter-active-class="animate__animated animate__fadeIn animate__faster"
+                leave-active-class="animate__animated animate__fadeOut animate__faster">
+      <div v-show="functionMenuShow" class="functionMenu">
+        <div class="functionMenu-alert">
+          <div class="drawer-header">
+            <div class="title">
+              功能
+            </div>
+            <!--关闭-->
+            <div style="display: flex;align-items: center;column-gap: 10px;position: relative">
+              <el-button plain type="danger" icon="el-icon-close" @click="functionMenuShow=false"></el-button>
+            </div>
+          </div>
+          <p style="margin-bottom: 13px">增强 web app 用户体验</p>
+          <div class="content" v-for="(item,index) in functionMenuList" :key="index">
+            <div class="top">
+              <img :src="item.img" alt="" height="26">
+              <div>{{ item.title }}</div>
+              <el-switch v-model="item.switch" style="margin-left: auto"></el-switch>
+            </div>
+            <p>{{ item.note }}</p>
+          </div>
+        </div>
+      </div>
+
     </transition>
   </div>
 </template>
@@ -137,6 +165,39 @@ export default {
   },
   data() {
     return {
+      functionMenuList: [
+        {
+          title: '对话开场白',
+          img: require('@/assets/开场白.png'),
+          note: '在对话型应用中，让 AI 主动说第一段话可以拉近与用户间的距离。',
+          switch: false
+        },
+        {
+          title: '下一步问题建议',
+          img: require('@/assets/问题建议.png'),
+          note: '设置下一步问题建议可以让用户更好的对话。',
+          switch: false
+        },
+        {
+          title: '文件上传',
+          img: require('@/assets/文件上传.png'),
+          note: '聊天输入框支持上传文件。类型包括图片、文档以及其他类型',
+          switch: false
+        },
+        {
+          title: '引用和归属',
+          img: require('@/assets/引用和归属.png'),
+          note: '显示源文档和生成内容的归属部分',
+          switch: false
+        },
+        {
+          title: '内容审查',
+          img: require('@/assets/内容审查.png'),
+          note: '您可以调用审查 API 或者维护敏感词库来使用模型更安全地输出。',
+          switch: false
+        },
+      ],
+      functionMenuShow: true,
       drawerLoading: false,
       controlList: [
         {
