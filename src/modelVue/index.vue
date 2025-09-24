@@ -197,7 +197,7 @@ export default {
           switch: false
         },
       ],
-      functionMenuShow: true,
+      functionMenuShow: false,
       drawerLoading: false,
       controlList: [
         {
